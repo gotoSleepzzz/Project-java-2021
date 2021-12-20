@@ -12,6 +12,7 @@ import view.ViewManager;
 import view.admin.adminView;
 import view.loginView;
 import view.UserView;
+import control.*;
 
 public class loginController{
     static dbUtil db;
@@ -42,7 +43,7 @@ public class loginController{
                                 new ViewManager();
                             }else /*if(role.equalsIgnoreCase("user"))*/{
                                 // gắn abc...
-                                new UserView();
+                                new userController(username);
                             }
                         }
                         else{

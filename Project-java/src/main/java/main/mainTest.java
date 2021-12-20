@@ -3,6 +3,7 @@ package main;
 import javax.swing.UIManager;
 import view.loginView;
 import control.loginController;
+import view.*;
 
 public class mainTest {
     
@@ -13,6 +14,6 @@ public class mainTest {
 
         }
         new loginController();
+        //new UserView();
     }
-    
 }

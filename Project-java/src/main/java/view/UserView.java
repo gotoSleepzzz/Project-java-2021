@@ -7,25 +7,24 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class UserView implements ActionListener {
+public class UserView extends JFrame implements ActionListener {
 
     JTable jtbl;
-    JFrame jfrm;
     JDialog dialog;
-
+    
+    JTextField name,dob,address,id;
+    
     public UserView() {
-        jfrm = new JFrame("User");
-        jfrm.setLayout(new FlowLayout());
-        jfrm.setSize(900, 900);
-        jfrm.setResizable(false);
-        jfrm.setLocationRelativeTo(null);
-        jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("User");
+        this.setLayout(new FlowLayout());
+        this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         // Panel thông tin cá nhân
-        JTextField name = new JTextField();
-        JTextField dob = new JTextField();
-        JTextField address = new JTextField();
-        JTextField id = new JTextField();
+        name = new JTextField();
+        dob = new JTextField();
+        address = new JTextField();
+        id = new JTextField();
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridLayout(4, 2, 5, 5));
         infoPanel.add(new JLabel("Họ tên"));
@@ -86,35 +85,41 @@ public class UserView implements ActionListener {
         panel.setLayout(new BorderLayout());
         panel.add(buttons, BorderLayout.CENTER);
         panel.add(jinfo, BorderLayout.WEST);
-
-        jfrm.add(panel);
-        jfrm.pack();
-        jfrm.setVisible(true);
+        
+        this.add(panel);
+        this.pack();
     }
-
-//    public static void main(String[] args) {
-//        new UserView();
-//    }
-
+    public void setNameField(String t){
+        name.setText(t);
+    }
+    public void setDobField(String t){
+        dob.setText(t);
+    }
+    public void setAddressField(String t){
+        address.setText(t);
+    }
+    public void setIdField(String t){
+        id.setText(t);
+    }
     //Handle buttons action events.
     @Override
     public void actionPerformed(ActionEvent ae) {
         String comStr = ae.getActionCommand();
 
         if (comStr.equals("Mua gói nhu yếu phẩm")) {
-            Buy(jfrm);
+            Buy(this);
         }
 
         if (comStr.equals("Thanh toán chi phí")) {
-            Pay(jfrm);
+            Pay(this);
         }
 
         if (comStr.equals("Đổi mật khẩu")) {
-            ChangePassword(jfrm);
+            ChangePassword(this);
         }
 
         if (comStr.equals("Xem lịch sử")) {
-            ShowHistory(jfrm);
+            ShowHistory(this);
         }
     }
 
@@ -181,7 +186,7 @@ public class UserView implements ActionListener {
         mainPanel.add(topPanel);
         mainPanel.add(contentPanel);
         
-        dialog = new JDialog(jfrm, "Mua gói nhu yếu phẩm", false);
+        dialog = new JDialog(this, "Mua gói nhu yếu phẩm", false);
         dialog.setSize(950, 600);
         dialog.setResizable(false);
         dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent cho tới khi hoàn thành mua gói nhu yếu phẩm hoặc thoát
@@ -228,7 +233,7 @@ public class UserView implements ActionListener {
             }
         });
 
-        dialog = new JDialog(jfrm, "Thanh toán dư nợ", false);
+        dialog = new JDialog(this, "Thanh toán dư nợ", false);
         dialog.setSize(400, 200);
         dialog.setResizable(false);
         dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent cho tới khi hoàn thành
@@ -274,7 +279,7 @@ public class UserView implements ActionListener {
             }
         });
 
-        dialog = new JDialog(jfrm, "Đổi mật khẩu", false);
+        dialog = new JDialog(this, "Đổi mật khẩu", false);
         dialog.setSize(400, 200);
         dialog.setResizable(false);
         dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent cho tới khi hoàn thành đổi mật khẩu
@@ -338,7 +343,7 @@ public class UserView implements ActionListener {
         jinfo.add(debt);
         jinfo.add(paymentHistory);
         
-        dialog = new JDialog(jfrm, "Lịch sử", false);
+        dialog = new JDialog(this, "Lịch sử", false);
         dialog.setSize(1000, 200);
         dialog.setResizable(false);
         dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent cho tới khi hoàn thành đổi mật khẩu

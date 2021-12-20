@@ -18,7 +18,6 @@ public class dbUtil {
     private ResultSet rs;
     
     private dbUtil(){
-        
     }
     
     public static dbUtil getDbUtil() {

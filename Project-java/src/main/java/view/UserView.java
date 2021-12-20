@@ -7,13 +7,13 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-class UserView implements ActionListener {
+public class UserView implements ActionListener {
 
     JTable jtbl;
     JFrame jfrm;
     JDialog dialog;
 
-    UserView() {
+    public UserView() {
         jfrm = new JFrame("User");
         jfrm.setLayout(new FlowLayout());
         jfrm.setSize(900, 900);
@@ -92,9 +92,9 @@ class UserView implements ActionListener {
         jfrm.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new UserView();
-    }
+//    public static void main(String[] args) {
+//        new UserView();
+//    }
 
     //Handle buttons action events.
     @Override

@@ -4,11 +4,21 @@ public class Account {
     private String username;
     private String pass;
     private String role;
+    private boolean status;
 
-    public Account(String username, String pass, String role) {
+    public Account(String username, String pass, String role, boolean status) {
         this.username = username;
         this.pass = pass;
         this.role = role;
+        this.status = status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean status() {
+        return status;
     }
 
     public void setUsername(String username) {

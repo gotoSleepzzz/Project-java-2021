@@ -11,7 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-public class loginView extends JFrame {
+public class loginView extends JFrame{
     JLabel usrLabel;
     JLabel passLabel;
     JTextField usrInput;
@@ -30,6 +30,7 @@ public class loginView extends JFrame {
     private void init(){
         this.setTitle("Covid App - Login");
         this.setBounds(10, 10, 600, 400);
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLayout(null);
@@ -75,22 +76,6 @@ public class loginView extends JFrame {
             }
         });
         
-        loginBtn.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = usrInput.getText();
-                String password = passInput.getText();
-                
-                if (username.equalsIgnoreCase("admin") && password.equalsIgnoreCase("admin")){
-                    setVisible(false);
-                    dispose();
-//                    new adminView().setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(loginBtn, "Invalid Username or Password");
-                }
-            }
-        });
-        
         clearBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,6 +83,17 @@ public class loginView extends JFrame {
                 passInput.setText("");
             }
         });
-        
+    }
+    
+    public String getUsername(){
+        return usrInput.getText();
+    }
+    
+    public String getPass(){
+        return passInput.getText();
+    }
+    
+    public void addLoginEvent(ActionListener act){
+        loginBtn.addActionListener(act);
     }
 }

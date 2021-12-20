@@ -378,6 +378,8 @@ call htql_covid.`proc_ChuyenNoiDieuTri` ('123456789001', 21, 'admin');
 
 call htql_covid.`proc_MuaNhuPham` ('123456789008', 10, 2);
 
+call htql_covid.`proc_TaoQuanLy` ('manager','manager','admin');
+
 -- select * from htql_covid.`account`;
 -- select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;

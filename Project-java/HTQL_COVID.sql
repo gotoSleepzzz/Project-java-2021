@@ -7,7 +7,8 @@ create table `account`
 (
 	`username` varchar(12) not null primary key,
 	`password` varchar(20) not null default '',
-	`role` varchar(8) not null default 'user'
+	`role` varchar(8) not null default 'user',
+    `status` bit default 1
 );
 
 alter table `account`

@@ -13,7 +13,7 @@ public class mainTest {
         } catch (Exception e1) {
 
         }
-        new loginController();
-        //new UserView();
+        //new loginController();
+        new UserView();
     }
 }

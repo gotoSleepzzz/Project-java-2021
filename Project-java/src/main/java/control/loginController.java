@@ -43,6 +43,7 @@ public class loginController{
                                 new ViewManager();
                             }else /*if(role.equalsIgnoreCase("user"))*/{
                                 // gắn abc...
+                                login.dispose();
                                 new userController(username);
                             }
                         }

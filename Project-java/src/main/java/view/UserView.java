@@ -22,9 +22,13 @@ public class UserView extends JFrame implements ActionListener {
         
         // Panel thông tin cá nhân
         name = new JTextField();
+        name.setEditable(false);
         dob = new JTextField();
+        dob.setEditable(false);
         address = new JTextField();
+        address.setEditable(false);
         id = new JTextField();
+        id.setEditable(false);
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridLayout(4, 2, 5, 5));
         infoPanel.add(new JLabel("Họ tên"));
@@ -88,6 +92,7 @@ public class UserView extends JFrame implements ActionListener {
         
         this.add(panel);
         this.pack();
+        this.setVisible(true);
     }
     public void setNameField(String t){
         name.setText(t);

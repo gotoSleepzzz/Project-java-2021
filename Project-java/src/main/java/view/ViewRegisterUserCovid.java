@@ -266,7 +266,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         }
         if (e.getSource() == districtComboBox) {
 
-            var x = districtComboBox.getSelectedItem();
+            Object x = districtComboBox.getSelectedItem();
             if (x != null) {
                 String dt = x.toString();
                 if (!dt.equals("Quận")) {

@@ -20,7 +20,10 @@ public class Province {
     public Province() throws IOException, ParseException {
         FileReader reader = null;
         try {
-            reader = new FileReader("/Users/lucky/untitled6/src/main/java/db.json");
+            // get pwd of the project
+            String path = System.getProperty("user.dir");
+            System.out.println(path);
+            reader = new FileReader(path + "/Project-java/src/main/java/resources/db.json");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

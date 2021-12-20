@@ -99,7 +99,6 @@ public class ViewManager extends JFrame implements ActionListener {
 
         }
         if (e.getSource() == register) {
-//            new ViewRegisterUserCovid();
             dispose();
             JFrame test = new JFrame();
             test.setTitle("Manger");
@@ -109,10 +108,11 @@ public class ViewManager extends JFrame implements ActionListener {
             test.setVisible(true);
         }
         if (e.getSource() == manageNecessary) {
-
+            dispose();
+            new ManagerNYP();
         }
         if (e.getSource() == viewStatistic) {
-
+            dispose();
         }
         if (e.getSource() == viewTransition) {
 

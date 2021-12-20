@@ -21,9 +21,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     {
         try {
             province = new Province();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }
@@ -108,7 +106,6 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         currentStateComboBox.addItem("F1");
         currentStateComboBox.addItem("F2");
         currentStateComboBox.addItem("F3");
-
 
         // Initializing JTextField
 
@@ -215,7 +212,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
 
     public void showMessage(String message, String state) {
-
+        // get current
         String path = new File("").getAbsolutePath() + "/" + state.toLowerCase() + ".png";
         System.out.println(path);
         icon = new ImageIcon(path);

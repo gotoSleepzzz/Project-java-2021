@@ -130,6 +130,26 @@ alter table `LICH_SU_THANH_TOAN` add
 /* ================================================================================== */
 
 
+create table TAI_KHOAN_GIAO_DICH
+(
+	tk varchar(12) not null primary key,
+	sodu float(15,2)
+);
+
+create table LICH_SU_GIAO_DICH
+(
+	id int not null primary key auto_increment,
+	thoigian timestamp default current_timestamp,
+    tk_gui varchar(12),
+    tk_nhan varchar(12),
+	sotien float(15,2),
+	foreign key (tk_gui) references TAI_KHOAN_GIAO_DICH(tk),
+    foreign key (tk_nhan) references TAI_KHOAN_GIAO_DICH(tk)
+);
+
+
+/* ================================================================================== */
+
 DELIMITER $$
 CREATE PROCEDURE `proc_TaoQuanLy` (_username nvarchar(12), _pass varchar(20), _quanly varchar(12))
 BEGIN
@@ -147,8 +167,25 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+-- DELIMITER $$
+-- CREATE PROCEDURE `Test3` (_username nvarchar(12))
+-- BEGIN
+-- 	declare a nvarchar(100);
+-- 	IF (_username IS NULL) THEN
+-- 		set a = null;
+-- 		select @a;
+-- 	ELSE 
+-- 		set a = 'aaa';
+-- 		select @a;
+--     END IF;
+-- END$$
+-- DELIMITER ;
+
+-- call Test3(null);
+
 DELIMITER $$
-CREATE PROCEDURE `proc_ThemNguoi` (_ten nvarchar(35), _cmnd varchar(12), _namsinh int, _diachi nvarchar(70), _trangthai varchar(2), _noiquanly int, _quanly varchar(12))
+CREATE PROCEDURE `proc_ThemNguoi` (_ten nvarchar(35), _cmnd varchar(12), _namsinh int, _diachi nvarchar(70), _trangthai varchar(2), _noiquanly int, _nguonlay varchar(12) , _quanly varchar(12))
 BEGIN
 	DECLARE _soluong int;
     DECLARE _msg nvarchar(100);
@@ -156,17 +193,27 @@ BEGIN
 		INSERT INTO htql_covid.`nguoi_lien_quan` (ten,cmnd, namsinh, diachi,trangthai, idnoiquanly)
 		VALUES
 		(_ten, _cmnd, _namsinh, _diachi, _trangthai, _noiquanly);
+		
 		insert into htql_covid.`account` (`username`)
-        values (_cmnd);
-        select soluongtiep into _soluong from htql_covid.noi_quan_ly where id = _noiquanly;
-        update htql_covid.noi_quan_ly set soluongtiep = _soluong + 1 where id = _noiquanly;
+		values (_cmnd);
+		select soluongtiep into _soluong from htql_covid.noi_quan_ly where id = _noiquanly;
         
-        set _msg = concat("Thêm người mới: (",_ten,", ",_cmnd,")");
+		IF (_nguonlay is not null) then
+			insert into htql_covid.`nguon_tiep_xuc` (nguon, nguoitiepxuc)
+			values (_nguonlay, _cmnd);
+		end if;		
+		
+        insert into htql_covid.tai_khoan_giao_dich (tk,sodu)
+        value (_cmnd, 1000000000);
+        
+        update htql_covid.noi_quan_ly set soluongtiep = _soluong + 1 where id = _noiquanly;
+		
+		set _msg = concat("Thêm người mới: (",_ten,", ",_cmnd,")");
 		INSERT INTO htql_covid.LICH_SU_HOAT_DONG (username, hanhdong, tb, msg)
 		VALUES	(_quanly, "them", "nguoi_lien_quan", _msg);
 	ELSE 
 		SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "Nguoi nay da co trong danh sach";
-    END IF;
+	END IF;
 END$$
 DELIMITER ;
 
@@ -309,16 +356,16 @@ call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 1', 1000, 'admin');
 call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 2', 1000, 'admin');
 call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 3', 1000, 'admin');
 
-call htql_covid.`proc_ThemNguoi` ('Kiều Nhật Hùng','123456789001',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20,"admin");
-call htql_covid.`proc_ThemNguoi` ('Vương Hiếu Phong','123456789002',1984,'Thành phố Hồ Chí Minh, Huyện Củ Chi, Xã Trung Lập Thượng','F0',20,"admin");
-call htql_covid.`proc_ThemNguoi` ('Bùi Tấn Tài','123456789003',1967,'Thành phố Hồ Chí Minh, Quận Bình Thạnh, Phường 13','F1',20,"admin");
-call htql_covid.`proc_ThemNguoi` ('Nguyễn Huy Vũ','123456789004',1982,'Thành phố Hồ Chí Minh, Quận 11, Phường 14','F0',21,"admin");
-call htql_covid.`proc_ThemNguoi` ('Nguyễn Hữu Chiến','123456789005',1988,'Thành phố Hồ Chí Minh, Huyện Củ Chi, Xã Phạm Văn Cội','F0',21,"admin");
-call htql_covid.`proc_ThemNguoi` ('Bùi Tiến Ðức','123456789006',1994,'Thành phố Hồ Chí Minh, Quận 10, Phường 10','F0',21,"admin");
-call htql_covid.`proc_ThemNguoi` ('Nguyễn Ngọc Tuấn','123456789007',1994,'Thành phố Hồ Chí Minh, Quận 3, Phường 10','F0',22,"admin");
-call htql_covid.`proc_ThemNguoi` ('Đỗ Kim Huyền','123456789008',1998,'Thành phố Hồ Chí Minh, Quận 5, Phường 02','F0',22,"admin");
-call htql_covid.`proc_ThemNguoi` ('Quyền Duy Cường','123456789009',1960,'Thành phố Hồ Chí Minh, Quận 4, Phường 14','F0',22,"admin");
-call htql_covid.`proc_ThemNguoi` ('Nguyễn Nguyên','123456789010',1977,'Thành phố Hồ Chí Minh, Quận Bình Thạnh, Phường 05','F0',22,"admin");
+call htql_covid.`proc_ThemNguoi` ('Kiều Nhật Hùng','123456789001',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, null ,"admin");
+call htql_covid.`proc_ThemNguoi` ('Vương Hiếu Phong','123456789002',1984,'Thành phố Hồ Chí Minh, Huyện Củ Chi, Xã Trung Lập Thượng','F0',20,null,"admin");
+call htql_covid.`proc_ThemNguoi` ('Bùi Tấn Tài','123456789003',1967,'Thành phố Hồ Chí Minh, Quận Bình Thạnh, Phường 13','F1',20,'123456789002',"admin");
+call htql_covid.`proc_ThemNguoi` ('Nguyễn Huy Vũ','123456789004',1982,'Thành phố Hồ Chí Minh, Quận 11, Phường 14','F0',21, null,"admin");
+call htql_covid.`proc_ThemNguoi` ('Nguyễn Hữu Chiến','123456789005',1988,'Thành phố Hồ Chí Minh, Huyện Củ Chi, Xã Phạm Văn Cội','F0',21,null,"admin");
+call htql_covid.`proc_ThemNguoi` ('Bùi Tiến Ðức','123456789006',1994,'Thành phố Hồ Chí Minh, Quận 10, Phường 10','F0',21,null,"admin");
+call htql_covid.`proc_ThemNguoi` ('Nguyễn Ngọc Tuấn','123456789007',1994,'Thành phố Hồ Chí Minh, Quận 3, Phường 10','F0',22,null,"admin");
+call htql_covid.`proc_ThemNguoi` ('Đỗ Kim Huyền','123456789008',1998,'Thành phố Hồ Chí Minh, Quận 5, Phường 02','F0',22,null,"admin");
+call htql_covid.`proc_ThemNguoi` ('Quyền Duy Cường','123456789009',1960,'Thành phố Hồ Chí Minh, Quận 4, Phường 14','F1',22,'123456789008',"admin");
+call htql_covid.`proc_ThemNguoi` ('Nguyễn Nguyên','123456789010',1977,'Thành phố Hồ Chí Minh, Quận Bình Thạnh, Phường 05','F2',22,'123456789003',"admin");
 
 call htql_covid.`proc_ThemNhuYeuPham` ('Bánh mì', 10, '2021-12-24',10000,'admin');
 call htql_covid.`proc_ThemNhuYeuPham` ('Gạo', 10, '2021-12-24',15000,'admin');
@@ -339,22 +386,4 @@ call htql_covid.`proc_MuaNhuPham` ('123456789008', 10, 2);
 -- select * from htql_covid.lich_su_mua;
 
 
-/* ================================================================================== */
-
-create table TAI_KHOAN
-(
-	tk varchar(12) not null primary key,
-	sodu float(15,2)
-);
-
-create table LICH_SU_THANH_TOAN_TAi_KHOAN
-(
-	id int not null primary key auto_increment,
-	thoigian timestamp default current_timestamp,
-    tk_gui varchar(12),
-    tk_nhan varchar(12),
-	sotien float(15,2),
-	foreign key (tk_gui) references TAI_KHOAN(tk),
-    foreign key (tk_nhan) references TAI_KHOAN(tk)
-);
 

@@ -1,5 +1,7 @@
 package view;
 
+import model.UserCovid;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
@@ -7,6 +9,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
@@ -15,6 +18,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private JPanel panelFooter;
     private JLabel label;
     private JButton button;
+    private JButton buttonModify;
     private JTable table;
     private JPanel MenuPanel;
     private JPanel TitlePanel;
@@ -23,11 +27,13 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private Button searchButton;
     JButton refreshButton;
     private JPanel searchPanel;
+    private JPanel footerPanel;
     private JButton watchMore;
+    List<UserCovid> list;
+
 
     public ViewManagerUserCovid() {
         setLayout(new BorderLayout());
-
         panelHeader = new JPanel();
         panelHeader.setLayout(new BorderLayout());
 
@@ -58,7 +64,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         String[] columns = new String[]{"Họ tên", "CMND", "Nơi điều trị", "Năm sinh",
                 "Trạng thái hiện tại", "Xem chi tiết", "Chỉnh sửa"};
         String[][] data = new String[][]{
-                {"Thomas", "1" , "Bệnh viện Dã Chiến", "1999", "F0"},
+                {"Thomas", "1", "Bệnh viện Dã Chiến", "1999", "F0"},
                 {"Thomas", "2", "Bệnh viện Dã Chiến", "1999", "F0"},
                 {"Thomas", "3", "Bệnh viện Dã Chiến", "1999", "F0"},
                 {"Thomas", "4", "Bệnh viện Dã Chiến", "1999", "F0"},
@@ -67,13 +73,17 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
                 {"Thomas", "6", "Bệnh viện Dã Chiến", "1999", "F0"},
         };
 
+
         DefaultTableModel model = new DefaultTableModel(data, columns);
         table = new JTable();
         table.setModel(model);
+
         table.getColumn("Xem chi tiết").setCellRenderer(new ButtonRenderer("Xem chi tiết"));
-        table.getColumn("Xem chi tiết").setCellEditor(new ButtonEditor(new JCheckBox(), "Xem chi tiết"));
+        button = new JButton("Xem chi tiết");
+        buttonModify = new JButton("Chỉnh sửa");
+        table.getColumn("Xem chi tiết").setCellEditor(new ButtonEditor(new JCheckBox(), "Xem chi tiết", button));
         table.getColumn("Chỉnh sửa").setCellRenderer(new ButtonRenderer("Chỉnh sửa"));
-        table.getColumn("Chỉnh sửa").setCellEditor(new ButtonEditor(new JCheckBox(), "Chỉnh sửa"));
+        table.getColumn("Chỉnh sửa").setCellEditor(new ButtonEditor(new JCheckBox(), "Chỉnh sửa", buttonModify));
         // add new row
         table.setRowHeight(30);
         table.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -88,12 +98,21 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-
-
-        button = new JButton("Xem chi tiết");
         button.addActionListener(
-                event -> JOptionPane.showMessageDialog(null, "Do you want to modify this line?")
+                event -> {
+                    JOptionPane.showMessageDialog(null, "Do you want to modify this line?");
+                }
         );
+
+        buttonModify.addActionListener(e -> {
+
+            int option = JOptionPane.showConfirmDialog(null, "Bạn có muốn chỉnh sửa không?", "Chỉnh sửa", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                int selectedRow = table.getSelectedRow();
+                String selectedRowData = (String) table.getValueAt(selectedRow, 1);
+                JOptionPane.showMessageDialog(null, "You have selected: " + columns[1] + ": " + selectedRowData);
+            }
+        });
 
 
         JScrollPane jScrollPane = new JScrollPane(table);
@@ -103,9 +122,18 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         // create a nicer border
         panelBody.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
+
+
+        panelFooter = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        watchMore = new JButton("Xem thêm");
+        panelFooter.add(watchMore);
+
         // add title to the panel
         add(panelHeader, BorderLayout.NORTH);
         add(panelBody, BorderLayout.CENTER);
+        add(panelFooter, BorderLayout.SOUTH);
+
+
         setVisible(true);
     }
 
@@ -133,16 +161,18 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
     class ButtonEditor extends DefaultCellEditor {
         private String label;
+        private JButton button;
 
-        public ButtonEditor(JCheckBox checkBox, String label) {
+        public ButtonEditor(JCheckBox checkBox, String label, JButton button) {
             super(checkBox);
             this.label = label;
+            this.button = button;
         }
 
         public Component getTableCellEditorComponent(JTable table, Object value,
                                                      boolean isSelected, int row, int column) {
-            button.setText(label);
-            return button;
+            this.button.setText(label);
+            return this.button;
         }
 
         public Object getCellEditorValue() {

@@ -1,5 +1,6 @@
 package view;
 
+import model.UserCovid;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -8,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -234,7 +234,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         String healthCenter = healthCenterComboBox.getSelectedItem().toString();
         String peopleReached = peopleReachedField.getText();
 
-        UserCovid userCovid = new UserCovid(name, id, Date.valueOf(dob), address, currentState, healthCenter, peopleReached);
+        UserCovid userCovid = new UserCovid(name, id, Integer.valueOf(dob), address, currentState, healthCenter, peopleReached);
         return userCovid;
     }
 

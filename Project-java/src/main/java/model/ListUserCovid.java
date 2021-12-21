@@ -1,4 +1,6 @@
-package view;
+package model;
+
+import model.UserCovid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,10 @@ import java.util.stream.Collectors;
 public class ListUserCovid {
     List<UserCovid> listUserCovid = new ArrayList<>();
 
-    public void addUserCovidByName(UserCovid userCovid){
+    public ListUserCovid() {
+    }
+
+    public void addUserCovid(UserCovid userCovid){
         listUserCovid.add(userCovid);
     }
 

@@ -8,8 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import view.admin.qlndt_Admin;
 import utils.dbUtil;
 import model.Hospital;
@@ -21,36 +24,160 @@ public class QLNoiDieuTriController {
     qlndt_Admin view;
     dbUtil db;
     String response;
+    ArrayList<Hospital> list;
     public QLNoiDieuTriController(qlndt_Admin view){
         response = "";
         db = dbUtil.getDbUtil();
         this.view = view;
+        list = findAll();
+        this.view.setTableModel(convertToArray2D(list));
         this.view.handlerAddButton(new AddEvent());
+        this.view.handlerDelButton(new DelEvent());
+        this.view.handlerUpdateButton(new UpdateEvent());
         this.view.setVisible(true);
     }
-    public class AddEvent implements ActionListener{
+    class AddEvent implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
+            if (view.getCurField().equals("") || view.getNameField().equals("") || view.getTotalField().equals("")){
+                response = "Please do not leave the field blank";
+                JOptionPane.showMessageDialog(view, response, "Warning",JOptionPane.ERROR_MESSAGE);
+            }
+            else{
                 String ten = view.getNameField();
                 Integer sucChua = Integer.parseInt(view.getTotalField());
-                Integer SoLuongTiepNhan;
+                Integer SoLuongTiepNhan = Integer.parseInt(view.getCurField());
                 
-                if (view.getCurField().equals(""))
-                    SoLuongTiepNhan = 0;
-                else SoLuongTiepNhan = Integer.parseInt(view.getCurField());
-                
-                ResultSet rs = db.executeQuery("Select * from `NOI_QUAN_LY` WHERE ten = '" + ten + "'");
-                if (rs.next()){
-                    response = "Đã tồn tại nơi điều trị " + '"' + ten + '"'; 
+                Hospital hospital = findByName(ten);
+                if (hospital != null){
+                    response = "there existed a hospital named '" + ten + "'";
+                    JOptionPane.showMessageDialog(view, response, "Warning",JOptionPane.INFORMATION_MESSAGE);
                 }
                 else{
-                    db.excuteProc("{CALL proc_ThemNoiQuanLy(?,?,?)}", new Object[]{ten,sucChua,SoLuongTiepNhan});
+                    hospital = new Hospital(ten,sucChua,SoLuongTiepNhan);
+                    insert(hospital);
+                    hospital = findByName(ten);
+                    list.add(hospital);
+                    view.getTableModel().addRow(new Object[]{ten,sucChua,SoLuongTiepNhan});
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(QLNoiDieuTriController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }   
+    }
+    class DelEvent implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //System.out.println(view.getRow());
+            int index = view.getSelectedRow();
+            if (index == -1){
+                response = "Please select a row on the table that you want to delete";
+                JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                Hospital hospital = list.get(index);
+                if (existsUser(hospital.getId())){
+                    response = "There are exists user in hospital";
+                    JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    delete(hospital.getId());
+                    list.remove(index);
+                    view.getTableModel().removeRow(index);
+                }
             }
         }
-        
+    }
+    class UpdateEvent implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int index = view.getSelectedRow();
+            if (index == -1){
+                response = "Please select a row on the table that you want to update";
+                JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                if (view.getCurField().equals("") || view.getNameField().equals("") || view.getTotalField().equals("")){
+                    response = "Please do not leave the field blank";
+                    JOptionPane.showMessageDialog(view, response, "Warning",JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    String ten = view.getNameField();
+                    Integer sucChua = Integer.parseInt(view.getTotalField());
+                    Integer SoLuongTiepNhan = Integer.parseInt(view.getCurField());
+                    
+                    Hospital hospital = list.get(index);
+                    hospital.setTen(ten);
+                    hospital.setSucChua(sucChua);
+                    hospital.setSLHienTai(SoLuongTiepNhan);
+                    update(hospital);
+                    
+                    list.set(index, hospital);
+                    view.getTableModel().setValueAt(ten, index, 0);
+                    view.getTableModel().setValueAt(sucChua, index, 1);
+                    view.getTableModel().setValueAt(SoLuongTiepNhan, index, 2);
+                }
+            }
+        }
+    }
+    public Hospital findByName(String ten){
+        Hospital result = null;
+        ResultSet rs = db.executeQuery("Select * from `NOI_QUAN_LY` WHERE ten = '" + ten + "'");
+        try {
+            if (rs.next()){
+                result = new Hospital(rs.getInt("id"),rs.getString("ten"),rs.getInt("succhua"),rs.getInt("soluongtiep"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QLNoiDieuTriController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+    public ArrayList<Hospital> findAll(){
+        ArrayList<Hospital> hospitals = new ArrayList<>();
+        try {
+            ResultSet rs = db.executeQuery("select * from `NOI_QUAN_LY`");
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String ten = rs.getString("ten");
+                int sucChua = rs.getInt("succhua");
+                int SL = rs.getInt("soluongtiep");
+                Hospital hos = new Hospital(id, ten, sucChua, SL);
+                hospitals.add(hos);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QLNoiDieuTriController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return hospitals;
+    }
+    public void delete(int id){
+        db.executeUpdate("delete from `NOI_QUAN_LY` where id = ?", new Object[]{id});
+    }
+    public void update(Hospital hos){
+        Object[] temp = {hos.getTen(),hos.getSucChua(), hos.getSLHienTai(), hos.getId()};
+        db.executeUpdate("update `NOI_QUAN_LY` set ten = ?, succhua = ?, soluongtiep = ? where id = ?", temp);
+    }
+    public void insert(Hospital hos){
+        Object[] temp = new Object[]{hos.getTen(),hos.getSucChua(),hos.getSLHienTai()};
+        db.excuteProc("{CALL proc_ThemNoiQuanLy(?,?,?)}", temp);
+    }
+    public String[][] convertToArray2D(List<Hospital> list){
+        String data[][] = new String[list.size()][3];
+        // convert list to data object 
+        for (int i = 0; i < list.size(); i++) {
+            Hospital hospital = list.get(i);
+            data[i][0] = hospital.getTen();
+            data[i][1] = hospital.getSucChua().toString();
+            data[i][2] = hospital.getSLHienTai().toString();
+        }
+        return data;
+    }
+    public boolean existsUser(int id){
+        try {
+            ResultSet rs = db.executeQuery("select * from `NGUOI_LIEN_QUAN` where idnoiquanly = ?", new Object[]{id});
+            if (rs.next()){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QLNoiDieuTriController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }

@@ -4,12 +4,9 @@ import static java.awt.Component.CENTER_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,8 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -134,6 +129,17 @@ public class qlndt_Admin extends JPanel {
         
         add(mainPanel);
         
+        table.addMouseListener(new MouseAdapter() { // row is clicked
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int selectedRowIndex = table.getSelectedRow();
+                DefaultTableModel model = (DefaultTableModel)table.getModel();
+                nameField.setText(model.getValueAt(selectedRowIndex, 0).toString());
+                totalField.setText(model.getValueAt(selectedRowIndex, 1).toString());
+                curField.setText(model.getValueAt(selectedRowIndex, 2).toString());
+            }
+
+        });
     }
     public String getNameField(){
         return nameField.getText();
@@ -146,5 +152,20 @@ public class qlndt_Admin extends JPanel {
     }
     public void handlerAddButton(ActionListener e){
         addBtn.addActionListener(e);
+    }
+    public void handlerDelButton(ActionListener e){
+        delBtn.addActionListener(e);
+    }
+    public void handlerUpdateButton(ActionListener e){
+        updateBtn.addActionListener(e);
+    }
+    public DefaultTableModel getTableModel(){
+        return (DefaultTableModel) table.getModel();
+    }
+    public int getSelectedRow(){
+        return table.getSelectedRow();
+    }
+    public void setTableModel(String[][]list){
+        table.setModel(new DefaultTableModel(list,headers));
     }
 }

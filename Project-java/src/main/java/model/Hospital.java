@@ -10,26 +10,27 @@ package model;
  * @author TRUNG
  */
 public class Hospital {
+    int id;
     String ten;
     Integer sucChua;
     Integer SLHienTai;
 
+    public Hospital(int id, String ten, Integer sucChua, Integer SLHienTai) {
+        this.id = id;
+        this.ten = ten;
+        this.sucChua = sucChua;
+        this.SLHienTai = SLHienTai;
+    }
+
     public Hospital(String ten, Integer sucChua, Integer SLHienTai) {
+        this.id = -1;
         this.ten = ten;
         this.sucChua = sucChua;
         this.SLHienTai = SLHienTai;
     }
 
-    public void setTen(String ten) {
-        this.ten = ten;
-    }
-
-    public void setSucChua(Integer sucChua) {
-        this.sucChua = sucChua;
-    }
-
-    public void setSLHienTai(Integer SLHienTai) {
-        this.SLHienTai = SLHienTai;
+    public int getId() {
+        return id;
     }
 
     public String getTen() {
@@ -43,5 +44,20 @@ public class Hospital {
     public Integer getSLHienTai() {
         return SLHienTai;
     }
-    
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTen(String ten) {
+        this.ten = ten;
+    }
+
+    public void setSucChua(Integer sucChua) {
+        this.sucChua = sucChua;
+    }
+
+    public void setSLHienTai(Integer SLHienTai) {
+        this.SLHienTai = SLHienTai;
+    }
 }

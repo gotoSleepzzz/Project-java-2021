@@ -20,7 +20,6 @@ public class UserCovidModel implements ImplementUserCovid {
             delete = "DELETE FROM nguoi_lien_quan WHERE cmnd = ?";
     private String
             getAll = "SELECT * FROM nguoi_lien_quan";
-
     private String
             updateUserCovidByState = "UPDATE nguoi_lien_quan SET trangthai = ? WHERE cmnd = ?";
 
@@ -50,7 +49,7 @@ public class UserCovidModel implements ImplementUserCovid {
         };
 
         try {
-            var rs = db.executeQuery(add, params);
+            db.executeUpdate(add, params);
             listUserCovid.addUserCovid(userCovid);
         } catch (Exception e) {
             System.out.println("Insert failed due some bug or id duplicated");
@@ -60,26 +59,16 @@ public class UserCovidModel implements ImplementUserCovid {
     @Override
     public void update(UserCovid userCovid) {
         Object[] params = {
-                userCovid.getName(),
-                userCovid.getId(),
-                userCovid.getDob(),
-                userCovid.getAddress(),
                 userCovid.getState(),
-                userCovid.getHealthCenter(),
+                userCovid.getId(),
         };
-        var rs = db.executeQuery(add, params);
-        if (rs != null) {
-            listUserCovid.addUserCovid(userCovid);
-        }
+        db.executeUpdate(updateUserCovidByState, params);
     }
 
     @Override
     public void delete(String id) {
         Object[] params = {id};
-        var rs = db.executeQuery(delete, params);
-        if (rs != null) {
-            listUserCovid.removeUserByID(id);
-        }
+        db.executeUpdate(delete, params);
     }
 
 
@@ -94,7 +83,7 @@ public class UserCovidModel implements ImplementUserCovid {
                         Integer.parseInt(rs.getString("namsinh")),
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
-                        rs.getString("idnoiquanly"),
+                        rs.getInt("idnoiquanly"),
                         rs.getString("ghino")));
             }
         } catch (SQLException throwables) {
@@ -104,7 +93,7 @@ public class UserCovidModel implements ImplementUserCovid {
     }
 
     @Override
-    public UserCovid getUserCovid(String id) {
+    public UserCovid getUserCovidByID(String id) {
         Object[] params = {id};
         var rs = db.executeQuery(getById, params);
         try {
@@ -114,7 +103,7 @@ public class UserCovidModel implements ImplementUserCovid {
                         Integer.parseInt(rs.getString("namsinh")),
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
-                        rs.getString("idnoiquanly"),
+                        rs.getInt("idnoiquanly"),
                         rs.getString("ghino")
                 );
             }

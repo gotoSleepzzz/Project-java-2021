@@ -9,5 +9,5 @@ public interface ImplementUserCovid {
     void update(UserCovid userCovid);
     void delete(String id);
     List<UserCovid> getAll();
-    UserCovid getUserCovid(String id);
+    UserCovid getUserCovidByID(String id);
 }

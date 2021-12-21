@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import model.UserCovid;
 
 public class ViewDetailsUserCovid extends JPanel {
     private UserCovid userCovid;
@@ -30,8 +31,8 @@ public class ViewDetailsUserCovid extends JPanel {
         dob = new JLabel("Năm sinh: " + userCovid.getDob());
         currentState = new JLabel("Trạng thái hiện tại :" + userCovid.getState());
         healthCenter = new JLabel("Nơi đang điều trị / cách ly: " + userCovid.getHealthCenter());
-        peopleReached = new JLabel("Số người đã điều trị: " + userCovid.getPeopleReached());
-        history = new JLabel("Lịch sử quá trình được quản lý: " + userCovid.getHistory());
+        //peopleReached = new JLabel("Số người đã điều trị: " + userCovid.getPeopleReached());
+        //history = new JLabel("Lịch sử quá trình được quản lý: " + userCovid.getHistory());
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(8, 1));

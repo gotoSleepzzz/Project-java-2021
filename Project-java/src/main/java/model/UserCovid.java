@@ -6,11 +6,11 @@ public class UserCovid {
     private int dob;
     private String address;
     private String state;
-    private String healthCenter;
+    private int healthCenter;
     private String idReached;
     private double debt = 0;
 
-    public UserCovid(String name, String id, int dob, String address, String state, String healthCenter, String idReached) {
+    public UserCovid(String name, String id, int dob, String address, String state, int healthCenter, String idReached) {
         this.name = name;
         this.id = id;
         this.dob = dob;
@@ -20,7 +20,7 @@ public class UserCovid {
         this.idReached = idReached;
     }
 
-    public UserCovid(String name, String id, int dob, String address, String state, String healthCenter, String idReached, double debt) {
+    public UserCovid(String name, String id, int dob, String address, String state, int healthCenter, String idReached, double debt) {
         this.name = name;
         this.id = id;
         this.dob = dob;
@@ -51,7 +51,7 @@ public class UserCovid {
         this.state = state;
     }
 
-    public void setHealthCenter(String healthCenter) {
+    public void setHealthCenter(int healthCenter) {
         this.healthCenter = healthCenter;
     }
 
@@ -83,7 +83,7 @@ public class UserCovid {
         return state;
     }
 
-    public String getHealthCenter() {
+    public int getHealthCenter() {
         return healthCenter;
     }
 
@@ -94,4 +94,19 @@ public class UserCovid {
     public double getDebt() {
         return debt;
     }
+    @Override
+    public String toString() {
+        return "UserCovid{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", dob=" + dob +
+                ", address='" + address + '\'' +
+                ", state='" + state + '\'' +
+                ", healthCenter='" + healthCenter + '\'' +
+                ", idReached='" + idReached + '\'' +
+                ", debt=" + debt +
+                '}';
+    }
+
+
 }

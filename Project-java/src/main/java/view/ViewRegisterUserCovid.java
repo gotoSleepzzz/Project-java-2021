@@ -231,7 +231,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         String address = addressField.getText();
         String dob = year.getSelectedItem().toString();
         String currentState = currentStateComboBox.getSelectedItem().toString();
-        String healthCenter = healthCenterComboBox.getSelectedItem().toString();
+        int healthCenter = Integer.parseInt(healthCenterComboBox.getSelectedItem().toString());
         String peopleReached = peopleReachedField.getText();
 
         UserCovid userCovid = new UserCovid(name, id, Integer.valueOf(dob), address, currentState, healthCenter, peopleReached);

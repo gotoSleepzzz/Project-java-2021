@@ -25,13 +25,13 @@ public class userController {
         user = getInfoUser(username);
         
         view = new UserView();
+        
         view.setNameField(user.getName());
         view.setAddressField(user.getAddress());
         view.setDobField(user.getBornYear().toString());
         view.setIdField(user.getCmnd());
         view.setLocationRelativeTo(null);
         
-        view.setSize(900,500);
         view.setVisible(true);
     }
     private User getInfoUser(String username){
@@ -39,8 +39,7 @@ public class userController {
         ResultSet rs = db.executeQuery("Select * from `NGUOI_LIEN_QUAN` where cmnd = '" + username + "'");
         try {
             if(rs.next()){
-                temp = new User(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getString(5),rs.getInt(6),rs.getFloat(7));
-                
+                temp = new User(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getString(5),rs.getInt(6),rs.getFloat(7)); 
             }
         } catch (SQLException ex) {
             Logger.getLogger(userController.class.getName()).log(Level.SEVERE, null, ex);

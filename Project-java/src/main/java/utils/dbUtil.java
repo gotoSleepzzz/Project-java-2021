@@ -67,6 +67,7 @@ public class dbUtil {
         try{
             cs = conn.prepareCall(sql);
             for(int i=0;i<obj.length;i++){
+                System.out.println(obj[i]);
                 cs.setObject(i+1, obj[i]);
             }            
             result = cs.execute();

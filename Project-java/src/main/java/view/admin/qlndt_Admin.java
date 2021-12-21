@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -133,5 +135,16 @@ public class qlndt_Admin extends JPanel {
         add(mainPanel);
         
     }
-    
+    public String getNameField(){
+        return nameField.getText();
+    }
+    public String getTotalField(){
+        return totalField.getText();
+    }
+    public String getCurField(){
+        return curField.getText();
+    }
+    public void handlerAddButton(ActionListener e){
+        addBtn.addActionListener(e);
+    }
 }

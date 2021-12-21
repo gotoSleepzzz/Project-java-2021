@@ -310,17 +310,17 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE `proc_ThemNoiQuanLy` (_ten nvarchar(40), _succhua int, _quanly varchar(12))
+CREATE PROCEDURE `proc_ThemNoiQuanLy` (_ten nvarchar(40), _succhua int, _SLhientai int)
 BEGIN
 	declare _id int;
     declare _msg varchar(100);
-    insert into htql_covid.noi_quan_ly (ten, succhua)
-    values (_ten, _succhua);
+    insert into htql_covid.noi_quan_ly (ten, succhua, soluongtiep)
+    values (_ten, _succhua, _SLhientai);
     
     select id into _id from htql_covid.noi_quan_ly ORDER BY id DESC LIMIT 1;
     set _msg = concat("Thêm nơi quản lý mới: (", _id, ", ", _ten, ")");
 	INSERT INTO htql_covid.LICH_SU_HOAT_DONG (username, hanhdong, tb, msg)
-	VALUES	(_quanly, "them", "noi_quan_ly", _msg);
+	VALUES	("admin", "them", "noi_quan_ly", _msg);
 END$$
 DELIMITER ;
 
@@ -353,9 +353,9 @@ DELIMITER ;
 /* ================================================================================== */
 insert into htql_covid.`account` (`username`,`password`,`role`) values ('admin','admin','admin');
 
-call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 1', 1000, 'admin');
-call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 2', 1000, 'admin');
-call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 3', 1000, 'admin');
+call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 1', 1000, 0);
+call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 2', 1000, 0);
+call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 3', 1000, 0);
 
 call htql_covid.`proc_ThemNguoi` ('Kiều Nhật Hùng','123456789001',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, null ,"admin");
 call htql_covid.`proc_ThemNguoi` ('Vương Hiếu Phong','123456789002',1984,'Thành phố Hồ Chí Minh, Huyện Củ Chi, Xã Trung Lập Thượng','F0',20,null,"admin");
@@ -381,12 +381,9 @@ call htql_covid.`proc_MuaNhuPham` ('123456789008', 10, 2);
 call htql_covid.`proc_TaoQuanLy` ('manager','manager','admin');
 
 -- select * from htql_covid.`account`;
--- select * from htql_covid.noi_quan_ly;
+select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;
 -- select * from htql_covid.nhu_pham;
 -- select * from htql_covid.lich_su_chuyen_trang_thai;
 -- select * from htql_covid.lich_su_hoat_dong;
 -- select * from htql_covid.lich_su_mua;
-
-
-

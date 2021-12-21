@@ -1,6 +1,7 @@
 package view.admin;
 
 
+import control.QLNoiDieuTriController;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -104,7 +105,7 @@ public class adminView extends JFrame implements ActionListener {
         else if(e.getSource() == qlndtBtn){
             mainPanel.setVisible(false);
             qlndt.setBounds(1, 1, this.getWidth(), this.getHeight());
-            qlndt.setVisible(true);
+            new QLNoiDieuTriController(qlndt);
             backBtn.setVisible(true);
         }
         else if (e.getSource() == backBtn){

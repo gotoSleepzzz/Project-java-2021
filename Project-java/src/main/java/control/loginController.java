@@ -7,12 +7,11 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Account;
 import utils.dbUtil;
 import view.ViewManager;
 import view.admin.adminView;
 import view.loginView;
-import view.UserView;
-import control.*;
 
 public class loginController{
     static dbUtil db;
@@ -29,7 +28,6 @@ public class loginController{
         public void actionPerformed(ActionEvent e) {
                 String username = login.getUsername();
                 String password = login.getPass();
-                
                 if (username != null && password != null){
                     try {
                         ResultSet rs = db.executeQuery("Select * from `account` where `username` = '" + username + "'");

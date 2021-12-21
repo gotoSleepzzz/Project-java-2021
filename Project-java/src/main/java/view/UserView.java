@@ -93,6 +93,7 @@ public class UserView extends JFrame implements ActionListener {
         this.add(panel);
         this.pack();
         this.setVisible(true);
+        this.setSize(900, 400);
     }
     public void setNameField(String t){
         name.setText(t);

@@ -1,9 +1,9 @@
 package main;
 
 import javax.swing.UIManager;
-import view.loginView;
 import control.loginController;
 import view.*;
+import view.admin.adminView;
 
 public class mainTest {
     
@@ -14,6 +14,9 @@ public class mainTest {
 
         }
         //new loginController();
-        new UserView();
+        //new ViewManager();
+        //new UserView();
+        adminView a = new adminView();
+        a.setVisible(true);
     }
 }

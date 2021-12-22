@@ -40,8 +40,8 @@ public class QLNoiDieuTriController {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (view.getCurField().equals("") || view.getNameField().equals("") || view.getTotalField().equals("")){
-                response = "Please do not leave the field blank";
-                JOptionPane.showMessageDialog(view, response, "Warning",JOptionPane.ERROR_MESSAGE);
+                response = "Vui lòng không để trống các ô";
+                JOptionPane.showMessageDialog(view, response, "Cảnh báo",JOptionPane.ERROR_MESSAGE);
             }
             else{
                 String ten = view.getNameField();
@@ -50,8 +50,8 @@ public class QLNoiDieuTriController {
                 
                 Hospital hospital = findByName(ten);
                 if (hospital != null){
-                    response = "there existed a hospital named '" + ten + "'";
-                    JOptionPane.showMessageDialog(view, response, "Warning",JOptionPane.INFORMATION_MESSAGE);
+                    response = "Đã tồn tại nơi điều trị có tên là '" + ten + "'";
+                    JOptionPane.showMessageDialog(view, response, "Cảnh báo",JOptionPane.INFORMATION_MESSAGE);
                 }
                 else{
                     hospital = new Hospital(ten,sucChua,SoLuongTiepNhan);
@@ -69,14 +69,14 @@ public class QLNoiDieuTriController {
             //System.out.println(view.getRow());
             int index = view.getSelectedRow();
             if (index == -1){
-                response = "Please select a row on the table that you want to delete";
-                JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
+                response = "Vui lòng chọn nơi điều trị mà bạn muốn xóa";
+                JOptionPane.showMessageDialog(view, response, "Thông báo",JOptionPane.INFORMATION_MESSAGE);
             }
             else{
                 Hospital hospital = list.get(index);
                 if (existsUser(hospital.getId())){
-                    response = "There are exists user in hospital";
-                    JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
+                    response = "Vẫn còn tồn tại người điều trị tại nơi này";
+                    JOptionPane.showMessageDialog(view, response, "Thông báo",JOptionPane.INFORMATION_MESSAGE);
                 }
                 else{
                     delete(hospital.getId());
@@ -91,12 +91,12 @@ public class QLNoiDieuTriController {
         public void actionPerformed(ActionEvent e) {
             int index = view.getSelectedRow();
             if (index == -1){
-                response = "Please select a row on the table that you want to update";
+                response = "Vui lòng chọn nơi điều trị mà bạn muốn cập nhật";
                 JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
             }
             else{
                 if (view.getCurField().equals("") || view.getNameField().equals("") || view.getTotalField().equals("")){
-                    response = "Please do not leave the field blank";
+                    response = "Vui lòng không để trống các ô";
                     JOptionPane.showMessageDialog(view, response, "Warning",JOptionPane.ERROR_MESSAGE);
                 }
                 else{

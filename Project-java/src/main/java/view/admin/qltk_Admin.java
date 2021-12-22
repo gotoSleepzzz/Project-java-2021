@@ -43,9 +43,6 @@ public class qltk_Admin extends JPanel{
         "Thời gian","Username","Lịch sử"
     };
     
-    private Object accData = new Object[][]{};
-    private Object hisData = new Object[][]{};
-
     public qltk_Admin() {
         init();
     }
@@ -72,7 +69,6 @@ public class qltk_Admin extends JPanel{
         
         accTable = new JTable();
         accScroll = new JScrollPane();
-        accTable.setModel(new DefaultTableModel((Object[][]) accData, accHeaders));
         accTable.setAutoCreateRowSorter(true);
         accScroll.setViewportView(accTable);
         
@@ -91,7 +87,6 @@ public class qltk_Admin extends JPanel{
         
         hisTable = new JTable();
         hisScroll = new JScrollPane();
-        hisTable.setModel(new DefaultTableModel((Object[][]) hisData, hisHeaders));
         hisTable.setAutoCreateRowSorter(true);
         hisScroll.setViewportView(hisTable);  
         
@@ -114,7 +109,13 @@ public class qltk_Admin extends JPanel{
         return (DefaultTableModel) accTable.getModel();
     }
     public void setTableAccountModel(String[][]list){
-        accTable.setModel(new DefaultTableModel(list,accHeaders));
+        accTable.setModel(new DefaultTableModel(list,accHeaders){
+            @Override
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;//This causes all cells to be not editable
+            }
+        });
     }
     public void handlerShowHisBtn(ActionListener e){
         showHisBtn.addActionListener(e);
@@ -123,7 +124,13 @@ public class qltk_Admin extends JPanel{
         return accTable.getSelectedRow();
     }
     public void setTableHistoryModel(String[][]list){
-        hisTable.setModel(new DefaultTableModel(list,hisHeaders));
+        hisTable.setModel(new DefaultTableModel(list,hisHeaders){
+            @Override
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;//This causes all cells to be not editable
+            }
+        });
     }
     public void handlerBanBtn(ActionListener e){
         banBtn.addActionListener(e);

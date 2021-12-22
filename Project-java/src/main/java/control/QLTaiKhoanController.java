@@ -73,10 +73,11 @@ public class QLTaiKhoanController {
         @Override
         public void actionPerformed(ActionEvent e) {
             int index = view.getSelectedRowTableAcc();
-            if (index == -1) {
-                response = "Please select a row on the table that you want to show";
-                JOptionPane.showMessageDialog(view, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
-            } else {
+            if(index == -1){
+                response = "Vui lòng chọn tài khoản mà bạn muốn xem lịch sử";
+                JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
                 Account account = accounts.get(index);
                 String username = account.getUsername();
                 ArrayList<History> temp = historyService.findById(username);

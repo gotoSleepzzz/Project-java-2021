@@ -25,12 +25,16 @@ public class userController {
         
         view = new UserView();
         
+        // Set thông tin cá nhân
         view.setNameField(user.getName());
         view.setAddressField(user.getAddress());
         view.setDobField(user.getDob().toString());
         view.setIdField(user.getId());
-        view.setLocationRelativeTo(null);
         
+        // Set dư nợ
+        view.setDebtField(String.valueOf(user.getDebt()));
+        
+        view.setLocationRelativeTo(null);
         view.setVisible(true);
     }
     private UserCovid getInfoUser(String username){

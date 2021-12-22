@@ -3,23 +3,45 @@ package view;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.EventObject;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 public class UserView extends JFrame implements ActionListener {
 
     JTable jtbl;
     JDialog dialog;
-    
-    JTextField name,dob,address,id;
-    
+    JButton jbuy, jpay, jchange, jconsumehistory, jmanagehistory, jpaymenthistory, changePassButton, searchBtn, buyBtn, payBtn;
+    JTextField name, dob, address, id, balance, debt, searchBar, productname, limit, time, cost, PassWarning;
+
+    int editableCell = 3;
+
+    private final String[] hisConsumeHeaders = new String[]{
+        "ID gói nhu yếu phẩm", "Số lượng", "Thành tiền", "Thời gian"
+    };
+
+    private final String[] hisManageHeaders = new String[]{
+        "Trạng thái cũ", "Trạng thái mới", "Nơi quản lý cũ", "Nơi quản lý mới", "Thời gian"
+    };
+
+    private final String[] hisPaymentHeaders = new String[]{
+        "Số tiền", "Thời gian"
+    };
+
+    private Object hisConsumeData = new Object[][]{};
+    private Object hisManageData = new Object[][]{};
+    private Object hisPaymentData = new Object[][]{};
+    private Object productData = new Object[][]{};
+
     public UserView() {
         this.setTitle("User");
         this.setLayout(new FlowLayout());
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         // Panel thông tin cá nhân
         name = new JTextField();
         name.setEditable(false);
@@ -39,74 +61,93 @@ public class UserView extends JFrame implements ActionListener {
         infoPanel.add(address);
         infoPanel.add(new JLabel("CMND/CCCD"));
         infoPanel.add(id);
-        
+
         JPanel info = new JPanel();
         info.setBorder(new TitledBorder("Thông tin"));
         info.setLayout(new GridLayout(2, 1));
         info.add(infoPanel);
-        
+
         // Panel dư nợ
-        JTextField duhientai = new JTextField();
-        JTextField duno = new JTextField();
-        JPanel dunoPanel = new JPanel();
-        dunoPanel.setLayout(new GridLayout(2, 2, 5, 5));
-        dunoPanel.add(new JLabel("Số dư hiện tại"));
-        dunoPanel.add(duhientai);
-        dunoPanel.add(new JLabel("Dư nợ"));
-        dunoPanel.add(duno);
-        
-        JPanel debt = new JPanel();
-        debt.setBorder(new TitledBorder("Dư nợ"));
-        debt.setLayout(new GridLayout(2, 1));
-        debt.add(dunoPanel);
-        
+        balance = new JTextField();
+        balance.setEditable(false);
+        debt = new JTextField();
+        debt.setEditable(false);
+        JPanel debtPanel = new JPanel();
+        debtPanel.setLayout(new GridLayout(2, 2, 5, 5));
+        debtPanel.add(new JLabel("Số dư hiện tại"));
+        debtPanel.add(balance);
+        debtPanel.add(new JLabel("Dư nợ"));
+        debtPanel.add(debt);
+
+        JPanel jdebt = new JPanel();
+        jdebt.setBorder(new TitledBorder("Dư nợ"));
+        jdebt.setLayout(new GridLayout(2, 1));
+        jdebt.add(debtPanel);
+
         // Panel thông tin
         JPanel jinfo = new JPanel(new BorderLayout());
         jinfo.add(info, BorderLayout.NORTH);
-        jinfo.add(debt, BorderLayout.SOUTH);
+        jinfo.add(jdebt, BorderLayout.SOUTH);
 
         // Các nút chọn
         JPanel buttons = new JPanel();
         buttons.setLayout(new GridLayout(10, 1, 10, 10));
         //buttons.setBorder(new EmptyBorder(new Insets(150, 200, 150, 200)));
-        JButton jbuy = new JButton("Mua gói nhu yếu phẩm");
-        JButton jpay = new JButton("Thanh toán chi phí");
-        JButton jchange = new JButton("Đổi mật khẩu");
-        JButton jhistory = new JButton("Xem lịch sử");
+        jbuy = new JButton("Mua gói nhu yếu phẩm");
+        jpay = new JButton("Thanh toán chi phí");
+        jchange = new JButton("Đổi mật khẩu");
+        jconsumehistory = new JButton("Lịch sử tiêu thụ gói nhu yếu phẩm");
+        jmanagehistory = new JButton("Lịch sử được quản lý");
+        jpaymenthistory = new JButton("Lịch sử thanh toán");
+
         buttons.add(jbuy);
         buttons.add(jpay);
         buttons.add(jchange);
-        buttons.add(jhistory);
+        buttons.add(jconsumehistory);
+        buttons.add(jmanagehistory);
+        buttons.add(jpaymenthistory);
 
         // Add action listener
         jbuy.addActionListener(this);
         jpay.addActionListener(this);
         jchange.addActionListener(this);
-        jhistory.addActionListener(this);
-        
+        jconsumehistory.addActionListener(this);
+        jmanagehistory.addActionListener(this);
+        jpaymenthistory.addActionListener(this);
+
         // Layout
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(buttons, BorderLayout.CENTER);
         panel.add(jinfo, BorderLayout.WEST);
-        
+
         this.add(panel);
         this.pack();
         this.setVisible(true);
         this.setSize(900, 400);
+        this.setLocationRelativeTo(null);
     }
-    public void setNameField(String t){
+
+    public void setNameField(String t) {
         name.setText(t);
     }
-    public void setDobField(String t){
+
+    public void setDobField(String t) {
         dob.setText(t);
     }
-    public void setAddressField(String t){
+
+    public void setAddressField(String t) {
         address.setText(t);
     }
-    public void setIdField(String t){
+
+    public void setIdField(String t) {
         id.setText(t);
     }
+
+    public void setDebtField(String t) {
+        debt.setText(t + "đ");
+    }
+
     //Handle buttons action events.
     @Override
     public void actionPerformed(ActionEvent ae) {
@@ -124,15 +165,23 @@ public class UserView extends JFrame implements ActionListener {
             ChangePassword(this);
         }
 
-        if (comStr.equals("Xem lịch sử")) {
-            ShowHistory(this);
+        if (comStr.equals("Lịch sử tiêu thụ gói nhu yếu phẩm")) {
+            ConsumeHistory(this);
+        }
+
+        if (comStr.equals("Lịch sử được quản lý")) {
+            ManageHistory(this);
+        }
+
+        if (comStr.equals("Lịch sử thanh toán")) {
+            PaymentHistory(this);
         }
     }
 
     public void Buy(JFrame frame) {
-        JTextField searchBar = new JTextField(50);
-        JButton searchBtn = new JButton("Tìm kiếm");
-        JButton buyBtn = new JButton("Chọn mua");
+        searchBar = new JTextField(50);
+        searchBtn = new JButton("Tìm kiếm");
+        buyBtn = new JButton("Chọn mua");
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
@@ -140,26 +189,49 @@ public class UserView extends JFrame implements ActionListener {
         topPanel.add(searchBar);
         topPanel.add(searchBtn);
         topPanel.add(buyBtn);
-
-        JTable table = new JTable();
-        JScrollPane scroll = new JScrollPane();
-        Object data = new Object[][]{};
+        
+        // Chọn mua là kiểu boolean
         String[] headerTable = new String[]{
             "Chọn mua", "Tên gói", "Số lượng", "Đơn giá"
         };
-        table.setModel(new DefaultTableModel((Object[][]) data, headerTable));
-        scroll.setViewportView(table);
+        productData = new Object[][]{{false, "Gói số 1", 0, "200.000"}};
+        DefaultTableModel model = new DefaultTableModel((Object[][]) productData, headerTable);
+        
+        JTable table = new JTable(model) {
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return Boolean.class;
+                    case 1:
+                        return String.class;
+                    case 2:
+                        return Integer.class;
+                    case 3:
+                        return String.class;
+                    default:
+                        return String.class;
+                }
+            }
+        };
         table.setAutoCreateRowSorter(true);
+        
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setViewportView(table);
+        
+        // Sử dụng spinner cho Số lượng
+        TableColumn col = table.getColumnModel().getColumn(2);
+        col.setCellEditor(new SpinnerEditor());
 
         FlowLayout flowLayout = new FlowLayout();
         flowLayout.setAlignment(FlowLayout.CENTER);
         flowLayout.setHgap(30);
         flowLayout.setVgap(30);
 
-        JTextField name = new JTextField();
-        JTextField limit = new JTextField();
-        JTextField time = new JTextField();
-        JTextField cost = new JTextField();
+        productname = new JTextField();
+        limit = new JTextField();
+        time = new JTextField();
+        cost = new JTextField();
         String[] category = new String[]{
             "< 500.000", "500.000 - 1.000.000"
         };
@@ -169,7 +241,7 @@ public class UserView extends JFrame implements ActionListener {
         infoPanel.add(new JLabel("Lọc"));
         infoPanel.add(filter);
         infoPanel.add(new JLabel("Chọn mua"));
-        infoPanel.add(name);
+        infoPanel.add(productname);
         infoPanel.add(new JLabel("Tên gói"));
         infoPanel.add(limit);
         infoPanel.add(new JLabel("Số lượng"));
@@ -191,7 +263,7 @@ public class UserView extends JFrame implements ActionListener {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.add(topPanel);
         mainPanel.add(contentPanel);
-        
+
         dialog = new JDialog(this, "Mua gói nhu yếu phẩm", false);
         dialog.setSize(950, 600);
         dialog.setResizable(false);
@@ -214,9 +286,11 @@ public class UserView extends JFrame implements ActionListener {
         JTextField current = new JTextField();
         current.setHorizontalAlignment(JTextField.CENTER);
         controls.add(current);
-        JTextField debt = new JTextField();
-        debt.setHorizontalAlignment(JTextField.CENTER);
-        controls.add(debt);
+        JTextField jdebt = new JTextField();
+        jdebt.setHorizontalAlignment(JTextField.CENTER);
+        jdebt.setText(debt.getText());
+        jdebt.setEditable(false);
+        controls.add(jdebt);
         JTextField minimum = new JTextField();
         minimum.setHorizontalAlignment(JTextField.CENTER);
         controls.add(minimum);
@@ -226,16 +300,16 @@ public class UserView extends JFrame implements ActionListener {
         panel.add(controls, BorderLayout.CENTER);
 
         JPanel jpanel = new JPanel(new GridLayout(0, 1, 2, 2));
-        JButton button = new JButton("Thanh toán dư nợ");
-        jpanel.add(button);
+        payBtn = new JButton("Thanh toán dư nợ");
+        jpanel.add(payBtn);
         panel.add(jpanel, BorderLayout.SOUTH);
 
-        button.addActionListener((ActionEvent ae) -> {
+        payBtn.addActionListener((ActionEvent ae) -> {
             if (true) {
                 dialog.dispose();
                 dialog.setVisible(false);
             } else {
-                
+
             }
         });
 
@@ -266,22 +340,22 @@ public class UserView extends JFrame implements ActionListener {
         panel.add(controls, BorderLayout.CENTER);
 
         JPanel jpanel = new JPanel(new GridLayout(0, 1, 2, 2));
-        JTextField warning = new JTextField();
-        warning.setForeground(Color.red);
-        warning.setBackground(null);
-        warning.setBorder(null);
-        warning.setHorizontalAlignment(JTextField.CENTER);
-        JButton button = new JButton("Đổi mật khẩu");
-        jpanel.add(warning);
-        jpanel.add(button);
+        PassWarning = new JTextField();
+        PassWarning.setForeground(Color.red);
+        PassWarning.setBackground(null);
+        PassWarning.setBorder(null);
+        PassWarning.setHorizontalAlignment(JTextField.CENTER);
+        changePassButton = new JButton("Đổi mật khẩu");
+        jpanel.add(PassWarning);
+        jpanel.add(changePassButton);
         panel.add(jpanel, BorderLayout.SOUTH);
 
-        button.addActionListener((ActionEvent ae) -> {
+        changePassButton.addActionListener((ActionEvent ae) -> {
             if (Arrays.equals(newPass.getPassword(), reEnterPass.getPassword())) {
                 dialog.dispose();
                 dialog.setVisible(false);
             } else {
-                warning.setText("Mật khẩu mới không trùng khớp");
+                PassWarning.setText("Mật khẩu mới không trùng khớp");
             }
         });
 
@@ -294,68 +368,96 @@ public class UserView extends JFrame implements ActionListener {
         dialog.setVisible(true);
     }
 
-    public void ShowHistory(JFrame frame) {
-        // Panel Lịch sử tiêu thụ gói nhu yếu phẩm
-        JTextField packageName = new JTextField();
-        JTextField packageTime = new JTextField();
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(2, 2, 5, 5));
-        infoPanel.add(new JLabel("Tên gói                      "));
-        infoPanel.add(packageName);
-        infoPanel.add(new JLabel("Thời gian"));
-        infoPanel.add(packageTime);
-        
-        JPanel info = new JPanel();
-        info.setBorder(new TitledBorder("Lịch sử tiêu thụ gói nhu yếu phẩm"));
-        info.setLayout(new GridLayout(2, 3));
-        info.add(infoPanel);
-        
-        // Panel Lịch sử được quản lý
-        JTextField stateChange = new JTextField();
-        JTextField locationChange = new JTextField();
-        JTextField timeChange = new JTextField();
-        JPanel dunoPanel = new JPanel();
-        dunoPanel.setLayout(new GridLayout(3, 2, 5, 5));
-        dunoPanel.add(new JLabel("Chuyển đổi trạng thái"));
-        dunoPanel.add(stateChange);
-        dunoPanel.add(new JLabel("Chuyển đổi nơi cách ly / điều trị"));
-        dunoPanel.add(locationChange);
-        dunoPanel.add(new JLabel("Thời gian thực hiện chuyển đổi"));
-        dunoPanel.add(timeChange);
-        
-        JPanel debt = new JPanel();
-        debt.setBorder(new TitledBorder("Lịch sử được quản lý"));
-        debt.setLayout(new GridLayout(2, 1));
-        debt.add(dunoPanel);
-        
-        // Panel Lịch sử thanh toán
-        JTextField time = new JTextField();
-        JTextField money = new JTextField();
-        JPanel paymentinfo = new JPanel();
-        paymentinfo.setLayout(new GridLayout(2, 2, 5, 5));
-        paymentinfo.add(new JLabel("Thời gian"));
-        paymentinfo.add(time);
-        paymentinfo.add(new JLabel("Số tiền thanh toán"));
-        paymentinfo.add(money);
-        
-        JPanel paymentHistory = new JPanel();
-        paymentHistory.setBorder(new TitledBorder("Lịch sử thanh toán"));
-        paymentHistory.setLayout(new GridLayout(2, 1));
-        paymentHistory.add(paymentinfo);
-        
-        // Panel tổng
-        JPanel jinfo = new JPanel();
-        jinfo.add(info);
-        jinfo.add(debt);
-        jinfo.add(paymentHistory);
-        
-        dialog = new JDialog(this, "Lịch sử", false);
+    public void ConsumeHistory(JFrame frame) {
+        JTable hisTable = new JTable();
+        JScrollPane hisScroll = new JScrollPane();
+        hisTable.setModel(new DefaultTableModel((Object[][]) hisConsumeData, hisConsumeHeaders));
+        hisTable.setAutoCreateRowSorter(true);
+        hisScroll.setViewportView(hisTable);
+
+        JPanel centerPanel = new JPanel();
+        FlowLayout flowLayout = new FlowLayout();
+        centerPanel.setLayout(flowLayout);
+        flowLayout.setHgap(10);
+        centerPanel.add(hisScroll);
+
+        dialog = new JDialog(this, "Lịch sử tiêu thụ gói nhu yếu phẩm", false);
         dialog.setSize(1000, 200);
         dialog.setResizable(false);
-        dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent cho tới khi hoàn thành đổi mật khẩu
+        dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent
         dialog.setLocationRelativeTo(null);
-        dialog.add(jinfo);
+        dialog.add(centerPanel);
         dialog.pack();
         dialog.setVisible(true);
+    }
+
+    public void ManageHistory(JFrame frame) {
+        JTable hisTable = new JTable();
+        JScrollPane hisScroll = new JScrollPane();
+        hisTable.setModel(new DefaultTableModel((Object[][]) hisManageData, hisManageHeaders));
+        hisTable.setAutoCreateRowSorter(true);
+        hisScroll.setViewportView(hisTable);
+
+        JPanel centerPanel = new JPanel();
+        FlowLayout flowLayout = new FlowLayout();
+        centerPanel.setLayout(flowLayout);
+        flowLayout.setHgap(10);
+        centerPanel.add(hisScroll);
+
+        dialog = new JDialog(this, "Lịch sử được quản lý", false);
+        dialog.setSize(1000, 200);
+        dialog.setResizable(false);
+        dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent
+        dialog.setLocationRelativeTo(null);
+        dialog.add(centerPanel);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
+    public void PaymentHistory(JFrame frame) {
+        JTable hisTable = new JTable();
+        JScrollPane hisScroll = new JScrollPane();
+        hisTable.setModel(new DefaultTableModel((Object[][]) hisPaymentData, hisPaymentHeaders));
+        hisTable.setAutoCreateRowSorter(true);
+        hisScroll.setViewportView(hisTable);
+
+        JPanel centerPanel = new JPanel();
+        FlowLayout flowLayout = new FlowLayout();
+        centerPanel.setLayout(flowLayout);
+        flowLayout.setHgap(10);
+        centerPanel.add(hisScroll);
+
+        dialog = new JDialog(this, "Lịch sử thanh toán", false);
+        dialog.setSize(1000, 200);
+        dialog.setResizable(false);
+        dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent
+        dialog.setLocationRelativeTo(null);
+        dialog.add(centerPanel);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+}
+
+class SpinnerEditor extends AbstractCellEditor implements TableCellEditor {
+    final JSpinner spinner = new JSpinner();
+    
+    public SpinnerEditor() {
+        spinner.setModel(new SpinnerNumberModel(0, 0, 10, 1));
+    }
+
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        spinner.setValue(value);
+        return spinner;
+    }
+
+    public boolean isCellEditable(EventObject evt) {
+        if (evt instanceof MouseEvent) {
+            return ((MouseEvent) evt).getClickCount() >= 2;
+        }
+        return true;
+    }
+
+    public Object getCellEditorValue() {
+        return spinner.getValue();
     }
 }

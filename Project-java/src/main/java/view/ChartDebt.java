@@ -22,6 +22,7 @@ public class ChartDebt extends JFrame{
     public ChartDebt(LinkedHashMap<String,Double> data){
         super("Thống kê");
         setContentPane(createContent(data));
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     private static PieDataset createDataset(LinkedHashMap<String,Double> data) {
       DefaultPieDataset dataset = new DefaultPieDataset( );

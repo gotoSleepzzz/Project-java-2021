@@ -23,6 +23,7 @@ public class ChartConsume extends JFrame{
     public ChartConsume(LinkedHashMap<String,Integer> data){
         super("Thống kê");
         setContentPane(createContent(data));
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     private DefaultCategoryDataset createDataset(LinkedHashMap<String,Integer> data) {
       DefaultCategoryDataset dataset = new DefaultCategoryDataset();

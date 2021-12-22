@@ -5,19 +5,19 @@
  */
 package control;
 
+import model.Account;
+import model.History;
+import service.AccountService;
+import service.ActivityHistoryService;
+import utils.dbUtil;
+import view.admin.qltk_Admin;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import model.Account;
-import model.History;
-import utils.dbUtil;
-import view.admin.qltk_Admin;
-import service.AccountService;
-import service.ActivityHistoryService;
 
 /**
- *
  * @author TRUNG
  */
 public class QLTaiKhoanController {
@@ -27,7 +27,8 @@ public class QLTaiKhoanController {
     ArrayList<Account> accounts;
     AccountService accountService;
     ActivityHistoryService historyService;
-    public QLTaiKhoanController(qltk_Admin view){
+
+    public QLTaiKhoanController(qltk_Admin view) {
         response = "";
         accountService = new AccountService();
         historyService = new ActivityHistoryService();
@@ -39,7 +40,8 @@ public class QLTaiKhoanController {
         this.view.setTableAccountModel(convertAccountToArray2D(accounts));
         this.view.setVisible(true);
     }
-    public String[][] convertAccountToArray2D(ArrayList<Account> list){
+
+    public String[][] convertAccountToArray2D(ArrayList<Account> list) {
         String data[][] = new String[list.size()][4];
         // convert list to data object 
         for (int i = 0; i < list.size(); i++) {
@@ -47,14 +49,15 @@ public class QLTaiKhoanController {
             data[i][0] = acc.getUsername();
             data[i][1] = acc.getPass();
             data[i][2] = acc.getRole();
-            if (acc.getStatus() == true)
+            if (acc.getStatus())
                 data[i][3] = "Unlocked";
             else
                 data[i][3] = "Locked";
         }
         return data;
     }
-    public String[][] convertHistoryToArray2D(ArrayList<History> list){
+
+    public String[][] convertHistoryToArray2D(ArrayList<History> list) {
         String data[][] = new String[list.size()][4];
         // convert list to data object 
         for (int i = 0; i < list.size(); i++) {
@@ -65,15 +68,15 @@ public class QLTaiKhoanController {
         }
         return data;
     }
-    class ShowHistoryEvent implements ActionListener{
+
+    class ShowHistoryEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             int index = view.getSelectedRowTableAcc();
-            if(index == -1){
+            if (index == -1) {
                 response = "Please select a row on the table that you want to show";
-                JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
-            }
-            else{
+                JOptionPane.showMessageDialog(view, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
+            } else {
                 Account account = accounts.get(index);
                 String username = account.getUsername();
                 ArrayList<History> temp = historyService.findById(username);
@@ -81,28 +84,25 @@ public class QLTaiKhoanController {
             }
         }
     }
-    class BanEvent implements ActionListener{
+
+    class BanEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             int index = view.getSelectedRowTableAcc();
-            if(index == -1){
+            if (index == -1) {
                 response = "Please select a row on the table that you want to lock/unlock";
-                JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
-            }
-            else{
+                JOptionPane.showMessageDialog(view, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
+            } else {
                 boolean status;
                 Account account = accounts.get(index);
-                if(account.getStatus() == true){
-                    status = false;
-                }
-                else status = true;
+                status = !account.getStatus();
                 account.setStatus(status);
                 accountService.LockAccount(account, status);
-                if (status == true)
+                if (status)
                     view.getTableAccountModel().setValueAt("Unlocked", index, 3);
-                else 
+                else
                     view.getTableAccountModel().setValueAt("Locked", index, 3);
-                
+
             }
         }
     }

@@ -18,6 +18,7 @@ public class dbUtil {
     private ResultSet rs;
     
     private dbUtil(){
+        getConn();
     }
     
     public static dbUtil getDbUtil() {

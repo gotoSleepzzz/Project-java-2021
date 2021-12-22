@@ -1,6 +1,7 @@
 package view;
 
 import model.UserCovid;
+import service.UserService;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -30,6 +31,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private JPanel footerPanel;
     private JButton watchMore;
     List<UserCovid> list;
+    private JButton backButton;
 
 
     public ViewManagerUserCovid() {
@@ -37,14 +39,14 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         panelHeader = new JPanel();
         panelHeader.setLayout(new BorderLayout());
 
-
         MenuPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        backButton = new JButton("Quay lại");
+
+        MenuPanel.add(backButton);
         searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(this);
-
-
         searchField = new CustomTextField(30);
         searchField.setPlaceholder("Nhập tên cần tìm kiếm bằng tên, cmnd");
 
@@ -63,15 +65,18 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
         String[] columns = new String[]{"Họ tên", "CMND", "Nơi điều trị", "Năm sinh",
                 "Trạng thái hiện tại", "Xem chi tiết", "Chỉnh sửa"};
-        String[][] data = new String[][]{
-                {"Thomas", "1", "Bệnh viện Dã Chiến", "1999", "F0"},
-                {"Thomas", "2", "Bệnh viện Dã Chiến", "1999", "F0"},
-                {"Thomas", "3", "Bệnh viện Dã Chiến", "1999", "F0"},
-                {"Thomas", "4", "Bệnh viện Dã Chiến", "1999", "F0"},
-                {"Thomas", "5", "Bệnh viện Dã Chiến", "1999", "F0"},
-                {"Thomas", "6", "Bệnh viện Dã Chiến", "1999", "F0"},
-                {"Thomas", "6", "Bệnh viện Dã Chiến", "1999", "F0"},
-        };
+
+        // Convert list to String[][]
+        list = UserService.getInstance().findAll();
+        String[][] data = new String[list.size()][5];
+
+        for (int i = 0; i < list.size(); i++) {
+            data[i][0] = list.get(i).getName();
+            data[i][1] = list.get(i).getId();
+            data[i][2] = String.valueOf(list.get(i).getHealthCenter());
+            data[i][3] = String.valueOf(list.get(i).getDob());
+            data[i][4] = list.get(i).getState();
+        }
 
 
         DefaultTableModel model = new DefaultTableModel(data, columns);
@@ -123,7 +128,6 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         panelBody.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
 
-
         panelFooter = new JPanel(new FlowLayout(FlowLayout.CENTER));
         watchMore = new JButton("Xem thêm");
         panelFooter.add(watchMore);
@@ -132,10 +136,30 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         add(panelHeader, BorderLayout.NORTH);
         add(panelBody, BorderLayout.CENTER);
         add(panelFooter, BorderLayout.SOUTH);
-
-
         setVisible(true);
     }
+
+    public void addBackButtonListener_ViewManagerUserCovid(ActionListener actionListener) {
+        backButton.addActionListener(actionListener);
+    }
+
+    public void addWatchMoreActionListener(ActionListener actionListener) {
+        watchMore.addActionListener(actionListener);
+    }
+
+    // get button listener
+    public void addModifyActionListener(ActionListener actionListener) {
+        buttonModify.addActionListener(actionListener);
+    }
+
+    public void addSearchActionListener(ActionListener actionListener) {
+        searchButton.addActionListener(actionListener);
+    }
+
+    public void addDetailsActionListener(ActionListener actionListener) {
+        button.addActionListener(actionListener);
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {

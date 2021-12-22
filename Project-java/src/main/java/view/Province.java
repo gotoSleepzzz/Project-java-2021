@@ -11,11 +11,25 @@ import java.io.IOException;
 import java.util.List;
 
 public class Province {
+
+    // make singleton
+    private static Province instance = null;
+
     JSONParser jsonParser = new JSONParser();
     JSONArray provinces;
     JSONArray districts;
     JSONArray communes;
 
+    public static Province getInstance() {
+        if (instance == null) {
+            try {
+                instance = new Province();
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
 
     public Province() throws IOException, ParseException {
         FileReader reader = null;

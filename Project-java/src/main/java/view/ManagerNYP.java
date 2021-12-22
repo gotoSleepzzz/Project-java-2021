@@ -1,46 +1,66 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
-
+import java.awt.BorderLayout;
+import static java.awt.Component.CENTER_ALIGNMENT;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-
-import static java.awt.Component.CENTER_ALIGNMENT;
+import javax.swing.text.Utilities;
 
 /**
+ *
  * @author TRUNG
  */
-public class ManagerNYP {
-    private JFrame frame;
-    private JButton newBtn, delBtn, updateBtn, searchBtn;
+public class ManagerNYP extends JPanel implements ActionListener {
+    private JButton newBtn,delBtn,updateBtn, searchBtn;
     private JTextField searchBar, name, limit, time, cost;
     private JTable table;
     private JPanel searchPanel, mainPanel, contentPanel, infoPanel, btnPanel, utilPanel;
     private JScrollPane scroll;
     private JComboBox filter;
+    private JButton back;
     private final String[] category = new String[]{
             "< 500.000", "500.000 - 1.000.000"
     };
     private final String[] headerTable = new String[]{
             "Tên gói", "Mức giới hạn", "Thời gian giới hạn", "Đơn giá"
     };
-    private Object data = new Object[][]{};
+    private Object data = new Object [][]{};
 
-    ManagerNYP() {
-        JLabel header = new JLabel("Quản lý gói nhu yếu phẩm");
-        header.setFont(new Font("Serif", Font.BOLD, 35));
-        header.setAlignmentX(CENTER_ALIGNMENT);
+    JPanel headerPanel;
+
+
+
+    public ManagerNYP(){
+
+        JLabel title = new JLabel("                              Quản lý gói nhu yếu phẩm");
+        title.setFont(new Font("Serif",Font.BOLD,35));
+        title.setAlignmentX(CENTER_ALIGNMENT);
+
+        headerPanel = new JPanel(new BorderLayout());
+        back = new JButton("Quay lại");
+
+        JPanel temp = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        temp.add(back);
+        headerPanel.add(temp, BorderLayout.NORTH);
+        headerPanel.add(title, BorderLayout.CENTER);
+        // make title at center
+        title.setAlignmentX(CENTER_ALIGNMENT);
+
+
 
         searchBar = new JTextField(75);
         searchBtn = new JButton("Search");
 
         searchPanel = new JPanel();
-        searchPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        searchPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
         searchPanel.add(searchBar);
         searchPanel.add(searchBtn);
 
@@ -72,7 +92,7 @@ public class ManagerNYP {
         cost = new JTextField();
         filter = new JComboBox(category);
         infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(5, 2, 20, 19));
+        infoPanel.setLayout(new GridLayout(5,2,20,19));
         infoPanel.add(new JLabel("Lọc"));
         infoPanel.add(filter);
         infoPanel.add(new JLabel("Tên gói"));
@@ -86,7 +106,7 @@ public class ManagerNYP {
 
         utilPanel = new JPanel();
         utilPanel.setBorder(new TitledBorder("Thông tin"));
-        utilPanel.setLayout(new GridLayout(2, 1));
+        utilPanel.setLayout(new GridLayout(2,1));
         utilPanel.add(infoPanel);
         utilPanel.add(btnPanel);
 
@@ -97,18 +117,20 @@ public class ManagerNYP {
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(header);
+        mainPanel.add(headerPanel);
         mainPanel.add(searchPanel);
         mainPanel.add(contentPanel);
+        add(mainPanel);
+        setVisible(true);
+    }
 
-        frame = new JFrame();
-        frame.setTitle("Manager");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(950, 700);
-        frame.setResizable(true);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.add(mainPanel);
+    public void addBackListener(ActionListener listener){
+        back.addActionListener(listener);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
     /*public static void main(String[] args) {
         new ManagerNYP();

@@ -1,30 +1,19 @@
 package view;
 
 import model.UserCovid;
-import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
 public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
     // declaration of variables
-
-    Province province;
-
-    {
-        try {
-            province = new Province();
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-    }
+    Province province = Province.getInstance();
 
     // JLabel
     private JLabel title;
@@ -50,6 +39,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     private JComboBox<String> healthCenterComboBox;
     private CustomTextField peopleReachedField;
 
+
     // Jbutton
 
     private String placeholderName = "Nhập họ tên:";
@@ -68,6 +58,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     private JPanel row5;
     private JPanel row6;
     private JPanel row7;
+    private JPanel panelHeader;
     private JPanel panel;
 
 
@@ -81,6 +72,8 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     private boolean isValidForm;
 
 
+    JPanel buttonBackPanel;
+
     // JPanel
 
     public ViewRegisterUserCovid() {
@@ -88,18 +81,29 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         // initializing variables
         setLayout(new BorderLayout());
 
+        // JPanel
+        panelHeader = new JPanel(new BorderLayout());
+
+
         // Initializing JLabel
         title = new JLabel("Đăng ký người liên quan Covid-19\n", SwingConstants.CENTER); // Using SwingConstants to set the text in the center of the label
         title.setFont(new Font("Arial", Font.BOLD, 20)); // Setting the font of the label
         // set padding top for title
         title.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-        name = new JLabel(         "Họ tên:                                 ");
-        id = new JLabel(           "CMND:                                  ");
-        address = new JLabel(      "Địa chỉ:                               ");
-        dob = new JLabel(          "Năm sinh:                             ");
-        currentState = new JLabel( "Trạng thái hiện tại:                ");
-        healthCenter = new JLabel( "Nơi đang điều trị/cách ly:     ");
+        buttonBackPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        back = new JButton("Quay lại");
+        buttonBackPanel.add(back);
+        panelHeader.add(buttonBackPanel, BorderLayout.NORTH);
+
+        panelHeader.add(title, BorderLayout.CENTER);
+
+        name = new JLabel("Họ tên:                                 ");
+        id = new JLabel("CMND:                                  ");
+        address = new JLabel("Địa chỉ:                               ");
+        dob = new JLabel("Năm sinh:                             ");
+        currentState = new JLabel("Trạng thái hiện tại:                ");
+        healthCenter = new JLabel("Nơi đang điều trị/cách ly:     ");
         peopleReached = new JLabel("Người liên quan Covid-19 :   ");
         currentStateComboBox = new JComboBox<>();
         currentStateComboBox.addItem("F0");
@@ -160,7 +164,6 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         // Initializing Button
         submit = new JButton("Submit");
         submit.addActionListener(this);
-        back = new JButton("Back");
 
         JLabel[] labels = {name, id, address, dob, currentState, healthCenter, peopleReached};
         JTextField[] textFields = {nameField, idField, addressField, new JTextField(), new JTextField(), new JTextField(), peopleReachedField};
@@ -168,7 +171,6 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
         // Create a new panel that will hold the contents of the frame and this panel would be center
         panel = new JPanel();
-        panel.add(title);
         panel.add(name);
         panel.add(nameField);
         // Set layout for panel using GridLayout
@@ -188,7 +190,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
             if (i == 3)
                 rows[i].add(year);
 
-            if (i != 2 && i != 5  && i != 3  && i != 4)
+            if (i != 2 && i != 5 && i != 3 && i != 4)
                 rows[i].add(textFields[i]);
 
             panel.add(rows[i]);
@@ -200,14 +202,17 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(submit);
 
-
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10 , 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // adding panel to the frame
-        add(title, BorderLayout.NORTH);
+        add(panelHeader, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    public void AddBackListener(ActionListener listener) {
+        back.addActionListener(listener);
     }
 
 

@@ -1,12 +1,13 @@
 package view;
 
+import org.jfree.ui.RefineryUtilities;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import org.jfree.ui.RefineryUtilities;
 
 
 public class ViewManager extends JFrame implements ActionListener {
@@ -23,9 +24,11 @@ public class ViewManager extends JFrame implements ActionListener {
     JButton viewTransition;
     JButton viewComsume;
     JButton viewDebt;
-
     JPanel insideBody;
 
+    ViewManagerUserCovid viewManagerUserCovid = new ViewManagerUserCovid();
+    ViewRegisterUserCovid viewRegisterUserCovid = new ViewRegisterUserCovid();
+    ManagerNYP viewManagerNYP = new ManagerNYP();
     public ViewManager() {
 
         setTitle("Manager");
@@ -81,93 +84,72 @@ public class ViewManager extends JFrame implements ActionListener {
         insideBody.add(viewDebt);
 
         body.add(insideBody, BorderLayout.CENTER);
-
-        add(header, BorderLayout.NORTH);
-        add(body, BorderLayout.CENTER);
-
-
+        getContentPane().add(header, BorderLayout.NORTH);
+        getContentPane().add(body, BorderLayout.CENTER);
         setVisible(true);
+        setLocationRelativeTo(null);
+    }
+
+
+    public ViewRegisterUserCovid getViewRegisterUserCovid() {
+        return viewRegisterUserCovid;
+    }
+
+    public ManagerNYP getViewManagerNYP() {
+        return viewManagerNYP;
+    }
+
+    // get this panel of viewManager
+    public JPanel getPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(header,  BorderLayout.NORTH);
+        panel.add(body, BorderLayout.CENTER);
+        return panel;
+    }
+
+    public ViewManagerUserCovid getViewManagerUserCovid() {
+        return viewManagerUserCovid;
+    }
+
+    public void addStatisticListener(ActionListener listener) {
+        viewStatistic.addActionListener(listener);
+    }
+
+    public void addTransitionListener(ActionListener listener) {
+        viewTransition.addActionListener(listener);
+    }
+
+    public void addComsumeListener(ActionListener listener) {
+        viewComsume.addActionListener(listener);
+    }
+
+    public void addDebtListener(ActionListener listener) {
+        viewDebt.addActionListener(listener);
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == manageListButton) {
-            dispose();
-            JFrame test = new JFrame();
-            test.setSize(1000, 800);
-            test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            test.add(new ViewManagerUserCovid());
-            test.setVisible(true);
-
+            getContentPane().removeAll();
+            getContentPane().repaint();
+            getContentPane().add(viewManagerUserCovid);
+            setSize(1000, 800);
+            getContentPane().revalidate();
         }
         if (e.getSource() == register) {
-            dispose();
-            JFrame test = new JFrame();
-            test.setTitle("Manger");
-            test.setSize(1000, 800);
-            test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            test.add(new ViewRegisterUserCovid());
-            test.setVisible(true);
+            getContentPane().removeAll();
+            getContentPane().repaint();
+            getContentPane().add(viewRegisterUserCovid);
+            setSize(1000, 800);
+            getContentPane().revalidate();
         }
         if (e.getSource() == manageNecessary) {
-            dispose();
-            new ManagerNYP();
-        }
-        if (e.getSource() == viewStatistic) {
-            LinkedHashMap<String, Integer> F1 = new LinkedHashMap();
-            F1.put("1970", 15);
-            F1.put("1980", 30);
-            F1.put("1990", 60);
-            F1.put("2000", 120);
-            F1.put("2010", 240);
-            F1.put("2014", 300);
-            LinkedHashMap<String, Integer> F2 = new LinkedHashMap();
-            F2.put("1970", 30);
-            F2.put("1980", 45);
-            F2.put("1990", 50);
-            F2.put("2000", 100);
-            F2.put("2010", 60);
-            F2.put("2014", 150);
-            HashMap<String,LinkedHashMap<String, Integer>> status = new HashMap();
-            status.put("F1",F1);
-            status.put("F2",F2);
-            ChartStatus chart = new ChartStatus(status);
-            chart.pack();
-            RefineryUtilities.centerFrameOnScreen( chart );
-            chart.setVisible( true );
-            chart.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        }
-        if (e.getSource() == viewTransition) {
-            LinkedHashMap<String, Integer> data = new LinkedHashMap();
-            data.put("Chuyển trạng thái", 100);
-            data.put("Khỏi bệnh", 300);
-            ChartTransition chart = new ChartTransition(data);
-            chart.pack();
-            RefineryUtilities.centerFrameOnScreen( chart );
-            chart.setVisible( true );
-            chart.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        }
-        if (e.getSource() == viewComsume) {
-            LinkedHashMap<String, Integer> data = new LinkedHashMap();
-            data.put("Food 1", 100);
-            data.put("Food 2", 300);
-            data.put("Food 3", 900);
-            ChartConsume chart = new ChartConsume(data);
-            chart.pack();
-            RefineryUtilities.centerFrameOnScreen( chart );
-            chart.setVisible( true );
-            chart.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        }
-        if (e.getSource() == viewDebt) {
-            LinkedHashMap<String, Double> data = new LinkedHashMap();
-            data.put("<500", 60d);
-            data.put("500-1000", 40d);
-            ChartDebt chart = new ChartDebt(data);
-            chart.pack();
-            RefineryUtilities.centerFrameOnScreen( chart );
-            chart.setVisible( true );
-            chart.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            getContentPane().removeAll();
+            getContentPane().repaint();
+            getContentPane().add(viewManagerNYP);
+            setSize(1050, 700);
+            getContentPane().revalidate();
         }
 
     }

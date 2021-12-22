@@ -8,10 +8,19 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserService{
+
+    private static UserService single_instance;
     dbUtil db;
+    ListUserCovid listUserCovid = new ListUserCovid();
 
     public UserService() {
         db = dbUtil.getDbUtil();
+    }
+
+    public static UserService getInstance() {
+        if (single_instance == null)
+            single_instance = new UserService();
+        return single_instance;
     }
 
     private String
@@ -35,7 +44,6 @@ public class UserService{
             getAllUser = "SELECT * FROM nguoi_lien_quan WHERE covid_id = ?";
     private String
             getByPage = "SELECT * FROM nguoi_lien_quan LIMIT ?, ?";
-    ListUserCovid listUserCovid = new ListUserCovid();
 
     public void add(UserCovid userCovid) {
         Object[] params = {

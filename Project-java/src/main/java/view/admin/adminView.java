@@ -2,6 +2,7 @@ package view.admin;
 
 
 import control.QLNoiDieuTriController;
+import control.QLTaiKhoanController;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -17,7 +18,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.border.EmptyBorder;
 
 public class adminView extends JFrame implements ActionListener {
-    QLNoiDieuTriController controller = null;
+    QLNoiDieuTriController qlNoiDieuTriController = null;
+    QLTaiKhoanController qlTaiKhoanController = null;
     public adminView(){
         init();
     }
@@ -98,14 +100,17 @@ public class adminView extends JFrame implements ActionListener {
         if (e.getSource() == qltkBtn){
             mainPanel.setVisible(false);
             qltk.setBounds(1, 1, this.getWidth(), this.getHeight());
-            qltk.setVisible(true);
+            if (qlTaiKhoanController == null)
+                qlTaiKhoanController = new QLTaiKhoanController(qltk);
+            else
+                qltk.setVisible(true);
             backBtn.setVisible(true);                     
         }
         else if(e.getSource() == qlndtBtn){
             mainPanel.setVisible(false);
             qlndt.setBounds(1, 1, this.getWidth(), this.getHeight());
-            if (controller == null)
-                controller = new QLNoiDieuTriController(qlndt);
+            if (qlNoiDieuTriController == null)
+                qlNoiDieuTriController = new QLNoiDieuTriController(qlndt);
             else{
                 qlndt.setVisible(true);
             }

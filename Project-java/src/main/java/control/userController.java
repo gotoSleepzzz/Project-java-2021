@@ -8,10 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import utils.dbUtil;
 import view.UserView;
-import model.User;
+import model.UserCovid;
 /**
  *
  * @author TRUNG
@@ -19,7 +18,7 @@ import model.User;
 public class userController {
     dbUtil db;
     UserView view;
-    User user;
+    UserCovid user;
     public userController(String username){
         db = dbUtil.getDbUtil();
         user = getInfoUser(username);
@@ -28,18 +27,18 @@ public class userController {
         
         view.setNameField(user.getName());
         view.setAddressField(user.getAddress());
-        view.setDobField(user.getBornYear().toString());
-        view.setIdField(user.getCmnd());
+        view.setDobField(user.getDob().toString());
+        view.setIdField(user.getId());
         view.setLocationRelativeTo(null);
         
         view.setVisible(true);
     }
-    private User getInfoUser(String username){
-        User temp = null;
+    private UserCovid getInfoUser(String username){
+        UserCovid temp = null;
         ResultSet rs = db.executeQuery("Select * from `NGUOI_LIEN_QUAN` where cmnd = '" + username + "'");
         try {
             if(rs.next()){
-                temp = new User(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getString(5),rs.getInt(6),rs.getFloat(7)); 
+                temp = new UserCovid(rs.getString("ten"),rs.getString("cmnd"),rs.getInt("namsinh"),rs.getString("diachi"),rs.getString("trangthai"),rs.getInt("idnoiquanly"),rs.getFloat("ghino")); 
             }
         } catch (SQLException ex) {
             Logger.getLogger(userController.class.getName()).log(Level.SEVERE, null, ex);

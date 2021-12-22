@@ -8,7 +8,7 @@ create table `account`
 	`username` varchar(12) not null primary key,
 	`password` varchar(20) not null default '',
 	`role` varchar(8) not null default 'user',
-    `status` bit default 1
+    `status` bool default true
 );
 
 alter table `account`
@@ -377,13 +377,16 @@ call htql_covid.`proc_ChuyenTrangThai` ('123456789001','F0','admin');
 call htql_covid.`proc_ChuyenNoiDieuTri` ('123456789001', 21, 'admin');
 
 call htql_covid.`proc_MuaNhuPham` ('123456789008', 10, 2);
+call htql_covid.`proc_MuaNhuPham` ('123456789008', 11, 10);
+call htql_covid.`proc_MuaNhuPham` ('123456789008', 12, 5);
+call htql_covid.`proc_MuaNhuPham` ('123456789008', 13, 1);
 
 call htql_covid.`proc_TaoQuanLy` ('manager','manager','admin');
 
 -- select * from htql_covid.`account`;
-select * from htql_covid.noi_quan_ly;
+-- select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;
--- select * from htql_covid.nhu_pham;
+select * from htql_covid.nhu_pham;
 -- select * from htql_covid.lich_su_chuyen_trang_thai;
--- select * from htql_covid.lich_su_hoat_dong;
+select * from htql_covid.lich_su_hoat_dong;
 -- select * from htql_covid.lich_su_mua;

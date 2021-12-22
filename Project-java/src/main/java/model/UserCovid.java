@@ -31,6 +31,16 @@ public class UserCovid {
         this.debt = debt;
     }
 
+    public UserCovid(String name, String id, int dob, String address, String state, int healthCenter, double debt) {
+        this.name = name;
+        this.id = id;
+        this.dob = dob;
+        this.address = address;
+        this.state = state;
+        this.healthCenter = healthCenter;
+        this.debt = debt;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -71,7 +81,7 @@ public class UserCovid {
         return id;
     }
 
-    public int getDob() {
+    public Integer getDob() {
         return dob;
     }
 

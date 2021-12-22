@@ -45,8 +45,7 @@ public class Account {
         return role;
     }
 
-    public Account() {
+    public boolean getStatus() {
+        return status;
     }
-    
-    
 }

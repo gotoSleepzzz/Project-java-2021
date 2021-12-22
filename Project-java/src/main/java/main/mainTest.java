@@ -17,8 +17,8 @@ public class mainTest {
         //new loginController();
         //new ViewManager();
         //new UserView();
-        //adminView a = new adminView();
-        //a.setVisible(true);
-        new ManagerController();
+        adminView a = new adminView();
+        a.setVisible(true);
+        //new ManagerController();
     }
 }

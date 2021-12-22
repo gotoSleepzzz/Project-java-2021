@@ -1,4 +1,4 @@
-package model.DAO;
+package service;
 
 import model.ListUserCovid;
 import model.UserCovid;
@@ -7,10 +7,10 @@ import utils.dbUtil;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserCovidModel implements ImplementUserCovid {
+public class UserService{
     dbUtil db;
 
-    public UserCovidModel() {
+    public UserService() {
         db = dbUtil.getDbUtil();
     }
 
@@ -37,7 +37,6 @@ public class UserCovidModel implements ImplementUserCovid {
             getByPage = "SELECT * FROM nguoi_lien_quan LIMIT ?, ?";
     ListUserCovid listUserCovid = new ListUserCovid();
 
-    @Override
     public void add(UserCovid userCovid) {
         Object[] params = {
                 userCovid.getName(),
@@ -56,7 +55,6 @@ public class UserCovidModel implements ImplementUserCovid {
         }
     }
 
-    @Override
     public void update(UserCovid userCovid) {
         Object[] params = {
                 userCovid.getState(),
@@ -65,15 +63,13 @@ public class UserCovidModel implements ImplementUserCovid {
         db.executeUpdate(updateUserCovidByState, params);
     }
 
-    @Override
     public void delete(String id) {
         Object[] params = {id};
         db.executeUpdate(delete, params);
     }
 
 
-    @Override
-    public List<UserCovid> getAll() {
+    public List<UserCovid> findAll() {
         Object[] params = {};
         var rs = db.executeQuery(getAll, params);
         try {
@@ -92,7 +88,6 @@ public class UserCovidModel implements ImplementUserCovid {
         return listUserCovid.getListUserCovid();
     }
 
-    @Override
     public UserCovid getUserCovidByID(String id) {
         Object[] params = {id};
         var rs = db.executeQuery(getById, params);

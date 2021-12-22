@@ -32,17 +32,23 @@ public class loginController{
                     try {
                         ResultSet rs = db.executeQuery("Select * from `account` where `username` = '" + username + "'");
                         if (rs.next()){
-                            String role = rs.getString(3);
-                            if(role.equalsIgnoreCase("admin")){
-                                login.setVisible(false);
-                                login.dispose();
-                                new adminView().setVisible(true);
-                            }else if(role.equalsIgnoreCase("manager")){
-                                new ViewManager();
-                            }else /*if(role.equalsIgnoreCase("user"))*/{
-                                // gắn abc...
-                                login.dispose();
-                                new userController(username);
+                            boolean status = rs.getBoolean("status");
+                            if (status == true){
+                                String role = rs.getString(3);
+                                if(role.equalsIgnoreCase("admin")){
+                                    login.setVisible(false);
+                                    login.dispose();
+                                    new adminView().setVisible(true);
+                                }else if(role.equalsIgnoreCase("manager")){
+                                    new ViewManager();
+                                }else /*if(role.equalsIgnoreCase("user"))*/{
+                                    // gắn abc...
+                                    login.dispose();
+                                    new userController(username);
+                                }
+                            }else{
+                                String response = "Your account has been locked";
+                                JOptionPane.showMessageDialog(login, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                         else{

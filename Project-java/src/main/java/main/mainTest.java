@@ -14,11 +14,11 @@ public class mainTest {
         } catch (Exception e1) {
 
         }
-        //new loginController();
+        new loginController();
         //new ViewManager();
         //new UserView();
-        adminView a = new adminView();
-        a.setVisible(true);
+//        adminView a = new adminView();
+//        a.setVisible(true);
         //new ManagerController();
     }
 }

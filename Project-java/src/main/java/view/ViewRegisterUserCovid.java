@@ -247,10 +247,15 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submit) {
 
-            if (nameField.getText().equals(placeholderName) || idField.getText().equals(placeholderId) || addressField.getText().equals(placeholderAddress) || peopleReachedField.getText().equals(placeholderPeopleReached)) {
-                if (provinceComboBox.getSelectedItem().toString().equals("Tỉnh/Thành phố") || districtComboBox.getSelectedItem().toString().equals("Quận") || communeComboBox.getSelectedItem().toString().equals("Huyện"))
-                    showMessage("Vui lòng nhập đầy đủ thông tin", "danger");
-            } else {
+            String regex = "[0-9]+";
+
+            if (nameField.getText().equals(placeholderName) || idField.getText().equals(placeholderId) || addressField.getText().equals(placeholderAddress) || (provinceComboBox.getSelectedItem()).toString().equals("Tỉnh/Thành phố") || districtComboBox.getSelectedItem().toString().equals("Quận") || (communeComboBox.getSelectedItem()).toString().equals("Huyện"))
+                showMessage("Vui lòng nhập đầy đủ thông tin", "danger");
+            else if (!idField.getText().strip().matches(regex) || idField.getText().length() != 9 && peopleReachedField.getText().length() != 12)
+                showMessage("Chứng minh nhân dân vui lòng nhập đúng 9 ký tự số hoặc 12 ký tự số", "danger");
+            else if (!peopleReachedField.getText().equals(placeholderPeopleReached) && (!peopleReachedField.getText().strip().matches(regex) || peopleReachedField.getText().length() != 9 && peopleReachedField.getText().length() != 12))
+                showMessage("Chứng minh nhân dân của người liên quan phải đúng 9 ký tự số hoặc 12 ký tự số", "danger");
+            else {
                 isValidForm = true;
                 showMessage("Đăng ký thông tin thành công", "success");
             }

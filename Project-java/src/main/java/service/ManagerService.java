@@ -5,21 +5,25 @@ import model.UserCovid;
 import utils.dbUtil;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
-public class UserService{
+public class ManagerService {
 
-    private static UserService single_instance;
+    private static ManagerService single_instance;
     dbUtil db;
     ListUserCovid listUserCovid = new ListUserCovid();
+    HashMap<Integer, String> healthCenter = new HashMap<>();
 
-    public UserService() {
+
+    public ManagerService() {
         db = dbUtil.getDbUtil();
+        MapUserCovidToHealthCenter();
     }
 
-    public static UserService getInstance() {
+    public static ManagerService getInstance() {
         if (single_instance == null)
-            single_instance = new UserService();
+            single_instance = new ManagerService();
         return single_instance;
     }
 
@@ -44,6 +48,9 @@ public class UserService{
             getAllUser = "SELECT * FROM nguoi_lien_quan WHERE covid_id = ?";
     private String
             getByPage = "SELECT * FROM nguoi_lien_quan LIMIT ?, ?";
+
+    private String
+            getAllHealthCenter = "SELECT * FROM noi_quan_ly";
 
     public void add(UserCovid userCovid) {
         Object[] params = {
@@ -96,7 +103,7 @@ public class UserService{
         return listUserCovid.getListUserCovid();
     }
 
-    public UserCovid getUserCovidByID(String id) {
+    public UserCovid findUserCovidByID(String id) {
         Object[] params = {id};
         var rs = db.executeQuery(getById, params);
         try {
@@ -114,5 +121,21 @@ public class UserService{
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void MapUserCovidToHealthCenter() {
+        Object[] params = {};
+        var rs = db.executeQuery(getAllHealthCenter, params);
+        try {
+            if (rs.next()) {
+                healthCenter.put(rs.getInt("id"), rs.getString("ten"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getHealthCenterName(int id) {
+        return healthCenter.get(id);
     }
 }

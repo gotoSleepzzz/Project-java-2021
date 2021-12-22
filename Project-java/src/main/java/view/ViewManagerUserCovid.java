@@ -1,7 +1,7 @@
 package view;
 
 import model.UserCovid;
-import service.UserService;
+import service.ManagerService;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
 
 public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
@@ -30,7 +31,8 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private JPanel searchPanel;
     private JPanel footerPanel;
     private JButton watchMore;
-    List<UserCovid> list;
+    List<UserCovid> list = ManagerService.getInstance().findAll();
+    String[][] data = new String[list.size()][5];
     private JButton backButton;
 
 
@@ -66,18 +68,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         String[] columns = new String[]{"Họ tên", "CMND", "Nơi điều trị", "Năm sinh",
                 "Trạng thái hiện tại", "Xem chi tiết", "Chỉnh sửa"};
 
-        // Convert list to String[][]
-        list = UserService.getInstance().findAll();
-        String[][] data = new String[list.size()][5];
-
-        for (int i = 0; i < list.size(); i++) {
-            data[i][0] = list.get(i).getName();
-            data[i][1] = list.get(i).getId();
-            data[i][2] = String.valueOf(list.get(i).getHealthCenter());
-            data[i][3] = String.valueOf(list.get(i).getDob());
-            data[i][4] = list.get(i).getState();
-        }
-
+        showTable();
 
         DefaultTableModel model = new DefaultTableModel(data, columns);
         table = new JTable();
@@ -137,6 +128,16 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         add(panelBody, BorderLayout.CENTER);
         add(panelFooter, BorderLayout.SOUTH);
         setVisible(true);
+    }
+
+    public void showTable() {
+        for (int i = 0; i < list.size(); i++) {
+            data[i][0] = list.get(i).getName();
+            data[i][1] = list.get(i).getId();
+            data[i][2] = ManagerService.getInstance().getHealthCenterName(list.get(i).getHealthCenter());
+            data[i][3] = String.valueOf(list.get(i).getDob());
+            data[i][4] = list.get(i).getState();
+        }
     }
 
     public void addBackButtonListener_ViewManagerUserCovid(ActionListener actionListener) {

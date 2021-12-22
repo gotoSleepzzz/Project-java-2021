@@ -1,7 +1,7 @@
 package control;
 
 import org.jfree.ui.RefineryUtilities;
-import service.UserService;
+import service.ManagerService;
 import view.*;
 
 import javax.swing.*;
@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 public class ManagerController{
 
 
-    private UserService userService;
+    private ManagerService managerService;
     private ViewManager viewManager;
     Container menu;
 
@@ -38,6 +38,8 @@ public class ManagerController{
     class AddBackEventViewManager implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            viewManager.setSize(800, 800);
+            viewManager.setLocationRelativeTo(null);
             viewManager.getContentPane().removeAll();
             viewManager.getContentPane().add(viewManager.getPanel());
             viewManager.getContentPane().validate();

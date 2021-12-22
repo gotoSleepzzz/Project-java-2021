@@ -131,10 +131,12 @@ public class ViewManager extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == manageListButton) {
+
             getContentPane().removeAll();
             getContentPane().repaint();
             getContentPane().add(viewManagerUserCovid);
-            setSize(1000, 800);
+            setSize(1150, 800);
+            setLocation(100, 70);
             getContentPane().revalidate();
         }
         if (e.getSource() == register) {
@@ -142,11 +144,13 @@ public class ViewManager extends JFrame implements ActionListener {
             getContentPane().repaint();
             getContentPane().add(viewRegisterUserCovid);
             setSize(1000, 800);
+            setLocationRelativeTo(null);
             getContentPane().revalidate();
         }
         if (e.getSource() == manageNecessary) {
             getContentPane().removeAll();
             getContentPane().repaint();
+            setLocationRelativeTo(null);
             getContentPane().add(viewManagerNYP);
             setSize(1050, 700);
             getContentPane().revalidate();

@@ -41,7 +41,8 @@ public class loginController {
                                 login.dispose();
                                 new adminView().setVisible(true);
                             } else if (role.equalsIgnoreCase("manager")) {
-                                new ViewManager();
+                                login.dispose();
+                                new ManagerController();
                             } else /*if(role.equalsIgnoreCase("user"))*/ {
                                 // gắn abc...
                                 login.dispose();

@@ -7,8 +7,20 @@ public class UserCovid {
     private String address;
     private String state;
     private int healthCenter;
-    private String idReached = null;
+    private String idReached;
     private double debt = 0;
+
+    public UserCovid(String name, String id, int dob, String address, String state, int healthCenter, double debt) {
+        this.name = name;
+        this.id = id;
+        this.dob = dob;
+        this.address = address;
+        this.state = state;
+        this.healthCenter = healthCenter;
+        this.debt = debt;
+        this.idReached = null;
+    }
+
 
     public UserCovid(String name, String id, int dob, String address, String state, int healthCenter, String idReached) {
         this.name = name;
@@ -29,17 +41,12 @@ public class UserCovid {
         this.healthCenter = healthCenter;
         this.idReached = idReached;
         this.debt = debt;
+
     }
 
-    public UserCovid(String name, String id, int dob, String address, String state, int healthCenter, double debt) {
-        this.name = name;
-        this.id = id;
-        this.dob = dob;
-        this.address = address;
-        this.state = state;
-        this.healthCenter = healthCenter;
-        this.debt = debt;
-    }
+
+
+
 
     public void setName(String name) {
         this.name = name;

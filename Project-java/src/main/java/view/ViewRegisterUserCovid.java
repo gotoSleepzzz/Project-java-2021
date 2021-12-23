@@ -239,7 +239,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         String dob = Objects.requireNonNull(year.getSelectedItem()).toString();
         String currentState = Objects.requireNonNull(currentStateComboBox.getSelectedItem()).toString();
         int healthCenter = ManagerService.getInstance().mapHealthCenterToId(healthCenterComboBox.getSelectedItem().toString());
-        String peopleReached = peopleReachedField.getText();
+        String peopleReached = peopleReachedField.getText().equals(placeholderPeopleReached) ? null : peopleReachedField.getText();
         return new UserCovid(name, id, Integer.parseInt(dob), address, currentState, healthCenter, peopleReached);
     }
 
@@ -256,8 +256,11 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
             else if (!peopleReachedField.getText().equals(placeholderPeopleReached) && (!peopleReachedField.getText().strip().matches(regex) || peopleReachedField.getText().length() != 9 && peopleReachedField.getText().length() != 12))
                 showMessage("Chứng minh nhân dân của người liên quan phải đúng 9 ký tự số hoặc 12 ký tự số", "danger");
             else {
-                isValidForm = true;
-                showMessage("Đăng ký thông tin thành công", "success");
+                if (ManagerService.getInstance().addUserCovid(getInfoUser()))
+                    showMessage("Đăng ký thông tin thành công", "success");
+                else {
+                    showMessage("Đăng ký thất bại", "danger");
+                }
             }
         }
 
@@ -288,10 +291,8 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
             }
 
         }
+
     }
 
-    public boolean isValidForm() {
-        return isValidForm;
-    }
 
 }

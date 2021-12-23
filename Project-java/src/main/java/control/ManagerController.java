@@ -22,8 +22,6 @@ public class ManagerController {
     String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
             "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
 
-
-
     public ManagerController() {
         viewManager = new ViewManager();
         setActionListener();
@@ -82,7 +80,7 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            viewManager.setSize(1000, 750);
+            viewManager.setSize(1150, 800);
             viewManager.setLocationRelativeTo(null);
             viewManager.getContentPane().removeAll();
             viewManager.getContentPane().add(viewManager.getViewManagerUserCovid());
@@ -227,6 +225,7 @@ public class ManagerController {
             chart.setVisible(true);
         }
     }
+
 
 
 }

@@ -22,18 +22,18 @@ public class mainTest {
         } catch (Exception e1) {
 
         }
-        //new loginController();
+        new loginController();
         //new ViewManager();
         //new UserView();
         //adminView a = new adminView();
         //a.setVisible(true);
         //new ManagerController();
         //new ViewManager();
-        /*JFrame frame = new JFrame();
-        frame.add(new ManagerNYP());
-        frame.setSize(1000,750);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);*/
-        new ViewUpdateHospitalAndStatus();
+
+//        JFrame frame = new JFrame();
+//        frame.add(new ViewDetailsUserCovid());
+//        frame.setSize(1000,750);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setVisible(true);
     }
 }

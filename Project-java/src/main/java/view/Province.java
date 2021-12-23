@@ -53,7 +53,6 @@ public class Province {
     }
 
     public List getListOfDistricts(String name) {
-
         List x = provinces.stream().filter(o -> ((JSONObject)(o)).get("name").equals(name)).toList();
         String idProvince = ((JSONObject)(x.get(0))).get("idProvince").toString();
         return districts.stream().filter(o -> ((JSONObject)(o)).get("idProvince").equals(idProvince)).map(o -> ((JSONObject)(o)).get("name")).toList();
@@ -62,7 +61,6 @@ public class Province {
     public List getListOfCommunes(String name) {
         List x = districts.stream().filter(o -> ((JSONObject)(o)).get("name").equals(name)).toList();
         String idDistrict = ((JSONObject)(x.get(0))).get("idDistrict").toString();
-
         return communes.stream().filter(o -> ((JSONObject)(o)).get("idDistrict").equals(idDistrict)).map(o -> ((JSONObject)(o)).get("name")).toList();
     }
 

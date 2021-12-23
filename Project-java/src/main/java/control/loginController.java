@@ -1,5 +1,6 @@
 package control;
 
+import service.ManagerService;
 import utils.dbUtil;
 import view.ViewManager;
 import view.admin.adminView;
@@ -43,6 +44,7 @@ public class loginController {
                             } else if (role.equalsIgnoreCase("manager")) {
                                 login.dispose();
                                 new ManagerController();
+                                ManagerService.getInstance().setNameManager(username);
                             } else /*if(role.equalsIgnoreCase("user"))*/ {
                                 // gắn abc...
                                 login.dispose();

@@ -5,8 +5,11 @@ import model.UserCovid;
 import utils.dbUtil;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ManagerService {
 
@@ -27,7 +30,6 @@ public class ManagerService {
             single_instance = new ManagerService();
         return single_instance;
     }
-
 
 
     private String
@@ -59,8 +61,6 @@ public class ManagerService {
 
     private String
             getAllHealthCenter = "SELECT * FROM noi_quan_ly";
-
-
 
 
     public boolean addUserCovid(UserCovid userCovid) {
@@ -96,7 +96,7 @@ public class ManagerService {
         return db.excuteProc(updateUserCovidByState, params);
     }
 
-     public boolean updateUserCovidByHealthCenter(int healthCenter, String id) {
+    public boolean updateUserCovidByHealthCenter(int healthCenter, String id) {
         Object[] params = {
                 healthCenter,
                 id,
@@ -104,7 +104,7 @@ public class ManagerService {
         if (db.excuteProc(updateUserCovidByHealthCenter, params)) {
             managerUserCovid.updateUserCovidByHealthCenter(healthCenter, id);
         }
-         System.out.println("Error when change health center");
+        System.out.println("Error when change health center");
         return false;
     }
 
@@ -151,7 +151,7 @@ public class ManagerService {
         Object[] params = {};
         var rs = db.executeQuery(getAllHealthCenter, params);
         try {
-            if (rs.next()) {
+            while (rs.next()) {
                 healthCenter.put(rs.getInt("id"), rs.getString("ten"));
             }
         } catch (SQLException e) {
@@ -166,5 +166,41 @@ public class ManagerService {
 
     public void setNameManager(String userName) {
         this.nameManager = userName;
+    }
+
+
+    public List<UserCovid> getByPage(int page, int size) {
+        Object[] params = {page, size};
+        var rs = db.executeQuery(getByPage, params);
+        try {
+            while (rs.next()) {
+                managerUserCovid.addUserCovid(new UserCovid(rs.getString("ten"),
+                        rs.getString("cmnd"),
+                        Integer.parseInt(rs.getString("namsinh")),
+                        rs.getString("diachi"),
+                        rs.getString("trangthai"),
+                        rs.getInt("idnoiquanly"),
+                        rs.getString("ghino")));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return managerUserCovid.getListUserCovid();
+    }
+
+
+    public int mapHealthCenterToId(String name) {
+        // loop through maps
+        int res = -1;
+        for (Map.Entry<Integer, String> entry : healthCenter.entrySet()) {
+            if (entry.getValue().equals(name)) {
+                return entry.getKey();
+            }
+        }
+        return res;
+    }
+
+    public List<String> getListHealtCenter() {
+        return new ArrayList<>(healthCenter.values());
     }
 }

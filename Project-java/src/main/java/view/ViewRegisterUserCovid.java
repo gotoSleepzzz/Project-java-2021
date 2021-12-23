@@ -1,6 +1,7 @@
 package view;
 
 import model.UserCovid;
+import service.ManagerService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
@@ -45,7 +47,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     private String placeholderName = "Nhập họ tên:";
     private String placeholderId = "Nhập chứng minh nhân dân";
     private String placeholderAddress = "Nhập số nhà, tên đường";
-    private String placeholderPeopleReached = "Những người liên quan, (cách nhau bởi dấu \",\" VD: Nguyễn Văn A, Nguyễn Văn B)";
+    private String placeholderPeopleReached = "Bỏ trống nếu không có hoặc nhập vào chứng minh dân của người liên quan";
 
 
     private JButton submit;
@@ -60,6 +62,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     private JPanel row7;
     private JPanel panelHeader;
     private JPanel panel;
+    JPanel buttonBackPanel;
 
 
     // JOptionPane
@@ -70,11 +73,8 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
     // isValidForm
     private boolean isValidForm;
-
-
-    JPanel buttonBackPanel;
-
-    // JPanel
+    // List Health Center
+    List<String> healthCenterList = ManagerService.getInstance().getListHealtCenter();
 
     public ViewRegisterUserCovid() {
 
@@ -83,7 +83,6 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
         // JPanel
         panelHeader = new JPanel(new BorderLayout());
-
 
         // Initializing JLabel
         title = new JLabel("Đăng ký người liên quan Covid-19\n", SwingConstants.CENTER); // Using SwingConstants to set the text in the center of the label
@@ -106,6 +105,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         healthCenter = new JLabel("Nơi đang điều trị/cách ly:     ");
         peopleReached = new JLabel("Người liên quan Covid-19 :   ");
         currentStateComboBox = new JComboBox<>();
+
         currentStateComboBox.addItem("F0");
         currentStateComboBox.addItem("F1");
         currentStateComboBox.addItem("F2");
@@ -155,11 +155,14 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         }
 
         healthCenterComboBox = new JComboBox<>();
-        healthCenterComboBox.addItem("Bệnh viện Dã Chiến");
+
+        for (String healthCenter : healthCenterList) {
+            healthCenterComboBox.addItem(healthCenter);
+        }
         healthCenterComboBox.addActionListener(this);
 
         peopleReachedField = new CustomTextField(45);
-        peopleReachedField.setPlaceholder("\"Những người liên quan, (cách nhau bởi dấu \\\",\\\" VD: Nguyễn Văn A, Nguyễn Văn B)\"");
+        peopleReachedField.setPlaceholder(placeholderPeopleReached);
 
         // Initializing Button
         submit = new JButton("Submit");
@@ -197,7 +200,6 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
         }
 
-
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(submit);
@@ -218,7 +220,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
     public void showMessage(String message, String state) {
         // get current
-        String path = new File("").getAbsolutePath() + "/" + state.toLowerCase() + ".png";
+        String path = new File("").getAbsolutePath() + "/Project-java/" + state.toLowerCase() + ".png";
         System.out.println(path);
         icon = new ImageIcon(path);
         icon.setImage(icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
@@ -234,13 +236,11 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
         String name = nameField.getText();
         String id = idField.getText();
         String address = addressField.getText();
-        String dob = year.getSelectedItem().toString();
-        String currentState = currentStateComboBox.getSelectedItem().toString();
-        int healthCenter = Integer.parseInt(healthCenterComboBox.getSelectedItem().toString());
+        String dob = Objects.requireNonNull(year.getSelectedItem()).toString();
+        String currentState = Objects.requireNonNull(currentStateComboBox.getSelectedItem()).toString();
+        int healthCenter = ManagerService.getInstance().mapHealthCenterToId(healthCenterComboBox.getSelectedItem().toString());
         String peopleReached = peopleReachedField.getText();
-
-        UserCovid userCovid = new UserCovid(name, id, Integer.valueOf(dob), address, currentState, healthCenter, peopleReached);
-        return userCovid;
+        return new UserCovid(name, id, Integer.parseInt(dob), address, currentState, healthCenter, peopleReached);
     }
 
     @Override
@@ -271,7 +271,6 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
                 for (String district : districts) {
                     districtComboBox.addItem(district);
                 }
-
             }
         }
         if (e.getSource() == districtComboBox) {
@@ -289,7 +288,6 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
             }
 
         }
-
     }
 
     public boolean isValidForm() {

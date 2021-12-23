@@ -37,7 +37,7 @@ public class userController {
         managerHistory = new ManagerHistoryService();
         hospitalService = new HospitalService();
         
-        user = managerService.findUserCovidByID(username);
+        user = managerService.findOneUserCovid(username);
         view = new UserView();
         
         // Set thông tin cá nhân

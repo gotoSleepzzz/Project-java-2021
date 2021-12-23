@@ -22,7 +22,7 @@ public class mainTest {
         } catch (Exception e1) {
 
         }
-        new loginController();
+        //new loginController();
         //new ViewManager();
         //new UserView();
         //adminView a = new adminView();
@@ -34,5 +34,6 @@ public class mainTest {
         frame.setSize(1000,750);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);*/
+        new ViewUpdateHospitalAndStatus();
     }
 }

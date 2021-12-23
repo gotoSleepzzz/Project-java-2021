@@ -1,15 +1,17 @@
 package control;
 
+import model.UserCovid;
 import org.jfree.ui.RefineryUtilities;
 import service.ManagerService;
 import view.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class ManagerController{
 
@@ -51,7 +53,24 @@ public class ManagerController{
         @Override
         public void actionPerformed(ActionEvent e) {
             // show message dialog
-            JOptionPane.showMessageDialog(null, "Searching...");
+            List<UserCovid> list = new ArrayList<>();
+            String textSearch = viewManager.getViewManagerUserCovid().getContentSearch();
+            System.out.println(textSearch);
+            if (textSearch.equals(viewManager.getViewManagerUserCovid().getPlaceHolderSearchTextField())) {
+                System.out.println("wao");
+                viewManager.getViewManagerUserCovid().showTable();
+            } else {
+                var user = ManagerService.getInstance().findOneUserCovid(textSearch);
+                System.out.println(user);
+                if (user != null) {
+                    list.add(user);
+                    viewManager.getViewManagerUserCovid().renderTable(list);
+                }
+                else {
+                    // show message dialog Khong tim thay nguoi lien quan
+                    JOptionPane.showMessageDialog(viewManager.getViewManagerUserCovid(), "Không tìm thấy người liên quan");
+                }
+            }
         }
     }
 
@@ -95,6 +114,7 @@ public class ManagerController{
             chart.setVisible(true);
         }
     }
+
 
     class AddConsumeEvent implements ActionListener {
         @Override

@@ -1,6 +1,6 @@
 package service;
 
-import model.ListUserCovid;
+import model.ManagerUserCovid;
 import model.UserCovid;
 import utils.dbUtil;
 
@@ -11,8 +11,9 @@ import java.util.List;
 public class ManagerService {
 
     private static ManagerService single_instance;
+    private String nameManager = null;
     dbUtil db;
-    ListUserCovid listUserCovid = new ListUserCovid();
+    ManagerUserCovid managerUserCovid = new ManagerUserCovid();
     HashMap<Integer, String> healthCenter = new HashMap<>();
 
 
@@ -27,32 +28,42 @@ public class ManagerService {
         return single_instance;
     }
 
+
+
     private String
-            add = "INSERT INTO nguoi_lien_quan (ten, cmnd, namsinh, diachi, trangthai, idnoiquanly) VALUES (?, ?, ?, ?, ?, ?)";
+            addUserCovid = "{Call proc_themnguoi (?, ?, ?, ?, ?, ?, ?, ?)}"; // _ten, _cmnd,_namsinh,_diachi,_trangthai,_noiquanly,_nguonlay,_quanly
+
     private String
-            delete = "DELETE FROM nguoi_lien_quan WHERE cmnd = ?";
+            addNYP = "{call proc_themnhuyeupham (?, ?, ?, ?)}";
+
+
     private String
-            getAll = "SELECT * FROM nguoi_lien_quan";
+            deleteUserCovid = "DELETE FROM nguoi_lien_quan WHERE cmnd = ?";
     private String
-            updateUserCovidByState = "UPDATE nguoi_lien_quan SET trangthai = ? WHERE cmnd = ?";
+            getAllUserCovid = "SELECT * FROM nguoi_lien_quan";
 
     private String
             updateUserCovidByDebt = "UPDATE nguoi_lien_quan SET ghino = ? WHERE cmnd = ?";
 
     private String
+            updateUserCovidByState = "{call proc_chuyentrangthai(?,?,?)}"; // _doituong, _trangthaimoi, _quanly
+
+    private String
             updateUserCovidByHealthCenter = "UPDATE nguoi_lien_quan SET idnoiquanly = ? WHERE cmnd = ?";
 
     private String
-            getById = "SELECT * FROM nguoi_lien_quan WHERE cmnd = ?";
-    private String
-            getAllUser = "SELECT * FROM nguoi_lien_quan WHERE covid_id = ?";
+            getUserById = "SELECT * FROM nguoi_lien_quan WHERE cmnd = ?";
+
     private String
             getByPage = "SELECT * FROM nguoi_lien_quan LIMIT ?, ?";
 
     private String
             getAllHealthCenter = "SELECT * FROM noi_quan_ly";
 
-    public void add(UserCovid userCovid) {
+
+
+
+    public boolean addUserCovid(UserCovid userCovid) {
         Object[] params = {
                 userCovid.getName(),
                 userCovid.getId(),
@@ -60,36 +71,49 @@ public class ManagerService {
                 userCovid.getAddress(),
                 userCovid.getState(),
                 userCovid.getHealthCenter(),
+                userCovid.getIdReached(),
+                this.nameManager
         };
 
         try {
-            db.executeUpdate(add, params);
-            listUserCovid.addUserCovid(userCovid);
+            if (db.excuteProc(addUserCovid, params)) {
+                managerUserCovid.addUserCovid(userCovid);
+                return true;
+            }
+
         } catch (Exception e) {
             System.out.println("Insert failed due some bug or id duplicated");
         }
+        return false;
     }
 
-    public void update(UserCovid userCovid) {
+    public boolean updateUserCovidByState(UserCovid userCovid) {
         Object[] params = {
                 userCovid.getState(),
                 userCovid.getId(),
         };
-        db.executeUpdate(updateUserCovidByState, params);
+
+        return db.excuteProc(updateUserCovidByState, params);
     }
 
-    public void delete(String id) {
-        Object[] params = {id};
-        db.executeUpdate(delete, params);
+     public boolean updateUserCovidByHealthCenter(int healthCenter, String id) {
+        Object[] params = {
+                healthCenter,
+                id,
+        };
+        if (db.excuteProc(updateUserCovidByHealthCenter, params)) {
+            managerUserCovid.updateUserCovidByHealthCenter(healthCenter, id);
+        }
+         System.out.println("Error when change health center");
+        return false;
     }
 
-
-    public List<UserCovid> findAll() {
+    public List<UserCovid> findAllUserCovid() {
         Object[] params = {};
-        var rs = db.executeQuery(getAll, params);
+        var rs = db.executeQuery(getAllUserCovid, params);
         try {
             while (rs.next()) {
-                listUserCovid.addUserCovid(new UserCovid(rs.getString("ten"),
+                managerUserCovid.addUserCovid(new UserCovid(rs.getString("ten"),
                         rs.getString("cmnd"),
                         Integer.parseInt(rs.getString("namsinh")),
                         rs.getString("diachi"),
@@ -100,12 +124,12 @@ public class ManagerService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return listUserCovid.getListUserCovid();
+        return managerUserCovid.getListUserCovid();
     }
 
-    public UserCovid findUserCovidByID(String id) {
+    public UserCovid findOneUserCovid(String id) {
         Object[] params = {id};
-        var rs = db.executeQuery(getById, params);
+        var rs = db.executeQuery(getUserById, params);
         try {
             if (rs.next()) {
                 return new UserCovid(rs.getString("ten"),
@@ -135,7 +159,12 @@ public class ManagerService {
         }
     }
 
+
     public String getHealthCenterName(int id) {
         return healthCenter.get(id);
+    }
+
+    public void setNameManager(String userName) {
+        this.nameManager = userName;
     }
 }

@@ -16,7 +16,6 @@ public class ManagerController{
 
     private ManagerService managerService;
     private ViewManager viewManager;
-    Container menu;
 
     public ManagerController() {
         viewManager = new ViewManager();

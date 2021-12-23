@@ -7,7 +7,7 @@ public class UserCovid {
     private String address;
     private String state;
     private int healthCenter;
-    private String idReached;
+    private String idReached = null;
     private double debt = 0;
 
     public UserCovid(String name, String id, int dob, String address, String state, int healthCenter, String idReached) {

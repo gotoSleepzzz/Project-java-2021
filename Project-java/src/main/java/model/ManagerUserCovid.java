@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListUserCovid {
+public class ManagerUserCovid {
     List<UserCovid> listUserCovid = new ArrayList<>();
 
-    public ListUserCovid() {
+    public ManagerUserCovid() {
     }
 
     public void addUserCovid(UserCovid userCovid){
@@ -32,5 +32,16 @@ public class ListUserCovid {
     public UserCovid searchUserByID(String id){
         return listUserCovid.stream().filter(userCovid -> userCovid.getId().equals(id)).findFirst().orElse(null);
     }
+
+    public void updateUserCovidByState() {
+
+    }
+
+    public void updateUserCovidByHealthCenter(int idHealthCenter, String id) {
+        UserCovid userCovid = searchUserByID(id);
+        userCovid.setHealthCenter(idHealthCenter);
+    }
+
+
 
 }

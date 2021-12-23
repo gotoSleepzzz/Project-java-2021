@@ -31,7 +31,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private JPanel searchPanel;
     private JPanel footerPanel;
     private JButton watchMore;
-    List<UserCovid> list = ManagerService.getInstance().findAll();
+    List<UserCovid> list = ManagerService.getInstance().findAllUserCovid();
     String[][] data = new String[list.size()][5];
     private JButton backButton;
 

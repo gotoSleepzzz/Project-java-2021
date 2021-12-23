@@ -37,13 +37,12 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     String[] columns = new String[]{"Họ tên", "CMND", "Nơi điều trị", "Năm sinh",
             "Trạng thái hiện tại", "Xem chi tiết", "Chỉnh sửa"};
     private String placeHolderSearchTextField = "Nhập tên cần tìm kiếm bằng tên, cmnd";
-
-
-
-
     private ViewDetailsUserCovid viewDetailsUserCovid;
 
+    String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
+            "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
 
+    JComboBox<String> comboBoxSort;
 
     public ViewManagerUserCovid() {
         setLayout(new BorderLayout());
@@ -55,6 +54,14 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
         MenuPanel.add(backButton);
         searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        comboBoxSort = new JComboBox<>(sortBy);
+
+        JLabel sortLabel = new JLabel("Sắp xếp theo: ");
+        JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        sortPanel.add(sortLabel);
+        sortPanel.add(comboBoxSort);
+
+        panelHeader.add(sortPanel, BorderLayout.EAST);
 
         refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(this);
@@ -132,30 +139,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     }
 
 
-//    public void addButtonListener() {
-//
-//        buttonWatchDetails.addActionListener(
-//                event -> {
-//                    int row = table.getSelectedRow();
-//                    String id = table.getValueAt(row, 1).toString();
-//                }
-//        );
-//
-//        buttonModify.addActionListener(e -> {
-//
-//            int option = JOptionPane.showConfirmDialog(null, "Bạn có muốn chỉnh sửa không?", "Chỉnh sửa", JOptionPane.YES_NO_OPTION);
-//            if (option == JOptionPane.YES_OPTION) {
-//                int selectedRow = table.getSelectedRow();
-//                String selectedRowData = (String) table.getValueAt(selectedRow, 1);
-//                JOptionPane.showMessageDialog(null, "You have selected: " + columns[1] + ": " + selectedRowData);
-//            }
-//        });
-//
-//    }
-
-
     public void renderTable(List<UserCovid> userCovids) {
-        System.out.println(" ++" + userCovids.size());
         String[][] dataUser = new String[userCovids.size()][5];
 
         for (int i = 0; i < userCovids.size(); ++i) {
@@ -194,7 +178,6 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         watchMore.addActionListener(actionListener);
     }
 
-    // get button listener
     public void addModifyActionListener(ActionListener actionListener) {
         buttonModify.addActionListener(actionListener);
     }
@@ -266,8 +249,8 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         this.viewDetailsUserCovid = viewDetailsUserCovid;
     }
 
-    public ViewDetailsUserCovid getViewDetailsUserCovid() {
-        return viewDetailsUserCovid;
+    public void addDropdownListener(ActionListener actionListener) {
+        comboBoxSort.addActionListener(actionListener);
     }
 
 }

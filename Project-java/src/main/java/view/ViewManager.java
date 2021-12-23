@@ -29,6 +29,7 @@ public class ViewManager extends JFrame implements ActionListener {
     ViewManagerUserCovid viewManagerUserCovid = new ViewManagerUserCovid();
     ViewRegisterUserCovid viewRegisterUserCovid = new ViewRegisterUserCovid();
     ManagerNYP viewManagerNYP = new ManagerNYP();
+
     public ViewManager() {
 
         setTitle("Manager");
@@ -41,6 +42,9 @@ public class ViewManager extends JFrame implements ActionListener {
 
         header = new JPanel(new FlowLayout());
         header.add(title, SwingUtilities.CENTER);
+
+
+
 
         header_body = new JPanel(new FlowLayout());
         titleMenu = new JLabel("Menu");
@@ -135,7 +139,7 @@ public class ViewManager extends JFrame implements ActionListener {
             getContentPane().removeAll();
             getContentPane().repaint();
             getContentPane().add(viewManagerUserCovid);
-            setSize(1150, 800);
+            setSize(1170, 800);
             setLocation(100, 70);
             getContentPane().revalidate();
         }
@@ -155,6 +159,7 @@ public class ViewManager extends JFrame implements ActionListener {
             setSize(1050, 700);
             getContentPane().revalidate();
         }
+
 
     }
 }

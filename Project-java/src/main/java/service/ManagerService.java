@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ManagerService {
 
@@ -203,4 +202,50 @@ public class ManagerService {
     public List<String> getListHealtCenter() {
         return new ArrayList<>(healthCenter.values());
     }
+
+    public List<UserCovid> sortByNameIncrement() {
+        return managerUserCovid.sortUserCovidByNameIncrement();
+    }
+
+    public List<UserCovid> sortByDobIncrement() {
+        return managerUserCovid.sortUserCovidByDobIncrement();
+    }
+
+    public List<UserCovid> sortByDebtIncrement() {
+        return managerUserCovid.sortUserByDebtIncrement();
+    }
+
+    public List<UserCovid> sortByStatusIncrement() {
+        return managerUserCovid.sortUserCovidByStateIncrement();
+    }
+
+    public List<UserCovid> sortByIdIncrement() {
+        return managerUserCovid.sortUserCovidByIdIncrement();
+    }
+
+    public List<UserCovid> sortByNameDecrement() {
+        return managerUserCovid.sortUserCovidByNameDecrement();
+    }
+
+    public List<UserCovid> sortByDobDecrement() {
+        return managerUserCovid.sortUserCovidByDobDecrement();
+    }
+
+    public List<UserCovid> sortByDebtDecrement() {
+        return managerUserCovid.sortUserByDebtDecrement();
+    }
+
+    public List<UserCovid> sortByStatusDecrement() {
+        return managerUserCovid.sortUserCovidByStateDecrement();
+    }
+
+    public List<UserCovid> sortByIdDecrement() {
+        return managerUserCovid.sortUserCovidByIdDecrement();
+    }
+
+    public List<UserCovid> searchByName() {
+        return managerUserCovid.sortUserCovidByNameDecrement();
+    }
+
+
 }

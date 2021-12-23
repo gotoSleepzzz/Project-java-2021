@@ -19,6 +19,10 @@ public class ManagerController {
     private ManagerService managerService;
     private ViewManager viewManager;
     private ViewDetailsUserCovid viewDetailsUserCovid;
+    String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
+            "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
+
+
 
     public ManagerController() {
         viewManager = new ViewManager();
@@ -30,6 +34,7 @@ public class ManagerController {
         viewManager.getViewManagerUserCovid().addBackButtonListener_ViewManagerUserCovid(new AddBackEventViewManager());
         viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
         viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+        viewManager.getViewManagerUserCovid().addDropdownListener(new AddComboboxSort());
         viewManager.getViewManagerNYP().addBackListener(new AddBackEventViewManager());
         viewManager.getViewRegisterUserCovid().AddBackListener(new AddBackEventViewManager());
         viewManager.addStatisticListener(new AddStatisticsEvent());
@@ -96,6 +101,36 @@ public class ManagerController {
         }
     }
 
+    class AddComboboxSort implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JComboBox comboBoxSort = (JComboBox) e.getSource();
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[0]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByNameIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[1]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDobIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[2]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByStatusIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[3]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDebtIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[4]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByIdIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[5]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByNameDecrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[6]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDobDecrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[7]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByStatusDecrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[8]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDebtDecrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[9]))
+                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByIdDecrement());
+            viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
+            viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+
+        }
+    }
 
     class AddSearchEvent implements ActionListener {
         @Override

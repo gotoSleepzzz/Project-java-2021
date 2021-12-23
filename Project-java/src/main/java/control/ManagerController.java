@@ -18,6 +18,7 @@ public class ManagerController{
 
     private ManagerService managerService;
     private ViewManager viewManager;
+    private ViewDetailsUserCovid viewDetailsUserCovid;
 
     public ManagerController() {
         viewManager = new ViewManager();
@@ -27,6 +28,8 @@ public class ManagerController{
     public void setActionListener() {
         viewManager.getViewManagerUserCovid().addSearchActionListener(new AddSearchEvent());
         viewManager.getViewManagerUserCovid().addBackButtonListener_ViewManagerUserCovid(new AddBackEventViewManager());
+        viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
+        viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
         viewManager.getViewManagerNYP().addBackListener(new AddBackEventViewManager());
         viewManager.getViewRegisterUserCovid().AddBackListener(new AddBackEventViewManager());
         viewManager.addStatisticListener(new AddStatisticsEvent());
@@ -35,6 +38,43 @@ public class ManagerController{
         viewManager.addDebtListener(new AddViewDebtEvent());
     }
 
+    class AddButtonModify_ViewMangerUserCovid implements  ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            JOptionPane.showMessageDialog(viewManager.getViewManagerUserCovid(), "Ban thich modify u");
+        }
+    }
+
+    class AddButtonDetails_ViewManagerUserCovid implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            var user = viewManager.getViewManagerUserCovid().getUserCovid();
+            viewManager.setSize(1000, 750);
+            viewManager.setLocationRelativeTo(null);
+            viewManager.getContentPane().removeAll();
+
+            viewDetailsUserCovid = new ViewDetailsUserCovid(user);
+            viewDetailsUserCovid.addBackButton(new AddBack_ViewDetailsUserCovid());
+            viewManager.getViewManagerUserCovid().setViewDetailsUserCovid(viewDetailsUserCovid);
+            viewManager.getContentPane().add(viewDetailsUserCovid);
+            viewManager.getContentPane().validate();
+        }
+    }
+
+    class AddBack_ViewDetailsUserCovid implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            viewManager.setSize(1000, 750);
+            viewManager.setLocationRelativeTo(null);
+            viewManager.getContentPane().removeAll();
+            viewManager.getContentPane().add(viewManager.getViewManagerUserCovid());
+            viewManager.getContentPane().validate();
+        }
+    }
 
     class AddBackEventViewManager implements ActionListener {
         @Override
@@ -55,16 +95,15 @@ public class ManagerController{
             // show message dialog
             List<UserCovid> list = new ArrayList<>();
             String textSearch = viewManager.getViewManagerUserCovid().getContentSearch();
-            System.out.println(textSearch);
             if (textSearch.equals(viewManager.getViewManagerUserCovid().getPlaceHolderSearchTextField())) {
-                System.out.println("wao");
                 viewManager.getViewManagerUserCovid().showTable();
             } else {
                 var user = ManagerService.getInstance().findOneUserCovid(textSearch);
-                System.out.println(user);
                 if (user != null) {
                     list.add(user);
                     viewManager.getViewManagerUserCovid().renderTable(list);
+                    viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
+                    viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
                 }
                 else {
                     // show message dialog Khong tim thay nguoi lien quan

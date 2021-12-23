@@ -19,7 +19,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private JPanel panelBody;
     private JPanel panelFooter;
     private JLabel label;
-    private JButton button;
+    private JButton buttonWatchDetails;
     private JButton buttonModify;
     private JTable table;
     private JPanel MenuPanel;
@@ -37,6 +37,12 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     String[] columns = new String[]{"Họ tên", "CMND", "Nơi điều trị", "Năm sinh",
             "Trạng thái hiện tại", "Xem chi tiết", "Chỉnh sửa"};
     private String placeHolderSearchTextField = "Nhập tên cần tìm kiếm bằng tên, cmnd";
+
+
+
+
+    private ViewDetailsUserCovid viewDetailsUserCovid;
+
 
 
     public ViewManagerUserCovid() {
@@ -69,7 +75,6 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
         table = new JTable();
         showTable();
-        addButtonListener();
 
         JScrollPane jScrollPane = new JScrollPane(table);
         panelBody = new JPanel();
@@ -92,9 +97,9 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
     public void setUpButtonTable() {
         table.getColumn("Xem chi tiết").setCellRenderer(new ButtonRenderer("Xem chi tiết"));
-        button = new JButton("Xem chi tiết");
+        buttonWatchDetails = new JButton("Xem chi tiết");
         buttonModify = new JButton("Chỉnh sửa");
-        table.getColumn("Xem chi tiết").setCellEditor(new ButtonEditor(new JCheckBox(), "Xem chi tiết", button));
+        table.getColumn("Xem chi tiết").setCellEditor(new ButtonEditor(new JCheckBox(), "Xem chi tiết", buttonWatchDetails));
         table.getColumn("Chỉnh sửa").setCellRenderer(new ButtonRenderer("Chỉnh sửa"));
         table.getColumn("Chỉnh sửa").setCellEditor(new ButtonEditor(new JCheckBox(), "Chỉnh sửa", buttonModify));
         // add new row
@@ -112,24 +117,42 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     }
 
-    public void addButtonListener() {
-        button.addActionListener(
-                event -> {
-                    JOptionPane.showMessageDialog(null, "Do you want to modify this line?");
-                }
-        );
-
-        buttonModify.addActionListener(e -> {
-
-            int option = JOptionPane.showConfirmDialog(null, "Bạn có muốn chỉnh sửa không?", "Chỉnh sửa", JOptionPane.YES_NO_OPTION);
-            if (option == JOptionPane.YES_OPTION) {
-                int selectedRow = table.getSelectedRow();
-                String selectedRowData = (String) table.getValueAt(selectedRow, 1);
-                JOptionPane.showMessageDialog(null, "You have selected: " + columns[1] + ": " + selectedRowData);
-            }
-        });
-
+    public UserCovid getUserCovid() {
+        int row = table.getSelectedRow();
+        String id = table.getValueAt(row, 1).toString();
+        return ManagerService.getInstance().findOneUserCovid(id);
     }
+
+    public void addButtonWatchDetailsListener(ActionListener actionListener) {
+        buttonWatchDetails.addActionListener(actionListener);
+    }
+
+    public void addButtonModifyListener(ActionListener actionListener) {
+        buttonModify.addActionListener(actionListener);
+    }
+
+
+//    public void addButtonListener() {
+//
+//        buttonWatchDetails.addActionListener(
+//                event -> {
+//                    int row = table.getSelectedRow();
+//                    String id = table.getValueAt(row, 1).toString();
+//                }
+//        );
+//
+//        buttonModify.addActionListener(e -> {
+//
+//            int option = JOptionPane.showConfirmDialog(null, "Bạn có muốn chỉnh sửa không?", "Chỉnh sửa", JOptionPane.YES_NO_OPTION);
+//            if (option == JOptionPane.YES_OPTION) {
+//                int selectedRow = table.getSelectedRow();
+//                String selectedRowData = (String) table.getValueAt(selectedRow, 1);
+//                JOptionPane.showMessageDialog(null, "You have selected: " + columns[1] + ": " + selectedRowData);
+//            }
+//        });
+//
+//    }
+
 
     public void renderTable(List<UserCovid> userCovids) {
         System.out.println(" ++" + userCovids.size());
@@ -145,7 +168,6 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         DefaultTableModel model = new DefaultTableModel(dataUser, columns);
         table.setModel(model);
         setUpButtonTable();
-        addButtonListener();
     }
 
 
@@ -187,7 +209,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     }
 
     public void addDetailsActionListener(ActionListener actionListener) {
-        button.addActionListener(actionListener);
+        buttonWatchDetails.addActionListener(actionListener);
     }
 
 
@@ -235,7 +257,17 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
     }
 
+
     public String getPlaceHolderSearchTextField() {
         return placeHolderSearchTextField;
     }
+
+    public void setViewDetailsUserCovid(ViewDetailsUserCovid viewDetailsUserCovid) {
+        this.viewDetailsUserCovid = viewDetailsUserCovid;
+    }
+
+    public ViewDetailsUserCovid getViewDetailsUserCovid() {
+        return viewDetailsUserCovid;
+    }
+
 }

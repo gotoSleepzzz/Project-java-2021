@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ManagerController{
+public class ManagerController {
 
 
     private ManagerService managerService;
@@ -38,12 +38,21 @@ public class ManagerController{
         viewManager.addDebtListener(new AddViewDebtEvent());
     }
 
-    class AddButtonModify_ViewMangerUserCovid implements  ActionListener {
+    class AddButtonModify_ViewMangerUserCovid implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            JOptionPane.showMessageDialog(viewManager.getViewManagerUserCovid(), "Ban thich modify u");
+
+            // pop up options confirm
+            int result = JOptionPane.showConfirmDialog(null, "Do you want to modify this user?", "Modify", JOptionPane.YES_NO_OPTION);
+
+            if (result == JOptionPane.YES_OPTION) {
+
+            } else {
+
+            }
+
         }
     }
 
@@ -88,7 +97,6 @@ public class ManagerController{
     }
 
 
-
     class AddSearchEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -97,6 +105,8 @@ public class ManagerController{
             String textSearch = viewManager.getViewManagerUserCovid().getContentSearch();
             if (textSearch.equals(viewManager.getViewManagerUserCovid().getPlaceHolderSearchTextField())) {
                 viewManager.getViewManagerUserCovid().showTable();
+                viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
+                viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
             } else {
                 var user = ManagerService.getInstance().findOneUserCovid(textSearch);
                 if (user != null) {
@@ -104,8 +114,8 @@ public class ManagerController{
                     viewManager.getViewManagerUserCovid().renderTable(list);
                     viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
                     viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
-                }
-                else {
+
+                } else {
                     // show message dialog Khong tim thay nguoi lien quan
                     JOptionPane.showMessageDialog(viewManager.getViewManagerUserCovid(), "Không tìm thấy người liên quan");
                 }
@@ -164,8 +174,9 @@ public class ManagerController{
             data.put("Food 3", 900);
             ChartConsume chart = new ChartConsume(data);
             chart.pack();
-            RefineryUtilities.centerFrameOnScreen( chart );
+            RefineryUtilities.centerFrameOnScreen(chart);
             chart.setVisible(true);
+
         }
     }
 
@@ -181,9 +192,6 @@ public class ManagerController{
             chart.setVisible(true);
         }
     }
-
-
-
 
 
 }

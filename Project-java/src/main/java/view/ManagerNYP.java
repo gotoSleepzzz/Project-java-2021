@@ -132,7 +132,4 @@ public class ManagerNYP extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
     }
-    public static void main(String[] args) {
-        new ManagerNYP();
-    }
 }

@@ -11,20 +11,20 @@ import java.util.Date;
  *
  * @author TRUNG
  */
-public class History {
+public class ActivityHistory {
     String user;
     String action;
     String table;
     String msg;
     Date time;
 
-    public History(String user, String msg, Date time) {
+    public ActivityHistory(String user, String msg, Date time) {
         this.user = user;
         this.msg = msg;
         this.time = time;
     }
 
-    public History(String user, String action, String table, String msg, Date time) {
+    public ActivityHistory(String user, String action, String table, String msg, Date time) {
         this.user = user;
         this.action = action;
         this.table = table;

@@ -8,11 +8,13 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
-public class UserView extends JFrame implements ActionListener {
+public class UserView extends JFrame /*implements ActionListener*/ {
 
-    JTable jtbl;
+    JTable jtbl, hisTable;
     JDialog dialog;
     JButton jbuy, jpay, jchange, jconsumehistory, jmanagehistory, jpaymenthistory, changePassButton, searchBtn, buyBtn, payBtn;
     JTextField name, dob, address, id, balance, debt, searchBar, productname, limit, time, cost, PassWarning;
@@ -108,19 +110,21 @@ public class UserView extends JFrame implements ActionListener {
         buttons.add(jpaymenthistory);
 
         // Add action listener
-        jbuy.addActionListener(this);
+        /*jbuy.addActionListener(this);
         jpay.addActionListener(this);
         jchange.addActionListener(this);
         jconsumehistory.addActionListener(this);
         jmanagehistory.addActionListener(this);
-        jpaymenthistory.addActionListener(this);
+        jpaymenthistory.addActionListener(this);*/
 
         // Layout
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(buttons, BorderLayout.CENTER);
         panel.add(jinfo, BorderLayout.WEST);
-
+        
+        hisTable = new JTable();
+        
         this.add(panel);
         this.pack();
         this.setVisible(true);
@@ -149,7 +153,7 @@ public class UserView extends JFrame implements ActionListener {
     }
 
     //Handle buttons action events.
-    @Override
+    /*@Override
     public void actionPerformed(ActionEvent ae) {
         String comStr = ae.getActionCommand();
 
@@ -176,7 +180,7 @@ public class UserView extends JFrame implements ActionListener {
         if (comStr.equals("Lịch sử thanh toán")) {
             PaymentHistory(this);
         }
-    }
+    }*/
 
     public void Buy(JFrame frame) {
         searchBar = new JTextField(50);
@@ -368,10 +372,9 @@ public class UserView extends JFrame implements ActionListener {
         dialog.setVisible(true);
     }
 
-    public void ConsumeHistory(JFrame frame) {
-        JTable hisTable = new JTable();
+    public void ConsumeHistory (JFrame frame) {
         JScrollPane hisScroll = new JScrollPane();
-        hisTable.setModel(new DefaultTableModel((Object[][]) hisConsumeData, hisConsumeHeaders));
+        hisTable.setPreferredScrollableViewportSize(hisTable.getPreferredSize());
         hisTable.setAutoCreateRowSorter(true);
         hisScroll.setViewportView(hisTable);
 
@@ -379,10 +382,11 @@ public class UserView extends JFrame implements ActionListener {
         FlowLayout flowLayout = new FlowLayout();
         centerPanel.setLayout(flowLayout);
         flowLayout.setHgap(10);
+        //flowLayout.setVgap(10);
         centerPanel.add(hisScroll);
+        
 
         dialog = new JDialog(this, "Lịch sử tiêu thụ gói nhu yếu phẩm", false);
-        dialog.setSize(1000, 200);
         dialog.setResizable(false);
         dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent
         dialog.setLocationRelativeTo(null);
@@ -392,9 +396,8 @@ public class UserView extends JFrame implements ActionListener {
     }
 
     public void ManageHistory(JFrame frame) {
-        JTable hisTable = new JTable();
         JScrollPane hisScroll = new JScrollPane();
-        hisTable.setModel(new DefaultTableModel((Object[][]) hisManageData, hisManageHeaders));
+        hisTable.setPreferredScrollableViewportSize(hisTable.getPreferredSize());
         hisTable.setAutoCreateRowSorter(true);
         hisScroll.setViewportView(hisTable);
 
@@ -405,7 +408,6 @@ public class UserView extends JFrame implements ActionListener {
         centerPanel.add(hisScroll);
 
         dialog = new JDialog(this, "Lịch sử được quản lý", false);
-        dialog.setSize(1000, 200);
         dialog.setResizable(false);
         dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent
         dialog.setLocationRelativeTo(null);
@@ -415,7 +417,7 @@ public class UserView extends JFrame implements ActionListener {
     }
 
     public void PaymentHistory(JFrame frame) {
-        JTable hisTable = new JTable();
+        hisTable = new JTable();
         JScrollPane hisScroll = new JScrollPane();
         hisTable.setModel(new DefaultTableModel((Object[][]) hisPaymentData, hisPaymentHeaders));
         hisTable.setAutoCreateRowSorter(true);
@@ -435,6 +437,33 @@ public class UserView extends JFrame implements ActionListener {
         dialog.add(centerPanel);
         dialog.pack();
         dialog.setVisible(true);
+    }
+    public void AddEventShowConsumeHistory(ActionListener e){
+        jconsumehistory.addActionListener(e);
+    }
+    public void AddEventShowManageHistory(ActionListener e){
+        jmanagehistory.addActionListener(e);
+    }
+    public void AddEventShowPaymentHistory(ActionListener e){
+        jpaymenthistory.addActionListener(e);
+    }
+    public void setDataPaymentHistoryTable(String[][] data){
+        hisTable.setModel(new DefaultTableModel(data, hisPaymentHeaders));
+        hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        TableColumnAdjuster tca = new TableColumnAdjuster(hisTable);
+        tca.adjustColumns();
+    }
+    public void setDataManageHistoryTable(String[][] data){
+        hisTable.setModel(new DefaultTableModel(data, hisManageHeaders));
+        hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        TableColumnAdjuster tca = new TableColumnAdjuster(hisTable);
+        tca.adjustColumns();
+    }
+    public void setDataConsumeHistoryTable(String[][] data){
+        hisTable.setModel(new DefaultTableModel(data, hisConsumeHeaders));
+        hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        TableColumnAdjuster tca = new TableColumnAdjuster(hisTable);
+        tca.adjustColumns();
     }
 }
 

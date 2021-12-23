@@ -6,7 +6,7 @@
 package control;
 
 import model.Account;
-import model.History;
+import model.ActivityHistory;
 import service.AccountService;
 import service.ActivityHistoryService;
 import utils.dbUtil;
@@ -57,11 +57,11 @@ public class QLTaiKhoanController {
         return data;
     }
 
-    public String[][] convertHistoryToArray2D(ArrayList<History> list) {
+    public String[][] convertHistoryToArray2D(ArrayList<ActivityHistory> list) {
         String data[][] = new String[list.size()][4];
         // convert list to data object 
         for (int i = 0; i < list.size(); i++) {
-            History history = list.get(i);
+            ActivityHistory history = list.get(i);
             data[i][0] = history.getTime().toString();
             data[i][1] = history.getUser();
             data[i][2] = history.getMsg();
@@ -80,7 +80,7 @@ public class QLTaiKhoanController {
             else{
                 Account account = accounts.get(index);
                 String username = account.getUsername();
-                ArrayList<History> temp = historyService.findById(username);
+                ArrayList<ActivityHistory> temp = historyService.findById(username);
                 view.setTableHistoryModel(convertHistoryToArray2D(temp));
             }
         }

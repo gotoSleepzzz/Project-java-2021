@@ -137,7 +137,7 @@ public class ManagerService {
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
                         rs.getInt("idnoiquanly"),
-                        rs.getString("ghino")
+                        rs.getFloat("ghino")
                 );
             }
         } catch (SQLException e) {

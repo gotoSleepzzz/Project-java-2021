@@ -52,14 +52,12 @@ public class loginController {
                             String response = "Tài khoản của bạn đã bị khóa";
                             JOptionPane.showMessageDialog(login, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
                         }
-                    } else {
+                    } else 
                         JOptionPane.showMessageDialog(login, "Tài khoản hoặc mật khẩu không chính xác!");
-                    }
-                } catch (SQLException ex) {
+                }catch (SQLException ex) {
                     Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
     }
-
 }

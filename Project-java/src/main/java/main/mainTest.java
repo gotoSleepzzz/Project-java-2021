@@ -29,10 +29,10 @@ public class mainTest {
         //a.setVisible(true);
         //new ManagerController();
         //new ViewManager();
-        JFrame frame = new JFrame();
-        frame.add(new ViewDetailsUserCovid());
+        /*JFrame frame = new JFrame();
+        frame.add(new ManagerNYP());
         frame.setSize(1000,750);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        frame.setVisible(true);*/
     }
 }

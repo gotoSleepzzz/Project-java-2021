@@ -37,7 +37,7 @@ public class Province {
             // get pwd of the project
             String path = System.getProperty("user.dir");
             System.out.println(path);
-            reader = new FileReader(path + "/Project-java/src/main/java/resources/db.json");
+            reader = new FileReader(path + "/src/main/java/resources/db.json");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

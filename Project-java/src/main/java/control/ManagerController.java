@@ -46,16 +46,7 @@ public class ManagerController {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-
-            // pop up options confirm
-            int result = JOptionPane.showConfirmDialog(null, "Do you want to modify this user?", "Modify", JOptionPane.YES_NO_OPTION);
-
-            if (result == JOptionPane.YES_OPTION) {
-
-            } else {
-
-            }
-
+            new ViewUpdateHospitalAndStatus();
         }
     }
 

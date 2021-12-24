@@ -37,6 +37,8 @@ public class ManagerService {
     private String
             addNYP = "{call proc_themnhuyeupham (?, ?, ?, ?)}";
 
+    private String
+            updateUserCovidByState = "{call proc_chuyentrangthai(?,?,?)}"; // _doituong, _trangthaimoi, _quanly
 
     private String
             deleteUserCovid = "DELETE FROM nguoi_lien_quan WHERE cmnd = ?";
@@ -46,8 +48,6 @@ public class ManagerService {
     private String
             updateUserCovidByDebt = "UPDATE nguoi_lien_quan SET ghino = ? WHERE cmnd = ?";
 
-    private String
-            updateUserCovidByState = "{call proc_chuyentrangthai(?,?,?)}"; // _doituong, _trangthaimoi, _quanly
 
     private String
             updateUserCovidByHealthCenter = "UPDATE nguoi_lien_quan SET idnoiquanly = ? WHERE cmnd = ?";
@@ -118,7 +118,7 @@ public class ManagerService {
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
                         rs.getInt("idnoiquanly"),
-                        rs.getString("ghino")));
+                        rs.getDouble("ghino")));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -137,8 +137,7 @@ public class ManagerService {
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
                         rs.getInt("idnoiquanly"),
-                        rs.getFloat("ghino")
-                );
+                        rs.getDouble("ghino"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -179,7 +178,7 @@ public class ManagerService {
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
                         rs.getInt("idnoiquanly"),
-                        rs.getString("ghino")));
+                        rs.getDouble("ghino")));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -189,7 +188,6 @@ public class ManagerService {
 
 
     public int mapHealthCenterToId(String name) {
-        // loop through maps
         int res = -1;
         for (Map.Entry<Integer, String> entry : healthCenter.entrySet()) {
             if (entry.getValue().equals(name)) {

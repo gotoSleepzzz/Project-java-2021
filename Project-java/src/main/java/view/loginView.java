@@ -7,12 +7,15 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class loginView extends JFrame{
+    JLabel usrLabel;
+    JLabel passLabel;
     JTextField usrInput;
     JPasswordField passInput;
     
@@ -55,6 +58,8 @@ public class loginView extends JFrame{
         createAdminPanel.setBounds(0,0,600,400);
         createAdminPanel.setLayout(null);
         
+        usrLabel = new JLabel("Username");
+        passLabel = new JLabel("Password");
         createNewPassPanel = new JPanel();
         createNewPassPanel.setBounds(0,0,600,400);
         createNewPassPanel.setLayout(null);
@@ -84,6 +89,13 @@ public class loginView extends JFrame{
         loginBtn.setBounds(320,220,120,30);
                         
         
+        this.add(usrLabel);
+        this.add(passLabel);
+        this.add(usrInput);
+        this.add(passInput);
+        this.add(showPassBox);
+        this.add(loginBtn);
+        this.add(clearBtn);
         mainPanel.add(usrLabel);
         mainPanel.add(passLabel);
         mainPanel.add(usrInput);

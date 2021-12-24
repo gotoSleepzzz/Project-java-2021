@@ -5,14 +5,10 @@ import model.UserCovid;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.traverse.BreadthFirstIterator;
 import utils.dbUtil;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ManagerService {
 
@@ -23,7 +19,6 @@ public class ManagerService {
     HashMap<Integer, String> healthCenter = new HashMap<>();
     DirectedGraph<String, DefaultEdge> directedGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
     List<UserCovid> userCovidList;
-    Map<String, UserCovid> userCovidMap = new HashMap<>();
 
     public ManagerService() {
 
@@ -97,34 +92,96 @@ public class ManagerService {
     }
 
 
-    public boolean updateUserCovidByState(String id, String state) {
+    public String changeState(int state) {
+        return state == 1 ? "F1" : state == 2 ? "F2" : state == 3 ? "F3" : state == 4 ? "F4" : "F0";
+    }
 
-        var iterator = new BreadthFirstIterator<>(directedGraph, id);
-        var first = iterator.next();
-        userCovidMap.get(first).setState("F0");
+    public boolean updateUserCovidByState(String id, String state, String currentState) {
         Object[] params = {
                 id,
                 state,
                 this.nameManager
         };
-        db.excuteProc(updateUserCovidByState, params);
 
-        while (iterator.hasNext()) {
-            var next = iterator.next();
-            UserCovid userCovid = userCovidMap.get(next);
-            userCovid.setState(changeState(userCovid.getState()));
-            Object[] param = {
-                    userCovid.getId(),
-                    userCovid.getState(),
-                    this.nameManager,
-            };
-            db.excuteProc(updateUserCovidByState, param);
+        if (state.equals("OK")) {
+            try {
+                db.excuteProc(updateUserCovidByState, params);
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
         }
 
-        for (Map.Entry<String, UserCovid> entry : userCovidMap.entrySet()) {
-            System.out.println(entry.getValue());
+
+        if (currentState.equals("F3")) {
+            UserCovid currentUser = findOneUserCovid(id);
+            params[0] = currentUser.getIdReached();
+            params[1] = "F1";
+            try {
+                db.excuteProc(updateUserCovidByState, params);
+            } catch (Exception e) {
+                return false;
+            }
+
+            params[0] = id;
+            params[1] = "F0";
+            try {
+                db.excuteProc(updateUserCovidByState, params);
+            } catch (Exception e) {
+                return false;
+            }
+            traversalAndUpdate(currentUser.getIdReached(), 2, id);
+            traversalAndUpdate(id, 1, id);
+
+        } else {
+
+            params[0] = id;
+            params[1] = "F0";
+            try {
+                db.excuteProc(updateUserCovidByState, params);
+            } catch (Exception e) {
+                return false;
+            }
+            traversalAndUpdate(id, 1, "");
         }
-        return false;
+
+        return true;
+    }
+
+
+    void traversalAndUpdate(String first, int count, String id) {
+
+        // iterater through the first layer node using breadth first search
+        Queue<String> queue = new LinkedList<>();
+        queue.add(first);
+
+        int layer = count;
+        while (!queue.isEmpty()) {
+            String node = queue.poll();
+
+            // get al the vertex that is connected to the current node
+            Set<DefaultEdge> set = directedGraph.outgoingEdgesOf(node);
+            for (DefaultEdge edge : set) {
+
+                String next = directedGraph.getEdgeTarget(edge);
+                if ((next.equals(id))) {
+                    continue;
+                }
+                String newState = changeState(count);
+                queue.add(next);
+                Object[] param = {
+                        next,
+                        newState,
+                        this.nameManager
+                };
+                try {
+                    db.excuteProc(updateUserCovidByState, param);
+                } catch (Exception e) {
+                    System.out.println("Update failed");
+                }
+            }
+            count++;
+        }
     }
 
 
@@ -242,11 +299,6 @@ public class ManagerService {
     public void buildGraph() {
 
         for (UserCovid userCovid : userCovidList) {
-            userCovidMap.put(userCovid.getId(), userCovid);
-        }
-
-
-        for (UserCovid userCovid : userCovidList) {
             String id = userCovid.getId();
             directedGraph.addVertex(id);
             String idReached = userCovid.getIdReached();
@@ -258,22 +310,6 @@ public class ManagerService {
             }
         }
 
-    }
-
-
-    public String changeState(String status) {
-
-        if (status.equals("F2")) {
-            return "F1";
-        }
-        if (status.equals("F3")) {
-            return "F2";
-        }
-        if (status.equals("F4")) {
-            return "F3";
-        }
-        // never reach here
-        return "F0";
     }
 
 

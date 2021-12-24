@@ -32,14 +32,15 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         JPanel temp1 = new JPanel();
-        JLabel title = new JLabel("Chỉnh sửa");
-        title.setFont(title.getFont().deriveFont(20.0f));
+        JLabel title = new JLabel("Cập nhật người liên quan " + userCovid.getName());
+        title.setFont(new Font("Arial", Font.BOLD, 20));
         temp1.setLayout(new FlowLayout());
         temp1.add(title);
         mainPanel.add(temp1);
 
         JPanel temp2 = new JPanel();
         hosLabel = new JLabel("Nơi điều trị đang điều trị");
+        // set color for label
         hosLabel.setHorizontalAlignment(SwingConstants.LEFT);
         temp2.setLayout(new GridLayout(1, 1));
         temp2.add(hosLabel);
@@ -47,6 +48,7 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
 
         JPanel hosPanel = new JPanel();
         hosUser = new JLabel(ManagerService.getInstance().getHealthCenterName(userCovid.getHealthCenter()));
+        hosUser.setForeground(Color.BLUE);
         hosUser.setFont(hosUser.getFont().deriveFont(Font.BOLD));
 
         List<String> healthCenter = ManagerService.getInstance().getListHealtCenter();
@@ -73,6 +75,7 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
 
         JPanel statusPanel = new JPanel();
         statusUser = new JLabel(userCovid.getState());
+        statusUser.setForeground(Color.BLUE);
         // make font bold
         statusUser.setFont(statusUser.getFont().deriveFont(Font.BOLD));
         statusBox = new JComboBox(state);
@@ -115,6 +118,10 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
 
     public String getUserId() {
         return userCovid.getId();
+    }
+
+    public String getUserState() {
+        return userCovid.getState();
     }
 
     @Override

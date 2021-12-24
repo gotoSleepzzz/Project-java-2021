@@ -18,7 +18,6 @@ public class UserCovid {
         this.state = state;
         this.healthCenter = healthCenter;
         this.debt = debt;
-        this.idReached = null;
     }
 
 

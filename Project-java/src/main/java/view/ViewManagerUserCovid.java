@@ -31,13 +31,15 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private JPanel searchPanel;
     private JPanel footerPanel;
     private JButton watchMore;
+    private JButton historyButton;
     List<UserCovid> list = ManagerService.getInstance().findAllUserCovid();
-    String[][] data = new String[list.size()][5];
+    String[][] data = new String[list.size()][6];
     private JButton backButton;
     String[] columns = new String[]{"Họ tên", "CMND", "Nơi điều trị", "Năm sinh",
-            "Trạng thái hiện tại", "Xem chi tiết", "Chỉnh sửa"};
+            "Trạng thái hiện tại", "Dư nợ", "Xem chi tiết", "Chỉnh sửa", "Lịch sử"};
     private String placeHolderSearchTextField = "Nhập tên cần tìm kiếm bằng tên, cmnd";
     private ViewDetailsUserCovid viewDetailsUserCovid;
+
 
     String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
             "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
@@ -106,10 +108,24 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         table.getColumn("Xem chi tiết").setCellRenderer(new ButtonRenderer("Xem chi tiết"));
         buttonWatchDetails = new JButton("Xem chi tiết");
         buttonModify = new JButton("Chỉnh sửa");
+        historyButton = new JButton("Lịch sử");
         table.getColumn("Xem chi tiết").setCellEditor(new ButtonEditor(new JCheckBox(), "Xem chi tiết", buttonWatchDetails));
         table.getColumn("Chỉnh sửa").setCellRenderer(new ButtonRenderer("Chỉnh sửa"));
         table.getColumn("Chỉnh sửa").setCellEditor(new ButtonEditor(new JCheckBox(), "Chỉnh sửa", buttonModify));
+        table.getColumn("Lịch sử").setCellEditor(new ButtonEditor(new JCheckBox(), "Lịch sử", historyButton));
+        table.getColumn("Lịch sử").setCellRenderer(new ButtonRenderer("Lịch sử"));
+
         // add new row
+        // make table get the text fit the cell
+        table.getColumnModel().getColumn(0).setPreferredWidth(80);
+        table.getColumnModel().getColumn(1).setPreferredWidth(50);
+        table.getColumnModel().getColumn(2).setPreferredWidth(120);
+        table.getColumnModel().getColumn(3).setPreferredWidth(10);
+        table.getColumnModel().getColumn(4).setPreferredWidth(10);
+        table.getColumnModel().getColumn(5).setPreferredWidth(40);
+        table.getColumnModel().getColumn(6).setPreferredWidth(100);
+        table.getColumnModel().getColumn(7).setPreferredWidth(100);
+
         table.setRowHeight(30);
         table.setFont(new Font("Arial", Font.PLAIN, 15));
         table.setRowHeight(30);
@@ -140,7 +156,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
 
     public void renderTable(List<UserCovid> userCovids) {
-        String[][] dataUser = new String[userCovids.size()][5];
+        String[][] dataUser = new String[userCovids.size()][6];
 
         for (int i = 0; i < userCovids.size(); ++i) {
             dataUser[i][0] = userCovids.get(i).getName();
@@ -148,6 +164,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
             dataUser[i][2] = ManagerService.getInstance().getHealthCenterName(userCovids.get(i).getHealthCenter());
             dataUser[i][3] = String.valueOf(userCovids.get(i).getDob());
             dataUser[i][4] = userCovids.get(i).getState();
+            dataUser[i][5] = String.valueOf(userCovids.get(i).getDebt());
         }
         DefaultTableModel model = new DefaultTableModel(dataUser, columns);
         table.setModel(model);
@@ -163,7 +180,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
             data[i][2] = ManagerService.getInstance().getHealthCenterName(list.get(i).getHealthCenter());
             data[i][3] = String.valueOf(list.get(i).getDob());
             data[i][4] = list.get(i).getState();
-
+            data[i][5] = String.valueOf(list.get(i).getDebt());
         }
         DefaultTableModel model = new DefaultTableModel(data, columns);
         table.setModel(model);
@@ -195,6 +212,10 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         buttonWatchDetails.addActionListener(actionListener);
     }
 
+
+    public void addHistoryActionListener(ActionListener actionListener) {
+        historyButton.addActionListener(actionListener);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

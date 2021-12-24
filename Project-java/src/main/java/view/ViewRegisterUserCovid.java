@@ -47,7 +47,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
     private String placeholderName = "Nhập họ tên:";
     private String placeholderId = "Nhập chứng minh nhân dân";
     private String placeholderAddress = "Nhập số nhà, tên đường";
-    private String placeholderPeopleReached = "Bỏ trống nếu không có hoặc nhập vào chứng minh dân của người liên quan";
+    private String placeholderPeopleReached = "Bỏ qua nếu không có hoặc nhập vào chứng minh dân của người liên quan";
 
 
     private JButton submit;

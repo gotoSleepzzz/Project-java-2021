@@ -33,6 +33,7 @@ public class ManagerController {
         viewManager.getViewManagerUserCovid().addSearchActionListener(new AddSearchEvent());
         viewManager.getViewManagerUserCovid().addBackButtonListener_ViewManagerUserCovid(new AddBackEventViewManager());
         viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
+        viewManager.getViewManagerUserCovid().addHistoryActionListener(new AddButtonHistory_ViewManagerUserCovid());
         viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
         viewManager.getViewManagerUserCovid().addDropdownListener(new AddComboboxSort());
         viewManager.getViewManagerNYP().addBackListener(new AddBackEventViewManager());
@@ -42,6 +43,18 @@ public class ManagerController {
         viewManager.addComsumeListener(new AddConsumeEvent());
         viewManager.addDebtListener(new AddViewDebtEvent());
     }
+
+
+    class AddButtonHistory_ViewManagerUserCovid implements  ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            var user = viewManager.getViewManagerUserCovid().getUserCovid();
+            System.out.println(user.getName());
+
+        }
+    }
+
 
     class AddButtonModify_ViewMangerUserCovid implements ActionListener {
 
@@ -54,6 +67,12 @@ public class ManagerController {
         }
     }
 
+    public void renderActionListenerTable() {
+        viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
+        viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+        viewManager.getViewManagerUserCovid().addHistoryActionListener(new AddButtonHistory_ViewManagerUserCovid());
+
+    }
 
     class AddButtonSave_ViewUpdateHopitalAndStatus implements ActionListener {
 
@@ -73,20 +92,17 @@ public class ManagerController {
                         JOptionPane.QUESTION_MESSAGE,
                         null, options, options[1]);
                 if (option == JOptionPane.YES_OPTION) {
-                    System.out.println(currentHealthCenter);
-                    System.out.println(currentState);
                     if (!currentHealthCenter.equals(state[0])) {
                         int idHealthCenter = ManagerService.getInstance().mapHealthCenterToId(currentHealthCenter);
                         ManagerService.getInstance().updateUserCovidByHealthCenter(idHealthCenter, viewUpdateHospitalAndStatus.getUserId());
                     }
                     if (!currentState.equals(state[0])) {
-                        ManagerService.getInstance().updateUserCovidByState(viewUpdateHospitalAndStatus.getUserId(), "F0");
+                        ManagerService.getInstance().updateUserCovidByState(viewUpdateHospitalAndStatus.getUserId(), "F0", viewUpdateHospitalAndStatus.getUserState());
                     }
 
                     viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().findAllUserCovid());
                     viewManager.getViewManagerUserCovid().repaint();
-                    viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
-                    viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+                    renderActionListenerTable();
 
 
                 }
@@ -140,6 +156,7 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+
             JComboBox comboBoxSort = (JComboBox) e.getSource();
             if (comboBoxSort.getSelectedItem().toString().equals(sortBy[0]))
                 viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByNameIncrement());
@@ -161,8 +178,8 @@ public class ManagerController {
                 viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDebtDecrement());
             if (comboBoxSort.getSelectedItem().toString().equals(sortBy[9]))
                 viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByIdDecrement());
-            viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
-            viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+
+            renderActionListenerTable();
 
         }
     }
@@ -182,8 +199,7 @@ public class ManagerController {
                 if (user != null) {
                     list.add(user);
                     viewManager.getViewManagerUserCovid().renderTable(list);
-                    viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
-                    viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+                    renderActionListenerTable();
 
                 } else {
                     // show message dialog Khong tim thay nguoi lien quan

@@ -30,7 +30,7 @@ public class loginController {
         public void actionPerformed(ActionEvent e) {
             String username = login.getUsername();
             String password = login.getPass();
-            if (!username.equals("") && !password.equals("")) {
+            //if (!username.equals("") && !password.equals("")) {
                 try {
                     ResultSet rs = db.executeQuery("Select * from `account` where `username` = '" + username + "'");
                     if (rs.next()) {
@@ -59,7 +59,7 @@ public class loginController {
                 }catch (SQLException ex) {
                     Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+            //}
         }
     }
 }

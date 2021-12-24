@@ -12,11 +12,11 @@ import java.util.Date;
  * @author TRUNG
  */
 public class ActivityHistory {
-    String user;
-    String action;
-    String table;
-    String msg;
-    Date time;
+    private String user;
+    private String action;
+    private String table;
+    private String msg;
+    private Date time;
 
     public ActivityHistory(String user, String msg, Date time) {
         this.user = user;

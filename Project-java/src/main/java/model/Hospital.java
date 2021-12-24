@@ -10,10 +10,10 @@ package model;
  * @author TRUNG
  */
 public class Hospital {
-    int id;
-    String ten;
-    Integer sucChua;
-    Integer SLHienTai;
+    private int id;
+    private String ten;
+    private int sucChua;
+    private int SLHienTai;
 
     public Hospital(int id, String ten, Integer sucChua, Integer SLHienTai) {
         this.id = id;

@@ -12,12 +12,12 @@ import java.util.Date;
  * @author TRUNG
  */
 public class ConsumeHistory {
-    int id;
-    String UserId;
-    int NeccessaryId;
-    int quantity;
-    float total;
-    Date time;
+    private int id;
+    private String UserId;
+    private int NeccessaryId;
+    private int quantity;
+    private float total;
+    private Date time;
 
     public ConsumeHistory(int id, String UserId, int NeccessaryId, int quantity, float total, Date time) {
         this.id = id;

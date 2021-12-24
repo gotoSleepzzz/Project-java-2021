@@ -17,9 +17,9 @@ import model.ManagerHistory;
  *
  * @author TRUNG
  */
-public class ManagerHistoryService {
+public class ManagedHistoryService {
     dbUtil db;
-    public ManagerHistoryService(){
+    public ManagedHistoryService(){
         db = dbUtil.getDbUtil();
     }
     public ArrayList<ManagerHistory> findAll(String userId){

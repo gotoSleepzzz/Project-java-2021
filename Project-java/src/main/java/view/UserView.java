@@ -124,6 +124,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         panel.add(jinfo, BorderLayout.WEST);
         
         hisTable = new JTable();
+        hisTable.setRowHeight(50);
         
         this.add(panel);
         this.pack();
@@ -398,6 +399,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     public void ManageHistory(JFrame frame) {
         JScrollPane hisScroll = new JScrollPane();
         hisTable.setPreferredScrollableViewportSize(hisTable.getPreferredSize());
+        //hisTable.setFillsViewportHeight(false);
         hisTable.setAutoCreateRowSorter(true);
         hisScroll.setViewportView(hisTable);
 
@@ -417,9 +419,8 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     }
 
     public void PaymentHistory(JFrame frame) {
-        hisTable = new JTable();
         JScrollPane hisScroll = new JScrollPane();
-        hisTable.setModel(new DefaultTableModel((Object[][]) hisPaymentData, hisPaymentHeaders));
+        hisTable.setPreferredScrollableViewportSize(hisTable.getPreferredSize());
         hisTable.setAutoCreateRowSorter(true);
         hisScroll.setViewportView(hisTable);
 

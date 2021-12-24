@@ -12,14 +12,14 @@ import java.util.Date;
  * @author TRUNG
  */
 public class ManagerHistory {
-    int id;
-    String nguoiQL;
-    String userId;
-    String oldStatus;
-    String newStatus;
-    int idOldHospital;
-    int idNewHospital;
-    Date time;
+    private int id;
+    private String nguoiQL;
+    private String userId;
+    private String oldStatus;
+    private String newStatus;
+    private int idOldHospital;
+    private int idNewHospital;
+    private Date time;
 
     public ManagerHistory(int id, String nguoiQL, String userId, String oldStatus, String newStatus, int idOldHospital, int idNewHospital, Date time) {
         this.id = id;

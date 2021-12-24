@@ -24,7 +24,8 @@ create table `NGUOI_LIEN_QUAN`
 	diachi nvarchar(70),
 	trangthai varchar(2) not null,
     idnoiquanly int default 0,
-	ghino float(15,2) default 0
+	ghino float(15,2) default 0,
+    nguonlay varchar(12) default null
 );
 
 alter table `NGUOI_LIEN_QUAN`
@@ -52,12 +53,6 @@ create table `NHU_PHAM`
 );
 
 alter table `NHU_PHAM` auto_increment = 10;
-
-create table `NGUON_TIEP_XUC`
-(
-	nguon varchar(12),
-	nguoitiepxuc varchar(12)
-);
 
 create table `LICH_SU_CHUYEN_TRANG_THAI`
 (
@@ -105,12 +100,9 @@ create table `LICH_SU_THANH_TOAN`
 
 alter table `NGUOI_LIEN_QUAN` add
 	constraint fk_noiquanly foreign key (idnoiquanly) references NOI_QUAN_LY(id);
+alter table `NGUOI_LIEN_QUAN` add
+    constraint fk_nguon foreign key (nguonlay) references NGUOI_LIEN_QUAN(cmnd);
     
-alter table `NGUON_TIEP_XUC` add
-	constraint fk_nguon foreign key (nguon) references NGUOI_LIEN_QUAN(cmnd);
-alter table `NGUON_TIEP_XUC` add
-	constraint fk_nguoitiepxuc foreign key (nguoitiepxuc) references NGUOI_LIEN_QUAN(cmnd);
-
 alter table `LICH_SU_CHUYEN_TRANG_THAI`	add
 	constraint fk_nguoiquanly foreign key (nguoiquanly) references `account`(`username`);
 alter table `LICH_SU_CHUYEN_TRANG_THAI`	add
@@ -169,21 +161,6 @@ END$$
 DELIMITER ;
 
 
--- DELIMITER $$
--- CREATE PROCEDURE `Test3` (_username nvarchar(12))
--- BEGIN
--- 	declare a nvarchar(100);
--- 	IF (_username IS NULL) THEN
--- 		set a = null;
--- 		select @a;
--- 	ELSE 
--- 		set a = 'aaa';
--- 		select @a;
---     END IF;
--- END$$
--- DELIMITER ;
-
--- call Test3(null);
 
 DELIMITER $$
 CREATE PROCEDURE `proc_ThemNguoi` (_ten nvarchar(35), _cmnd varchar(12), _namsinh int, _diachi nvarchar(70), _trangthai varchar(2), _noiquanly int, _nguonlay varchar(12) , _quanly varchar(12))
@@ -191,18 +168,13 @@ BEGIN
 	DECLARE _soluong int;
     DECLARE _msg nvarchar(100);
 	IF ((select 'username' from htql_covid.`account` WHERE 'username' = _cmnd) IS NULL) THEN
-		INSERT INTO htql_covid.`nguoi_lien_quan` (ten,cmnd, namsinh, diachi,trangthai, idnoiquanly)
+		INSERT INTO htql_covid.`nguoi_lien_quan` (ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,nguonlay)
 		VALUES
-		(_ten, _cmnd, _namsinh, _diachi, _trangthai, _noiquanly);
+		(_ten, _cmnd, _namsinh, _diachi, _trangthai, _noiquanly,_nguonlay);
 		
 		insert into htql_covid.`account` (`username`)
 		values (_cmnd);
 		select soluongtiep into _soluong from htql_covid.noi_quan_ly where id = _noiquanly;
-        
-		IF (_nguonlay is not null) then
-			insert into htql_covid.`nguon_tiep_xuc` (nguon, nguoitiepxuc)
-			values (_nguonlay, _cmnd);
-		end if;		
 		
         insert into htql_covid.tai_khoan_giao_dich (tk,sodu)
         value (_cmnd, 1000000000);

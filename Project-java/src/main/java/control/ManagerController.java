@@ -19,6 +19,8 @@ public class ManagerController {
     private ManagerService managerService;
     private ViewManager viewManager;
     private ViewDetailsUserCovid viewDetailsUserCovid;
+    private ViewUpdateHospitalAndStatus viewUpdateHospitalAndStatus;
+
     String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
             "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
 
@@ -45,10 +47,54 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+
             var user = viewManager.getViewManagerUserCovid().getUserCovid();
-            new ViewUpdateHospitalAndStatus(user);
+            viewUpdateHospitalAndStatus = new ViewUpdateHospitalAndStatus(user);
+            viewUpdateHospitalAndStatus.addSaveListener(new AddButtonSave_ViewUpdateHopitalAndStatus());
         }
     }
+
+
+    class AddButtonSave_ViewUpdateHopitalAndStatus implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String[] state = {"Không thay đổi", "F0"};
+            String currentState = viewUpdateHospitalAndStatus.getSelectedStatus();
+            String currentHealthCenter = viewUpdateHospitalAndStatus.getSelectedHospital();
+            if (currentState.equals(state[0]) && currentHealthCenter.equals(state[0])) {
+                viewUpdateHospitalAndStatus.dispose();
+            } else {
+
+                Object[] options = {"Yes", "No"};
+                var option = JOptionPane.showOptionDialog(viewUpdateHospitalAndStatus, "Bạn có muốn lưu thay đổi không?",
+                        "Lưu thay đổi",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, options, options[1]);
+                if (option == JOptionPane.YES_OPTION) {
+                    System.out.println(currentHealthCenter);
+                    System.out.println(currentState);
+                    if (!currentHealthCenter.equals(state[0])) {
+                        int idHealthCenter = ManagerService.getInstance().mapHealthCenterToId(currentHealthCenter);
+                        ManagerService.getInstance().updateUserCovidByHealthCenter(idHealthCenter, viewUpdateHospitalAndStatus.getUserId());
+                    }
+                    if (!currentState.equals(state[0])) {
+                        ManagerService.getInstance().updateUserCovidByState(viewUpdateHospitalAndStatus.getUserId(), "F0");
+                    }
+
+                    viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().findAllUserCovid());
+                    viewManager.getViewManagerUserCovid().repaint();
+                    viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
+                    viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+
+
+                }
+                viewUpdateHospitalAndStatus.dispose();
+            }
+        }
+    }
+
 
     class AddButtonDetails_ViewManagerUserCovid implements ActionListener {
 
@@ -216,7 +262,6 @@ public class ManagerController {
             chart.setVisible(true);
         }
     }
-
 
 
 }

@@ -8,7 +8,12 @@ import java.util.stream.Collectors;
 public class ManagerUserCovid {
     List<UserCovid> listUserCovid = new ArrayList<>();
 
+
     public ManagerUserCovid() {
+    }
+
+    public void removeListUserCovid() {
+        listUserCovid.clear();
     }
 
     public void addUserCovid(UserCovid userCovid) {
@@ -32,8 +37,10 @@ public class ManagerUserCovid {
         return listUserCovid.stream().filter(userCovid -> userCovid.getId().equals(id)).findFirst().orElse(null);
     }
 
-    public void updateUserCovidByState() {
-
+    public void updateUserCovidByState(String state, String id) {
+        // update
+        UserCovid userCovid = searchUserByID(id);
+        userCovid.setState(state);
     }
 
     public void updateUserCovidByHealthCenter(int idHealthCenter, String id) {

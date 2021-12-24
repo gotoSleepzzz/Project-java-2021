@@ -24,7 +24,10 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
     private JButton save;
     String[] state = {"Không thay đổi", "F0"};
 
+    UserCovid userCovid;
+
     public ViewUpdateHospitalAndStatus(UserCovid userCovid) {
+        this.userCovid = userCovid;
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
@@ -86,7 +89,6 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
         JPanel tmp = new JPanel(new FlowLayout(FlowLayout.CENTER));
         save = new JButton("Lưu");
         tmp.add(save);
-        save.addActionListener(this);
         footer.add(tmp, BorderLayout.CENTER);
 
         mainPanel.add(footer);
@@ -99,24 +101,25 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
         setVisible(true);
     }
 
+    public void addSaveListener(ActionListener actionListener) {
+        save.addActionListener(actionListener);
+    }
+
+    public String getSelectedHospital() {
+        return (String) hosBox.getSelectedItem();
+    }
+
+    public String getSelectedStatus() {
+        return (String) statusBox.getSelectedItem();
+    }
+
+    public String getUserId() {
+        return userCovid.getId();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // pop up options confirm
-        if (e.getSource() == save) {
-            String currentState = statusBox.getSelectedItem().toString();
-            String currentHealthCenter = hosBox.getSelectedItem().toString();
-            if (currentState.equals(state[0]) && currentHealthCenter.equals(state[0])) {
-                dispose();
-            } else {
-                Object[] options = {"Yes", "No"};
-                JOptionPane.showOptionDialog(this, "Bạn có muốn lưu thay đổi không?",
-                        "Lưu thay đổi",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null, options, options[1]);
 
-            }
-
-        }
     }
 }
+

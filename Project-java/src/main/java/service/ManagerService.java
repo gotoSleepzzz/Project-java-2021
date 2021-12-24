@@ -2,6 +2,10 @@ package service;
 
 import model.ManagerUserCovid;
 import model.UserCovid;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.traverse.BreadthFirstIterator;
 import utils.dbUtil;
 
 import java.sql.SQLException;
@@ -12,16 +16,22 @@ import java.util.Map;
 
 public class ManagerService {
 
+    dbUtil db;
     private static ManagerService single_instance;
     private String nameManager = null;
-    dbUtil db;
     ManagerUserCovid managerUserCovid = new ManagerUserCovid();
     HashMap<Integer, String> healthCenter = new HashMap<>();
-
+    DirectedGraph<String, DefaultEdge> directedGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
+    List<UserCovid> userCovidList;
+    Map<String, UserCovid> userCovidMap = new HashMap<>();
 
     public ManagerService() {
+
         db = dbUtil.getDbUtil();
         MapUserCovidToHealthCenter();
+        userCovidList = findAllUserCovid();
+        buildGraph();
+
     }
 
     public static ManagerService getInstance() {
@@ -50,7 +60,7 @@ public class ManagerService {
 
 
     private String
-            updateUserCovidByHealthCenter = "UPDATE nguoi_lien_quan SET idnoiquanly = ? WHERE cmnd = ?";
+            updateUserCovidByHealthCenterProc = "{call proc_chuyennoidieutri(?,?,?)}";
 
     private String
             getUserById = "SELECT * FROM nguoi_lien_quan WHERE cmnd = ?";
@@ -86,24 +96,50 @@ public class ManagerService {
         return false;
     }
 
-    public boolean updateUserCovidByState(UserCovid userCovid) {
-        Object[] params = {
-                userCovid.getState(),
-                userCovid.getId(),
-        };
 
-        return db.excuteProc(updateUserCovidByState, params);
+    public boolean updateUserCovidByState(String id, String state) {
+
+        var iterator = new BreadthFirstIterator<>(directedGraph, id);
+        var first = iterator.next();
+        userCovidMap.get(first).setState("F0");
+        Object[] params = {
+                id,
+                state,
+                this.nameManager
+        };
+        db.excuteProc(updateUserCovidByState, params);
+
+        while (iterator.hasNext()) {
+            var next = iterator.next();
+            UserCovid userCovid = userCovidMap.get(next);
+            userCovid.setState(changeState(userCovid.getState()));
+            Object[] param = {
+                    userCovid.getId(),
+                    userCovid.getState(),
+                    this.nameManager,
+            };
+            db.excuteProc(updateUserCovidByState, param);
+        }
+
+        for (Map.Entry<String, UserCovid> entry : userCovidMap.entrySet()) {
+            System.out.println(entry.getValue());
+        }
+        return false;
     }
+
 
     public boolean updateUserCovidByHealthCenter(int healthCenter, String id) {
         Object[] params = {
-                healthCenter,
                 id,
+                healthCenter,
+                this.nameManager
         };
-        if (db.excuteProc(updateUserCovidByHealthCenter, params)) {
+        try {
+            db.excuteProc(updateUserCovidByHealthCenterProc, params);
             managerUserCovid.updateUserCovidByHealthCenter(healthCenter, id);
+        } catch (Exception e) {
+            System.out.println("Error when change health center");
         }
-        System.out.println("Error when change health center");
         return false;
     }
 
@@ -111,6 +147,7 @@ public class ManagerService {
         Object[] params = {};
         var rs = db.executeQuery(getAllUserCovid, params);
         try {
+            managerUserCovid.removeListUserCovid();
             while (rs.next()) {
                 managerUserCovid.addUserCovid(new UserCovid(rs.getString("ten"),
                         rs.getString("cmnd"),
@@ -118,7 +155,9 @@ public class ManagerService {
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
                         rs.getInt("idnoiquanly"),
-                        rs.getDouble("ghino")));
+                        rs.getString("nguonlay"),
+                        rs.getDouble("ghino")
+                ));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -137,6 +176,7 @@ public class ManagerService {
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
                         rs.getInt("idnoiquanly"),
+                        rs.getString("nguonlay"),
                         rs.getDouble("ghino"));
             }
         } catch (SQLException e) {
@@ -178,6 +218,7 @@ public class ManagerService {
                         rs.getString("diachi"),
                         rs.getString("trangthai"),
                         rs.getInt("idnoiquanly"),
+                        rs.getString("nguonlay"),
                         rs.getDouble("ghino")));
             }
         } catch (SQLException throwables) {
@@ -196,6 +237,45 @@ public class ManagerService {
         }
         return res;
     }
+
+
+    public void buildGraph() {
+
+        for (UserCovid userCovid : userCovidList) {
+            userCovidMap.put(userCovid.getId(), userCovid);
+        }
+
+
+        for (UserCovid userCovid : userCovidList) {
+            String id = userCovid.getId();
+            directedGraph.addVertex(id);
+            String idReached = userCovid.getIdReached();
+            if (idReached != null) {
+                if (!directedGraph.containsVertex(idReached)) {
+                    directedGraph.addVertex(idReached);
+                }
+                directedGraph.addEdge(idReached, id);
+            }
+        }
+
+    }
+
+
+    public String changeState(String status) {
+
+        if (status.equals("F2")) {
+            return "F1";
+        }
+        if (status.equals("F3")) {
+            return "F2";
+        }
+        if (status.equals("F4")) {
+            return "F3";
+        }
+        // never reach here
+        return "F0";
+    }
+
 
     public List<String> getListHealtCenter() {
         return new ArrayList<>(healthCenter.values());

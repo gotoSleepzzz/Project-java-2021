@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Account;
 import org.mindrot.jbcrypt.BCrypt;
+import service.ManagerService;
 import utils.dbUtil;
 import view.ViewManager;
 import view.admin.adminView;
@@ -51,13 +52,13 @@ public class loginController {
             String confirmPass = login.getConfirmPass();
             System.out.println(newPass);
             System.out.println(confirmPass);
-            
+
             newPass = newPass.trim();
             confirmPass = confirmPass.trim();
-            
+
             if(!newPass.equals("") && !confirmPass.equals("")){
                 if((newPass.length() < 6) || !newPass.matches(".*[a-zA-Z].*") || !newPass.matches(".*[0-9].*")){
-                   JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
+                    JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }
                 else{
                     if (newPass.equalsIgnoreCase(confirmPass)) {
@@ -71,7 +72,7 @@ public class loginController {
                 }
             }
             else {
-                JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
+                JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
@@ -114,14 +115,15 @@ public class loginController {
                             if (pass.length() < 1) {
                                 login.showCreateNewPass();
                             } else if (BCrypt.checkpw(password, pass)) {
-                                if (status == true) {
+                                if (status) {
                                     String role = rs.getString(3);
                                     if (role.equalsIgnoreCase("admin")) {
                                         login.setVisible(false);
                                         login.dispose();
                                         new adminView().setVisible(true);
                                     } else if (role.equalsIgnoreCase("manager")) {
-                                        new ViewManager();
+                                        new ManagerController();
+                                        ManagerService.getInstance().setNameManager(username);
                                     } else {
                                         login.setVisible(false);
                                         login.dispose();

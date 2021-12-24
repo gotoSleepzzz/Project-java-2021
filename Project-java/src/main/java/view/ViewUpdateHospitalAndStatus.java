@@ -5,11 +5,10 @@
  */
 package view;
 
+import model.UserCovid;
 import service.ManagerService;
 
-import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,9 +22,9 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
     private JLabel hosUser, statusUser;
     private JComboBox hosBox, statusBox;
     private JButton save;
-    String[] state = {"F0"};
+    String[] state = {"Không thay đổi", "F0"};
 
-    public ViewUpdateHospitalAndStatus() {
+    public ViewUpdateHospitalAndStatus(UserCovid userCovid) {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
@@ -44,11 +43,12 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
         mainPanel.add(temp2);
 
         JPanel hosPanel = new JPanel();
-        hosUser = new JLabel("F0");
+        hosUser = new JLabel(ManagerService.getInstance().getHealthCenterName(userCovid.getHealthCenter()));
         hosUser.setFont(hosUser.getFont().deriveFont(Font.BOLD));
 
         List<String> healthCenter = ManagerService.getInstance().getListHealtCenter();
         hosBox = new JComboBox();
+        hosBox.addItem(state[0]);
         for (String s : healthCenter) {
             hosBox.addItem(s);
         }
@@ -69,7 +69,7 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
         mainPanel.add(temp3);
 
         JPanel statusPanel = new JPanel();
-        statusUser = new JLabel("F0");
+        statusUser = new JLabel(userCovid.getState());
         // make font bold
         statusUser.setFont(statusUser.getFont().deriveFont(Font.BOLD));
         statusBox = new JComboBox(state);
@@ -103,14 +103,20 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
     public void actionPerformed(ActionEvent e) {
         // pop up options confirm
         if (e.getSource() == save) {
-            // make a pop up message but default is no
+            String currentState = statusBox.getSelectedItem().toString();
+            String currentHealthCenter = hosBox.getSelectedItem().toString();
+            if (currentState.equals(state[0]) && currentHealthCenter.equals(state[0])) {
+                dispose();
+            } else {
+                Object[] options = {"Yes", "No"};
+                JOptionPane.showOptionDialog(this, "Bạn có muốn lưu thay đổi không?",
+                        "Lưu thay đổi",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, options, options[1]);
 
-            Object[] options = {"Yes", "No"};
-            JOptionPane.showOptionDialog(this, "Bạn có muốn lưu thay đổi không?",
-                    "Lưu thay đổi",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null, options, options[1]);
+            }
+
         }
     }
 }

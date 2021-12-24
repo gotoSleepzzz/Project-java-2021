@@ -45,8 +45,8 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
-            new ViewUpdateHospitalAndStatus();
+            var user = viewManager.getViewManagerUserCovid().getUserCovid();
+            new ViewUpdateHospitalAndStatus(user);
         }
     }
 

@@ -8,6 +8,6 @@ package model;
  *
  * @author DELL
  */
-public class Neccessary {
+public class NYP {
     
 }

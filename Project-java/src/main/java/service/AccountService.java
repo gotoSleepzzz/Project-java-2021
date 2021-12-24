@@ -45,4 +45,6 @@ public class AccountService{
     public void LockAccount(Account account,boolean status){
         db.executeUpdate("update `account` set status = ? where username = ?",new Object[]{status,account.getUsername()});
     }
+    
+    
 }

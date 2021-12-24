@@ -91,7 +91,7 @@ public class QLTaiKhoanController {
         public void actionPerformed(ActionEvent e) {
             int index = view.getSelectedRowTableAcc();
             if (index == -1) {
-                response = "Please select a row on the table that you want to lock/unlock";
+                response = "Vui lòng chọn tài khoản mà bạn muốn khóa/mở khóa";
                 JOptionPane.showMessageDialog(view, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 boolean status;

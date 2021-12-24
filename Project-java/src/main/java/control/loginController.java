@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Account;
+import org.mindrot.jbcrypt.BCrypt;
 import utils.dbUtil;
 import view.ViewManager;
 import view.admin.adminView;
@@ -50,12 +51,27 @@ public class loginController {
             String confirmPass = login.getConfirmPass();
             System.out.println(newPass);
             System.out.println(confirmPass);
-            if (newPass.equalsIgnoreCase(confirmPass)) {
-                String query = "update `account` set `password` = '" + newPass + "' where `username`= '" + username + "'";
-                db.executeUpdate(query);
-                login.showLoginView();
-            } else {
-                JOptionPane.showMessageDialog(login, "Mật khẩu không trùng khớp", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            
+            newPass = newPass.trim();
+            confirmPass = confirmPass.trim();
+            
+            if(!newPass.equals("") && !confirmPass.equals("")){
+                if((newPass.length() < 6) || !newPass.matches(".*[a-zA-Z].*") || !newPass.matches(".*[0-9].*")){
+                   JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
+                }
+                else{
+                    if (newPass.equalsIgnoreCase(confirmPass)) {
+                        String hashPass = BCrypt.hashpw(newPass, BCrypt.gensalt(12));
+                        String query = "update `account` set `password` = '" + hashPass + "' where `username`= '" + username + "'";
+                        db.executeUpdate(query);
+                        login.showLoginView();
+                    } else {
+                        JOptionPane.showMessageDialog(login, "Mật khẩu không trùng khớp", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
             }
         }
     }
@@ -97,7 +113,7 @@ public class loginController {
                             boolean status = rs.getBoolean("status");
                             if (pass.length() < 1) {
                                 login.showCreateNewPass();
-                            } else if (password.equalsIgnoreCase(pass)) {
+                            } else if (BCrypt.checkpw(password, pass)) {
                                 if (status == true) {
                                     String role = rs.getString(3);
                                     if (role.equalsIgnoreCase("admin")) {
@@ -110,7 +126,6 @@ public class loginController {
                                         login.setVisible(false);
                                         login.dispose();
                                         new userController(username);
-
                                     }
                                 } else {
                                     JOptionPane.showMessageDialog(login, "Tài khoản đã bị khóa", "Thông báo", JOptionPane.INFORMATION_MESSAGE);

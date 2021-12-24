@@ -6,7 +6,7 @@ use `htql_covid`;
 create table `account`
 (
 	`username` varchar(12) not null primary key,
-	`password` varchar(20) not null default '',
+	`password` varchar(100) not null default '',
 	`role` varchar(8) not null default 'user',
     `status` bool default true
 );
@@ -144,7 +144,7 @@ create table LICH_SU_GIAO_DICH
 /* ================================================================================== */
 
 DELIMITER $$
-CREATE PROCEDURE `proc_TaoQuanLy` (_username nvarchar(12), _pass varchar(20), _quanly varchar(12))
+CREATE PROCEDURE `proc_TaoQuanLy` (_username nvarchar(12), _pass varchar(100), _quanly varchar(12))
 BEGIN
 	declare _msg nvarchar(100);
 	IF ((select 'username' from htql_covid.`account` WHERE 'username' = _username) IS NULL) THEN
@@ -355,7 +355,7 @@ call htql_covid.`proc_MuaNhuPham` ('123456789008', 13, 1);
 
 call htql_covid.`proc_TaoQuanLy` ('manager','manager','admin');
 
--- select * from htql_covid.`account`;
+select * from htql_covid.`account`;
 -- select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;
 -- select * from htql_covid.nhu_pham;

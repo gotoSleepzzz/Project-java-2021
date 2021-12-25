@@ -18,6 +18,7 @@ public class ManagerController {
     private ViewManager viewManager;
     private ViewDetailsUserCovid viewDetailsUserCovid;
     private ViewUpdateHospitalAndStatus viewUpdateHospitalAndStatus;
+    private ViewUpdateNYP viewUpdateNYP;
 
     String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
             "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
@@ -50,6 +51,45 @@ public class ManagerController {
         viewManager.addComsumeListener(new AddConsumeEvent());
         viewManager.addDebtListener(new AddViewDebtEvent());
     }
+
+
+    class AddButtonSave_ViewUpdateNYP implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // show confirm dialog
+            int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn lưu thông tin này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                NYP nyp = viewUpdateNYP.getInfoNYP();
+                if (nyp != null) {
+                    var ok = ManagerService.getInstance().updateNYP(nyp);
+                    if (ok) {
+                        JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+                        viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().findAllNYP());
+                        viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+                        viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+                        viewUpdateNYP.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Cập nhật thất bại");
+                    }
+                }
+
+            } else {
+                viewUpdateNYP.dispose();
+            }
+        }
+    }
+
+    class AddButtonModify_ViewManagerNYP implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            NYP nyp = viewManager.getViewManagerNYP().getSelectedNYP();
+            viewUpdateNYP = new ViewUpdateNYP(nyp);
+            viewUpdateNYP.addSaveButtonListener(new AddButtonSave_ViewUpdateNYP());
+        }
+    }
+
 
 
     class AddButtonSearch_ViewManagerNYP implements ActionListener {
@@ -109,7 +149,6 @@ public class ManagerController {
                 if (result.size() == 0) {
                     JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả");
                 } else {
-                    System.out.println(result);
                     viewManager.getViewManagerNYP().renderTable(result);
                     viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
                     viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
@@ -132,8 +171,9 @@ public class ManagerController {
             JComboBox comboBoxSort = (JComboBox) e.getSource();
             if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[0]))
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByLimitIncrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[1]))
+            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[1])) {
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByDateIncrement());
+            }
             if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[2]))
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByPriceIncrement());
             if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[3]))
@@ -142,6 +182,7 @@ public class ManagerController {
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByDateDecrement());
             if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[5]))
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByPriceDecrement());
+
             viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
             viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
 
@@ -162,13 +203,8 @@ public class ManagerController {
         }
     }
 
-    class AddButtonModify_ViewManagerNYP implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
 
-        }
-    }
 
     class AddButtonRemove_ViewManagerNYP implements ActionListener {
 

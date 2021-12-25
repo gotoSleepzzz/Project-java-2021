@@ -18,23 +18,29 @@ import java.util.List;
  * @author TRUNG
  */
 public class ViewManagerNYP extends JPanel implements ActionListener {
-    private JButton newBtn, searchBtn;
-    private CustomTextField searchBar;
-    private CustomTextField name;
-    private CustomTextField limit;
-    private CustomTextField time;
-    private CustomTextField cost;
-    private JComboBox sortCombobox;
-    private JTable table;
-    private JPanel searchPanel, mainPanel, contentPanel, infoPanel, btnPanel, utilPanel;
-    private JScrollPane scroll;
-    private JComboBox filter;
-    private JButton back;
+    private final JButton newBtn;
+    private final JButton searchBtn;
+    private final CustomTextField searchBar;
+    private final CustomTextField name;
+    private final CustomTextField limit;
+    private final CustomTextField time;
+    private final CustomTextField cost;
+    private final JComboBox sortCombobox;
+    private final JTable table;
+    private final JPanel searchPanel;
+    private final JPanel mainPanel;
+    private final JPanel contentPanel;
+    private final JPanel infoPanel;
+    private final JPanel btnPanel;
+    private final JPanel utilPanel;
+    private final JScrollPane scroll;
+    private final JComboBox filter;
+    private final JButton back;
     private JButton modifyButton;
-    private JComboBox typeDateCombobox;
+    private final JComboBox typeDateCombobox;
     private JButton removeButton;
     List<NYP> list = ManagerService.getInstance().findAllNYP();
-    String data[][] = new String[list.size()][4];
+    String[][] data = new String[list.size()][4];
     private final String[] category = new String[]{
             "< 500.000", "500.000 - 1.000.000"
     };
@@ -44,15 +50,15 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
 
     JPanel headerPanel;
 
-    private String searchPlacehoder = "Tìm kiếm bằng tên gói hoặc bỏ trống để refresh lại bảng";
-    private String namePlacehoder = "Tên gói";
-    private String limitPlacehoder = "Mức giới hạn";
-    private String timePlacehoder = "Thời gian ";
-    private String costPlacehoder = "Đơn giá VNĐ";
+    private final String searchPlacehoder = "Tìm kiếm bằng tên gói hoặc bỏ trống để refresh lại bảng";
+    private final String namePlacehoder = "Tên gói";
+    private final String limitPlacehoder = "Mức giới hạn";
+    private final String timePlacehoder = "Thời gian ";
+    private final String costPlacehoder = "Đơn giá VNĐ";
 
     String[] sortBy = {"Mức giới hạn tăng dần", "Thời gian giới hạn tăng dần", "Đơn giá tằng dần",
             "Mức giới hạn giảm dần", "Thời gian giới hạn giảm dần", "Đơn giá giảm dần"};
-    String labelCombobox[] = {"Ngày", "Tuần", "Tháng"};
+    String[] labelCombobox = {"Ngày", "Tuần", "Tháng"};
 
     public ViewManagerNYP() {
 
@@ -182,7 +188,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         for (int i = 0; i < list.size(); i++) {
             data[i][0] = list.get(i).getName();
             data[i][1] = String.valueOf(list.get(i).getLimit());
-            data[i][2] = String.valueOf(list.get(i).getExpriredDate()) + " ngày";
+            data[i][2] = list.get(i).getExpriredDate() + " ngày";
             data[i][3] = String.valueOf(list.get(i).getPrice());
         }
 
@@ -196,7 +202,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         for (int i = 0; i < nyps.size(); i++) {
             data[i][0] = nyps.get(i).getName();
             data[i][1] = String.valueOf(nyps.get(i).getLimit());
-            data[i][2] = String.valueOf(list.get(i).getExpriredDate()) + " ngày";
+            data[i][2] = nyps.get(i).getExpriredDate() + " ngày";
             data[i][3] = String.valueOf(nyps.get(i).getPrice());
         }
         DefaultTableModel model = new DefaultTableModel(data, headerTable);
@@ -243,8 +249,8 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
     }
 
     class ButtonEditor extends DefaultCellEditor {
-        private String label;
-        private JButton button;
+        private final String label;
+        private final JButton button;
 
         public ButtonEditor(JCheckBox checkBox, String label, JButton button) {
             super(checkBox);

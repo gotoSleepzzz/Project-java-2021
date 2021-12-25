@@ -7,9 +7,16 @@ import java.util.stream.Collectors;
 
 public class ManagerNYP {
 
+    // implement singleton pattern
+    private static ManagerNYP instance = null;
+
     List<NYP> list = new ArrayList<>();
 
-    public ManagerNYP() {
+    public static ManagerNYP getInstance() {
+        if (instance == null) {
+            instance = new ManagerNYP();
+        }
+        return instance;
     }
 
     public void removeAll() {
@@ -58,7 +65,7 @@ public class ManagerNYP {
     }
 
     public List<NYP> sortNYPByDateDecrement() {
-        return  list.stream().sorted(Comparator.comparing(NYP::getExpriredDate).reversed()).collect(Collectors.toList());
+        return list.stream().sorted(Comparator.comparing(NYP::getExpriredDate).reversed()).collect(Collectors.toList());
     }
 
     public List<NYP> sortNYPByPriceIncrement() {

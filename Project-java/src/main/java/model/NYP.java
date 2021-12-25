@@ -75,4 +75,15 @@ public class NYP {
         this.expriredDate = expriredDate;
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "NYP{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", limit=" + limit +
+                ", expriredDate=" + expriredDate +
+                ", price=" + price +
+                '}';
+    }
 }

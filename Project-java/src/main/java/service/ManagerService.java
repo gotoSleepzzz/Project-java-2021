@@ -72,6 +72,14 @@ public class ManagerService {
     private String
             getOneNYP = "select * from nhu_pham where id = ?";
 
+    private String
+            updateNYP = "{call proc_CapNhatNhuYeuPham(?, ?, ?, ?, ?, ?)}"; // id, ten, muchan,hsd,gia,quanly
+
+    public boolean updateNYP(NYP nyp) {
+        Object[] params = {nyp.getId(), nyp.getName(), nyp.getLimit(), nyp.getExpriredDate(), nyp.getPrice(), this.nameManager};
+        return db.excuteProc(updateNYP, params);
+    }
+
     public NYP findOneNYPById(int id) {
         Object[] params = {id};
         var rs = db.executeQuery(getOneNYP, params);
@@ -88,6 +96,7 @@ public class ManagerService {
         }
         return null;
     }
+
 
     public List<NYP> findAllNYP() {
 
@@ -433,6 +442,7 @@ public class ManagerService {
         return managerUserCovid.sortUserCovidByIdDecrement();
     }
 
+
     public List<NYP> sortNYPByDateIncrement() {
         return managerNYP.sortNYPByDateIncrement();
     }
@@ -457,6 +467,18 @@ public class ManagerService {
         return managerNYP.sortNYPByLimitDecrement();
     }
 
+
+
+
+    public NYP getNYPByName(String name) {
+        var list = findAllNYP();
+        for (NYP nyp : list) {
+            if (nyp.getName().equals(name)) {
+                return nyp;
+            }
+        }
+        return null;
+    }
 
     public NYP getNYPByName(List<NYP> list, String name) {
         for (NYP nyp : list) {

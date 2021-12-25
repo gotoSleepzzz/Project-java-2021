@@ -21,6 +21,8 @@ public class ManagerController {
 
     String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
             "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
+    String[] sortNYP = {"Mức giới hạn tăng dần", "Thời gian giới hạn tăng dần", "Đơn giá tằng dần",
+            "Mức giới hạn giảm dần", "Thời gian giới hạn giảm dần", "Đơn giá giảm dần"};
 
     public ManagerController() {
         viewManager = new ViewManager();
@@ -40,6 +42,7 @@ public class ManagerController {
         viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
         viewManager.getViewManagerNYP().addNewActionListener(new AddButtonNew_ViewManagerNYP());
         viewManager.getViewManagerNYP().addSearchActionListener(new AddButtonSearch_ViewManagerNYP());
+        viewManager.getViewManagerNYP().addSortActionListener(new AddSortCombobox_ViewManagerNYP());
 
         viewManager.getViewRegisterUserCovid().AddBackListener(new AddBackEventViewManager());
         viewManager.addStatisticListener(new AddStatisticsEvent());
@@ -112,8 +115,7 @@ public class ManagerController {
                     viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
                 }
 
-            }
-            else if (query.equals("") || query.equals(viewManager.getViewManagerNYP().getSearchPlacehoder())) {
+            } else if (query.equals("") || query.equals(viewManager.getViewManagerNYP().getSearchPlacehoder())) {
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().findAllNYP());
                 viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
                 viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
@@ -121,11 +123,36 @@ public class ManagerController {
         }
     }
 
+    class AddSortCombobox_ViewManagerNYP implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+    //    String[] sortNYP = {"Mức giới hạn tăng dần", "Thời gian giới hạn tăng dần", "Đơn giá tằng dần",
+            //            "Mức giới hạn giảm dần", "Thời gian giới hạn giảm dần", "Đơn giá giảm dần"};
+            JComboBox comboBoxSort = (JComboBox) e.getSource();
+            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[0]))
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByLimitIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[1]))
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByDateIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[2]))
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByPriceIncrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[3]))
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByLimitDecrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[4]))
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByDateDecrement());
+            if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[5]))
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().sortNYPByPriceDecrement());
+            viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+            viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+
+        }
+    }
+
     class AddButtonNew_ViewManagerNYP implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
         }
     }
 
@@ -262,6 +289,7 @@ public class ManagerController {
             viewManager.getContentPane().validate();
         }
     }
+
 
     class AddComboboxSort implements ActionListener {
 

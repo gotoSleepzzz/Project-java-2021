@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ManagerNYP {
 
@@ -52,36 +53,36 @@ public class ManagerNYP {
         return false;
     }
 
-    public void sortNYPByDateIncrement() {
-        list.sort(Comparator.comparing(NYP::getExpriredDate));
+    public List<NYP> sortNYPByDateIncrement() {
+        return list.stream().sorted(Comparator.comparing(NYP::getExpriredDate)).collect(Collectors.toList());
     }
 
-    public void sortNYPByDateDescement() {
-        list.sort(Comparator.comparing(NYP::getExpriredDate).reversed());
+    public List<NYP> sortNYPByDateDecrement() {
+        return  list.stream().sorted(Comparator.comparing(NYP::getExpriredDate).reversed()).collect(Collectors.toList());
     }
 
-    public void sortNYPByPriceIncrement() {
-        list.sort(Comparator.comparing(NYP::getPrice));
+    public List<NYP> sortNYPByPriceIncrement() {
+        return list.stream().sorted(Comparator.comparing(NYP::getPrice)).collect(Collectors.toList());
     }
 
-    public void sortNYPByPriceDescement() {
-        list.sort(Comparator.comparing(NYP::getPrice).reversed());
+    public List<NYP> sortNYPByPriceDecrement() {
+        return list.stream().sorted(Comparator.comparing(NYP::getPrice).reversed()).collect(Collectors.toList());
     }
 
-    public void sortNYPByLimitIncrement() {
-        list.sort(Comparator.comparing(NYP::getLimit));
+    public List<NYP> sortNYPByLimitIncrement() {
+        return list.stream().sorted(Comparator.comparing(NYP::getLimit)).collect(Collectors.toList());
     }
 
-    public void sortNYPByLimitDescement() {
-        list.sort(Comparator.comparing(NYP::getLimit).reversed());
+    public List<NYP> sortNYPByLimitDecrement() {
+        return list.stream().sorted(Comparator.comparing(NYP::getLimit).reversed()).collect(Collectors.toList());
     }
 
-    public void sortNYPByNameIncrement() {
-        list.sort(Comparator.comparing(NYP::getName));
+    public List<NYP> sortNYPByNameIncrement() {
+        return list.stream().sorted(Comparator.comparing(NYP::getName)).collect(Collectors.toList());
     }
 
-    public void sortNYPByNameDescement() {
-        list.sort(Comparator.comparing(NYP::getName).reversed());
+    public List<NYP> sortNYPByNameDescement() {
+        return list.stream().sorted(Comparator.comparing(NYP::getName).reversed()).collect(Collectors.toList());
     }
 
 

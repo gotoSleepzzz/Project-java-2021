@@ -258,6 +258,10 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         removeButton.addActionListener(actionListener);
     }
 
+    public void addSortActionListener(ActionListener actionListener) {
+        sortCombobox.addActionListener(actionListener);
+    }
+
 
     public void addModifyActionListener(ActionListener actionListener) {
         modifyButton.addActionListener(actionListener);

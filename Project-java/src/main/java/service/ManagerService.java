@@ -433,9 +433,30 @@ public class ManagerService {
         return managerUserCovid.sortUserCovidByIdDecrement();
     }
 
-    public List<UserCovid> searchByName() {
-        return managerUserCovid.sortUserCovidByNameDecrement();
+    public List<NYP> sortNYPByDateIncrement() {
+        return managerNYP.sortNYPByDateIncrement();
     }
+
+    public List<NYP> sortNYPByDateDecrement() {
+        return managerNYP.sortNYPByDateDecrement();
+    }
+
+    public List<NYP> sortNYPByPriceIncrement() {
+        return managerNYP.sortNYPByPriceIncrement();
+    }
+
+    public List<NYP> sortNYPByPriceDecrement() {
+        return managerNYP.sortNYPByPriceDecrement();
+    }
+
+    public List<NYP> sortNYPByLimitIncrement() {
+        return managerNYP.sortNYPByLimitIncrement();
+    }
+
+    public List<NYP> sortNYPByLimitDecrement() {
+        return managerNYP.sortNYPByLimitDecrement();
+    }
+
 
     public NYP getNYPByName(List<NYP> list, String name) {
         for (NYP nyp : list) {

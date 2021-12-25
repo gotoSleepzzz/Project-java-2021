@@ -43,7 +43,7 @@ public class ManagerService {
             addUserCovid = "{Call proc_themnguoi (?, ?, ?, ?, ?, ?, ?, ?)}"; // _ten, _cmnd,_namsinh,_diachi,_trangthai,_noiquanly,_nguonlay,_quanly
 
     private String
-            addNYP = "{call proc_themnhuyeupham (?, ?, ?, ?)}"; // _ten, _muchan, _hsd, _gia, _quanly
+            addNYP = "{call proc_themnhuyeupham (?, ?, ?, ?, ?)}"; // _ten, _muchan, _hsd, _gia, _quanly
 
     private String
             updateUserCovidByState = "{call proc_chuyentrangthai(?,?,?)}"; // _doituong, _trangthaimoi, _quanly
@@ -72,7 +72,7 @@ public class ManagerService {
     private String
             getOneNYP = "select * from nhu_pham where id = ?";
 
-    public NYP findOneById(int id) {
+    public NYP findOneNYPById(int id) {
         Object[] params = {id};
         var rs = db.executeQuery(getOneNYP, params);
         try {
@@ -120,7 +120,7 @@ public class ManagerService {
 
         try {
             db.excuteProc(addNYP, params);
-            managerNYP.addNYP(nyp);
+            findAllNYP();
             return true;
         } catch (Exception e) {
             return false;

@@ -1,7 +1,9 @@
 package view;
 
-import model.ManagerNYP;
 import model.NYP;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import service.ManagerService;
 
 import javax.swing.*;
@@ -12,7 +14,8 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -33,6 +36,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
     private JButton back;
     private JButton modifyButton;
     private JButton removeButton;
+    private JDatePickerImpl datePicker;
     List<NYP> list = ManagerService.getInstance().findAllNYP();
     String data[][] = new String[list.size()][4];
     private final String[] category = new String[]{
@@ -102,8 +106,6 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         name.setPlaceholder(namePlacehoder);
         limit = new CustomTextField(10);
         limit.setPlaceholder(limitPlacehoder);
-        time = new CustomTextField(10);
-        time.setPlaceholder(timePlacehoder);
         cost = new CustomTextField(10);
         cost.setPlaceholder(costPlacehoder);
         filter = new JComboBox(category);
@@ -122,7 +124,13 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         infoPanel.add(new JLabel("Mức giới hạn"));
         infoPanel.add(limit);
         infoPanel.add(new JLabel("Thời gian giới hạn"));
-        infoPanel.add(time);
+
+        // create a button for  choose time picker nice jdatepicker
+        datePicker = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel()));
+        datePicker.setPreferredSize(new Dimension(150, 30));
+        infoPanel.add(datePicker);
+
+
         infoPanel.add(new JLabel("Đơn giá"));
         infoPanel.add(cost);
         infoPanel.setPreferredSize(new Dimension(800, 500));
@@ -138,8 +146,6 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         contentPanel.setLayout(new BorderLayout(10, 10));
         contentPanel.add(scroll, BorderLayout.CENTER);
         contentPanel.add(utilPanel, BorderLayout.EAST);
-
-
 
 
         mainPanel = new JPanel();
@@ -158,9 +164,10 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         int row = table.getSelectedRow();
         if (row == -1) return null;
         // get selected row
-        String name = String.valueOf(table.getValueAt(row, 0));
-        return ManagerService.getInstance().getNYPByName(list, name);
+        String nameNYP = String.valueOf(table.getValueAt(row, 0));
+        return ManagerService.getInstance().getNYPByName(list, nameNYP);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -200,7 +207,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         table.getColumnModel().getColumn(3).setPreferredWidth(10);
         removeButton = new JButton("Xoá");
         modifyButton = new JButton("Chỉnh sửa");
-        table.getColumn("Xoá").setCellEditor(new ButtonEditor(new JCheckBox(), "Xoá",removeButton));
+        table.getColumn("Xoá").setCellEditor(new ButtonEditor(new JCheckBox(), "Xoá", removeButton));
         table.getColumn("Xoá").setCellRenderer(new ButtonRenderer("Xoá"));
         table.getColumn("Cập nhật").setCellEditor(new ButtonEditor(new JCheckBox(), "Cập nhật", modifyButton));
         table.getColumn("Cập nhật").setCellRenderer(new ButtonRenderer("Cập nhật"));
@@ -279,9 +286,27 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
     public String getSearchPlacehoder() {
         return searchPlacehoder;
     }
+
     public void addNewActionListener(ActionListener actionListener) {
         newBtn.addActionListener(actionListener);
     }
 
+    public NYP getInfoNYP() {
+        String nameNYP = name.getText();
+        String limitNYP = limit.getText();
+        String datePattern = "yyyy-MM-dd";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
+        String expiredDate = dateFormat.format(datePicker.getModel().getValue());
+        String priceNYP = cost.getText();
+        if (nameNYP.equals("") || limitNYP.equals("") || expiredDate == null || expiredDate.equals("") || priceNYP.equals(""))
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin");
+        else if (Integer.parseInt(limitNYP) < 0 || Integer.parseInt(priceNYP) < 0)
+            JOptionPane.showMessageDialog(null, "Giá và số lượng không được âm");
+        else if (nameNYP.equals(namePlacehoder) || limitNYP.equals(limitPlacehoder) || priceNYP.equals(costPlacehoder))
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin");
+        else return new NYP(nameNYP, Integer.parseInt(limitNYP), Date.valueOf(expiredDate), Double.valueOf(priceNYP));
+        return null;
+
+    }
 
 }

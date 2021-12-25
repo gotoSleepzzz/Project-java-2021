@@ -17,6 +17,17 @@ public class NYP {
     private Date expriredDate;
     private double price;
 
+    public NYP() {
+
+    }
+
+    public NYP(String name, int limit, Date expriredDate, double price) {
+        this.name = name;
+        this.limit = limit;
+        this.expriredDate = expriredDate;
+        this.price = price;
+    }
+
     public NYP(int id, String name, int limit, Date expriredDate, double price) {
         this.id = id;
         this.name = name;

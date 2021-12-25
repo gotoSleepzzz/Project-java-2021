@@ -152,7 +152,13 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            NYP nyp = viewManager.getViewManagerNYP().getInfoNYP();
+            if (nyp!=null) {
+                ManagerService.getInstance().addNYP(nyp);
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().findAllNYP());
+                viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+                viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+            }
         }
     }
 

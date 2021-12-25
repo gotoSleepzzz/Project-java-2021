@@ -1,13 +1,11 @@
 package view;
 
-import org.jfree.ui.RefineryUtilities;
+import model.NYP;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 
 public class ViewManager extends JFrame implements ActionListener {
@@ -28,7 +26,7 @@ public class ViewManager extends JFrame implements ActionListener {
 
     ViewManagerUserCovid viewManagerUserCovid = new ViewManagerUserCovid();
     ViewRegisterUserCovid viewRegisterUserCovid = new ViewRegisterUserCovid();
-    ManagerNYP viewManagerNYP = new ManagerNYP();
+    ViewManagerNYP viewManagerNYP = new ViewManagerNYP();
 
     public ViewManager() {
 
@@ -99,7 +97,7 @@ public class ViewManager extends JFrame implements ActionListener {
         return viewRegisterUserCovid;
     }
 
-    public ManagerNYP getViewManagerNYP() {
+    public ViewManagerNYP getViewManagerNYP() {
         return viewManagerNYP;
     }
 
@@ -156,7 +154,8 @@ public class ViewManager extends JFrame implements ActionListener {
             getContentPane().repaint();
             setLocationRelativeTo(null);
             getContentPane().add(viewManagerNYP);
-            setSize(1050, 700);
+            setSize(1250, 700);
+            setLocation(100, 70);
             getContentPane().revalidate();
         }
 

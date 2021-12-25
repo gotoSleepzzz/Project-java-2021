@@ -1,6 +1,8 @@
 package service;
 
+import model.ManagerNYP;
 import model.ManagerUserCovid;
+import model.NYP;
 import model.UserCovid;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -19,6 +21,7 @@ public class ManagerService {
     HashMap<Integer, String> healthCenter = new HashMap<>();
     DirectedGraph<String, DefaultEdge> directedGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
     List<UserCovid> userCovidList;
+    ManagerNYP managerNYP = new ManagerNYP();
 
     public ManagerService() {
 
@@ -40,19 +43,13 @@ public class ManagerService {
             addUserCovid = "{Call proc_themnguoi (?, ?, ?, ?, ?, ?, ?, ?)}"; // _ten, _cmnd,_namsinh,_diachi,_trangthai,_noiquanly,_nguonlay,_quanly
 
     private String
-            addNYP = "{call proc_themnhuyeupham (?, ?, ?, ?)}";
+            addNYP = "{call proc_themnhuyeupham (?, ?, ?, ?)}"; // _ten, _muchan, _hsd, _gia, _quanly
 
     private String
             updateUserCovidByState = "{call proc_chuyentrangthai(?,?,?)}"; // _doituong, _trangthaimoi, _quanly
 
     private String
-            deleteUserCovid = "DELETE FROM nguoi_lien_quan WHERE cmnd = ?";
-    private String
             getAllUserCovid = "SELECT * FROM nguoi_lien_quan";
-
-    private String
-            updateUserCovidByDebt = "UPDATE nguoi_lien_quan SET ghino = ? WHERE cmnd = ?";
-
 
     private String
             updateUserCovidByHealthCenterProc = "{call proc_chuyennoidieutri(?,?,?)}";
@@ -65,6 +62,86 @@ public class ManagerService {
 
     private String
             getAllHealthCenter = "SELECT * FROM noi_quan_ly";
+
+    private String
+            removeNYP = "{call proc_XoaNhuYeuPham(?, ?)}"; // id, quanly
+
+    private String
+            getAllNYP = "Select * from nhu_pham";
+
+    private String
+            getOneNYP = "select * from nhu_pham where id = ?";
+
+    public NYP findOneById(int id) {
+        Object[] params = {id};
+        var rs = db.executeQuery(getOneNYP, params);
+        try {
+            if (rs.next()) {
+                return new NYP(rs.getInt("id"),
+                        rs.getString("ten"),
+                        rs.getInt("muchan"),
+                        rs.getDate("hsd"),
+                        rs.getDouble("gia"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<NYP> findAllNYP() {
+
+        Object[] params = {};
+        var rs = db.executeQuery(getAllNYP, params);
+        try {
+            managerNYP.removeAll();
+            while (rs.next()) {
+                managerNYP.addNYP(new NYP(rs.getInt("id"),
+                        rs.getString("ten"),
+                        rs.getInt("muchan"),
+                        rs.getDate("hsd"),
+                        rs.getDouble("gia")));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return managerNYP.getList();
+    }
+
+
+    public boolean addNYP(NYP nyp) {
+        Object[] params = {
+                nyp.getName(),
+                nyp.getLimit(),
+                nyp.getExpriredDate(),
+                nyp.getPrice(),
+                this.nameManager
+        };
+
+        try {
+            db.excuteProc(addNYP, params);
+            managerNYP.addNYP(nyp);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    public boolean removeNYP(int id) {
+
+        Object[] params = {
+                id,
+                this.nameManager
+        };
+        try {
+            managerNYP.removeNYP(id);
+            db.excuteProc(removeNYP, params);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 
     public boolean addUserCovid(UserCovid userCovid) {
@@ -134,7 +211,6 @@ public class ManagerService {
             traversalAndUpdate(id, 1, id);
 
         } else {
-
             params[0] = id;
             params[1] = "F0";
             try {
@@ -361,5 +437,12 @@ public class ManagerService {
         return managerUserCovid.sortUserCovidByNameDecrement();
     }
 
-
+    public NYP getNYPByName(List<NYP> list, String name) {
+        for (NYP nyp : list) {
+            if (nyp.getName().equals(name)) {
+                return nyp;
+            }
+        }
+        return null;
+    }
 }

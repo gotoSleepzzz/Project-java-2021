@@ -33,11 +33,11 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     private JButton watchMore;
     private JButton historyButton;
     List<UserCovid> list = ManagerService.getInstance().findAllUserCovid();
-    String[][] data = new String[list.size()][6];
+    String[][] data;
     private JButton backButton;
     String[] columns = new String[]{"Họ tên", "CMND", "Nơi điều trị", "Năm sinh",
             "Trạng thái hiện tại", "Dư nợ", "Xem chi tiết", "Chỉnh sửa", "Lịch sử"};
-    private String placeHolderSearchTextField = "Nhập tên cần tìm kiếm bằng tên, cmnd";
+    private String placeHolderSearchTextField = "Nhập tên cần tìm kiếm bằng cmnd hoặc để trống để refresh lại bảng";
     private ViewDetailsUserCovid viewDetailsUserCovid;
 
 
@@ -67,7 +67,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
         refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(this);
-        searchField = new CustomTextField(30);
+        searchField = new CustomTextField(40);
         searchField.setPlaceholder(placeHolderSearchTextField);
 
         searchButton = new Button("Tìm kiếm");
@@ -157,7 +157,6 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
     public void renderTable(List<UserCovid> userCovids) {
         String[][] dataUser = new String[userCovids.size()][6];
-
         for (int i = 0; i < userCovids.size(); ++i) {
             dataUser[i][0] = userCovids.get(i).getName();
             dataUser[i][1] = userCovids.get(i).getId();
@@ -173,7 +172,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
 
     public void showTable() {
-
+        data = new String[list.size()][6];
         for (int i = 0; i < list.size(); i++) {
             data[i][0] = list.get(i).getName();
             data[i][1] = list.get(i).getId();
@@ -221,7 +220,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == refreshButton) {
             searchField.setText("");
-            searchField.setPlaceholder("Nhập tên cần tìm kiếm bằng tên, cmnd");
+            searchField.setPlaceholder(placeHolderSearchTextField);
 
         }
     }

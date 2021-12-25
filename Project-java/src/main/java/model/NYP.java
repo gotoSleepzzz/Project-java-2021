@@ -25,6 +25,7 @@ public class NYP {
         this.price = price;
     }
 
+
     public int getId() {
         return id;
     }
@@ -59,6 +60,17 @@ public class NYP {
 
     public void setExpriredDate(Date expriredDate) {
         this.expriredDate = expriredDate;
+    }
+
+    @Override
+    public String toString() {
+        return "NYP{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", limit=" + limit +
+                ", expriredDate=" + expriredDate +
+                ", price=" + price +
+                '}';
     }
 
     void setPrice(double price) {

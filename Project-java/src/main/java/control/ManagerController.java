@@ -1,5 +1,6 @@
 package control;
 
+import model.NYP;
 import model.UserCovid;
 import org.jfree.ui.RefineryUtilities;
 import service.ManagerService;
@@ -8,10 +9,7 @@ import view.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class ManagerController {
 
@@ -36,7 +34,13 @@ public class ManagerController {
         viewManager.getViewManagerUserCovid().addHistoryActionListener(new AddButtonHistory_ViewManagerUserCovid());
         viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
         viewManager.getViewManagerUserCovid().addDropdownListener(new AddComboboxSort());
+
         viewManager.getViewManagerNYP().addBackListener(new AddBackEventViewManager());
+        viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+        viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+        viewManager.getViewManagerNYP().addNewActionListener(new AddButtonNew_ViewManagerNYP());
+        viewManager.getViewManagerNYP().addSearchActionListener(new AddButtonSearch_ViewManagerNYP());
+
         viewManager.getViewRegisterUserCovid().AddBackListener(new AddBackEventViewManager());
         viewManager.addStatisticListener(new AddStatisticsEvent());
         viewManager.addTransitionListener(new AddTransactionEvent());
@@ -45,7 +49,114 @@ public class ManagerController {
     }
 
 
-    class AddButtonHistory_ViewManagerUserCovid implements  ActionListener {
+    class AddButtonSearch_ViewManagerNYP implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String query = viewManager.getViewManagerNYP().getContentSearch();
+            if (!query.equals(viewManager.getViewManagerNYP().getSearchPlacehoder())) {
+                List<NYP> list = ManagerService.getInstance().findAllNYP();
+                List<NYP> result = new ArrayList<>();
+                // search list contains name is query with regex local vietnamese
+                for (NYP nyp : list) {
+
+                    String pattern = nyp.getName();
+                    // convert vietnamese pattern string to english with non sign
+                    pattern = pattern.replaceAll("[àáạảãâầấậẩẫăằắặẳẵ]", "a");
+                    pattern = pattern.replaceAll("[èéẹẻẽêềếệểễ]", "e");
+                    pattern = pattern.replaceAll("[ìíịỉĩ]", "i");
+                    pattern = pattern.replaceAll("[òóọỏõôồốộổỗơờớợởỡ]", "o");
+                    pattern = pattern.replaceAll("[ùúụủũưừứựửữ]", "u");
+                    pattern = pattern.replaceAll("[ỳýỵỷỹ]", "y");
+                    pattern = pattern.replaceAll("[đ]", "d");
+                    pattern = pattern.replaceAll("[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]", "A");
+                    pattern = pattern.replaceAll("[ÈÉẸẺẼÊỀẾỆỂỄ]", "E");
+                    pattern = pattern.replaceAll("[ÌÍỊỈĨ]", "I");
+                    pattern = pattern.replaceAll("[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]", "O");
+                    pattern = pattern.replaceAll("[ÙÚỤỦŨƯỪỨỰỬỮ]", "U");
+                    pattern = pattern.replaceAll("[ỲÝỴỶỸ]", "Y");
+                    pattern = pattern.replaceAll("[Đ]", "D");
+                    pattern = pattern.toLowerCase(Locale.ROOT);
+                    pattern = pattern.replaceAll("\\s+", "");
+                    pattern = pattern.replaceAll("\\W", "");
+
+                    query = query.replaceAll("[àáạảãâầấậẩẫăằắặẳẵ]", "a");
+                    query = query.replaceAll("[èéẹẻẽêềếệểễ]", "e");
+                    query = query.replaceAll("[ìíịỉĩ]", "i");
+                    query = query.replaceAll("[òóọỏõôồốộổỗơờớợởỡ]", "o");
+                    query = query.replaceAll("[ùúụủũưừứựửữ]", "u");
+                    query = query.replaceAll("[ỳýỵỷỹ]", "y");
+                    query = query.replaceAll("[đ]", "d");
+                    query = query.replaceAll("[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]", "A");
+                    query = query.replaceAll("[ÈÉẸẺẼÊỀẾỆỂỄ]", "E");
+                    query = query.replaceAll("[ÌÍỊỈĨ]", "I");
+                    query = query.replaceAll("[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]", "O");
+                    query = query.replaceAll("[ÙÚỤỦŨƯỪỨỰỬỮ]", "U");
+                    query = query.replaceAll("[ỲÝỴỶỸ]", "Y");
+                    query = query.replaceAll("[Đ]", "D");
+                    query = query.toLowerCase(Locale.ROOT);
+                    query = query.toLowerCase(Locale.ROOT);
+                    query = query.replaceAll("\\s+", "");
+                    query = query.replaceAll("\\W", "");
+
+                    // if query is substring of pattern
+                    if (pattern.contains(query)) {
+                        result.add(nyp);
+                    }
+                }
+                if (result.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả");
+                } else {
+                    System.out.println(result);
+                    viewManager.getViewManagerNYP().renderTable(result);
+                    viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+                    viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+                }
+
+            }
+            else if (query.equals("") || query.equals(viewManager.getViewManagerNYP().getSearchPlacehoder())) {
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().findAllNYP());
+                viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+                viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+            }
+        }
+    }
+
+    class AddButtonNew_ViewManagerNYP implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+        }
+    }
+
+    class AddButtonModify_ViewManagerNYP implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    }
+
+    class AddButtonRemove_ViewManagerNYP implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //             make confirm dialog
+            int result = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                // remove user
+                NYP nyp = viewManager.getViewManagerNYP().getSelectedNYP();
+                System.out.println(nyp.getId());
+                ManagerService.getInstance().removeNYP(nyp.getId());
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().findAllNYP());
+                viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+                viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+            }
+        }
+    }
+
+
+    class AddButtonHistory_ViewManagerUserCovid implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {

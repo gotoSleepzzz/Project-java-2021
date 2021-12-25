@@ -1,12 +1,10 @@
 package view;
 
 import model.NYP;
-import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
-import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
-import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import service.ManagerService;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -14,8 +12,6 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -35,8 +31,8 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
     private JComboBox filter;
     private JButton back;
     private JButton modifyButton;
+    private JComboBox typeDateCombobox;
     private JButton removeButton;
-    private JDatePickerImpl datePicker;
     List<NYP> list = ManagerService.getInstance().findAllNYP();
     String data[][] = new String[list.size()][4];
     private final String[] category = new String[]{
@@ -51,11 +47,12 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
     private String searchPlacehoder = "Tìm kiếm bằng tên gói hoặc bỏ trống để refresh lại bảng";
     private String namePlacehoder = "Tên gói";
     private String limitPlacehoder = "Mức giới hạn";
-    private String timePlacehoder = "Thời gian giới hạn";
-    private String costPlacehoder = "Đơn giá";
+    private String timePlacehoder = "Thời gian ";
+    private String costPlacehoder = "Đơn giá VNĐ";
 
     String[] sortBy = {"Mức giới hạn tăng dần", "Thời gian giới hạn tăng dần", "Đơn giá tằng dần",
             "Mức giới hạn giảm dần", "Thời gian giới hạn giảm dần", "Đơn giá giảm dần"};
+    String labelCombobox[] = {"Ngày", "Tuần", "Tháng"};
 
     public ViewManagerNYP() {
 
@@ -125,10 +122,13 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         infoPanel.add(limit);
         infoPanel.add(new JLabel("Thời gian giới hạn"));
 
-        // create a button for  choose time picker nice jdatepicker
-        datePicker = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel()));
-        datePicker.setPreferredSize(new Dimension(150, 30));
-        infoPanel.add(datePicker);
+        JPanel timePanel = new JPanel(new GridLayout(1, 2));
+        typeDateCombobox = new JComboBox(labelCombobox);
+        time = new CustomTextField(10);
+        time.setPlaceholder(timePlacehoder);
+        timePanel.add(typeDateCombobox);
+        timePanel.add(time);
+        infoPanel.add(timePanel);
 
 
         infoPanel.add(new JLabel("Đơn giá"));
@@ -140,7 +140,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         utilPanel.setLayout(new GridLayout(2, 1));
         utilPanel.add(infoPanel);
         utilPanel.add(btnPanel);
-        utilPanel.setPreferredSize(new Dimension(350, 500));
+        utilPanel.setPreferredSize(new Dimension(400, 500));
 
         contentPanel = new JPanel();
         contentPanel.setLayout(new BorderLayout(10, 10));
@@ -153,7 +153,10 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         mainPanel.add(headerPanel);
         mainPanel.add(searchPanel);
         mainPanel.add(contentPanel);
-        add(mainPanel);
+        setLayout(new BorderLayout());
+        // padding
+        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     public void addBackListener(ActionListener listener) {
@@ -179,7 +182,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         for (int i = 0; i < list.size(); i++) {
             data[i][0] = list.get(i).getName();
             data[i][1] = String.valueOf(list.get(i).getLimit());
-            data[i][2] = String.valueOf(list.get(i).getExpriredDate());
+            data[i][2] = String.valueOf(list.get(i).getExpriredDate()) + " ngày";
             data[i][3] = String.valueOf(list.get(i).getPrice());
         }
 
@@ -193,7 +196,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         for (int i = 0; i < nyps.size(); i++) {
             data[i][0] = nyps.get(i).getName();
             data[i][1] = String.valueOf(nyps.get(i).getLimit());
-            data[i][2] = String.valueOf(nyps.get(i).getExpriredDate());
+            data[i][2] = String.valueOf(list.get(i).getExpriredDate()) + " ngày";
             data[i][3] = String.valueOf(nyps.get(i).getPrice());
         }
         DefaultTableModel model = new DefaultTableModel(data, headerTable);
@@ -291,22 +294,33 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
         newBtn.addActionListener(actionListener);
     }
 
+    public void addDateComboboxActionListener(ActionListener actionListener) {
+        typeDateCombobox.addActionListener(actionListener);
+    }
+
+    public void addDateActionListener(ActionListener actionListener) {
+        time.addActionListener(actionListener);
+    }
+
     public NYP getInfoNYP() {
         String nameNYP = name.getText();
         String limitNYP = limit.getText();
-        String datePattern = "yyyy-MM-dd";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
-        String expiredDate = dateFormat.format(datePicker.getModel().getValue());
+        String typeDate = (String) typeDateCombobox.getSelectedItem();
+        String unit = time.getText();
         String priceNYP = cost.getText();
-        if (nameNYP.equals("") || limitNYP.equals("") || expiredDate == null || expiredDate.equals("") || priceNYP.equals(""))
+
+
+        if (nameNYP.equals("") || limitNYP.equals("") || priceNYP.equals("") || unit.equals(""))
             JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin");
         else if (Integer.parseInt(limitNYP) < 0 || Integer.parseInt(priceNYP) < 0)
             JOptionPane.showMessageDialog(null, "Giá và số lượng không được âm");
         else if (nameNYP.equals(namePlacehoder) || limitNYP.equals(limitPlacehoder) || priceNYP.equals(costPlacehoder))
             JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin");
-        else return new NYP(nameNYP, Integer.parseInt(limitNYP), Date.valueOf(expiredDate), Double.valueOf(priceNYP));
+        else {
+            int day = typeDate.equals(labelCombobox[0]) ? 1 : typeDate.equals(labelCombobox[1]) ? 7 : 30;
+            return new NYP(nameNYP, Integer.parseInt(limitNYP), Integer.parseInt(unit) * day, Double.parseDouble(priceNYP));
+        }
         return null;
-
     }
 
 }

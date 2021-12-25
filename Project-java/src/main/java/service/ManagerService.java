@@ -80,7 +80,7 @@ public class ManagerService {
                 return new NYP(rs.getInt("id"),
                         rs.getString("ten"),
                         rs.getInt("muchan"),
-                        rs.getDate("hsd"),
+                        rs.getInt("hsd"),
                         rs.getDouble("gia"));
             }
         } catch (SQLException throwables) {
@@ -99,7 +99,7 @@ public class ManagerService {
                 managerNYP.addNYP(new NYP(rs.getInt("id"),
                         rs.getString("ten"),
                         rs.getInt("muchan"),
-                        rs.getDate("hsd"),
+                        rs.getInt("hsd"),
                         rs.getDouble("gia")));
             }
         } catch (SQLException throwables) {

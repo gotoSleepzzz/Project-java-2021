@@ -48,7 +48,7 @@ create table `NHU_PHAM`
 	id int not null primary key auto_increment,
 	ten nvarchar(50) not null,
 	muchan int,
-	hsd date null,
+	hsd int default 10,
 	gia float(15,2) not null
 );
 
@@ -236,7 +236,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE `proc_ThemNhuYeuPham` (_ten nvarchar(50), _muchan int,_hsd date, _gia float(15,2), _quanly varchar(12))
+CREATE PROCEDURE `proc_ThemNhuYeuPham` (_ten nvarchar(50), _muchan int,_hsd int, _gia float(15,2), _quanly varchar(12))
 BEGIN
 	declare _id int;
     declare _msg varchar(100);
@@ -267,7 +267,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE `proc_CapNhatNhuYeuPham` (_id int, _ten nvarchar(50), _muchan int,_hsd date, _gia float(15,2), _quanly varchar(12))
+CREATE PROCEDURE `proc_CapNhatNhuYeuPham` (_id int, _ten nvarchar(50), _muchan int,_hsd int, _gia float(15,2), _quanly varchar(12))
 BEGIN
     declare _msg varchar(100);
     
@@ -340,10 +340,10 @@ call htql_covid.`proc_ThemNguoi` ('Đỗ Kim Huyền','123456789008',1998,'Thàn
 call htql_covid.`proc_ThemNguoi` ('Quyền Duy Cường','123456789009',1960,'Thành phố Hồ Chí Minh, Quận 4, Phường 14','F1',22,'123456789008',"admin");
 call htql_covid.`proc_ThemNguoi` ('Nguyễn Nguyên','123456789010',1977,'Thành phố Hồ Chí Minh, Quận Bình Thạnh, Phường 05','F2',22,'123456789003',"admin");
 
-call htql_covid.`proc_ThemNhuYeuPham` ('Bánh mì', 10, '2021-12-24',10000,'admin');
-call htql_covid.`proc_ThemNhuYeuPham` ('Gạo', 10, '2021-12-24',15000,'admin');
-call htql_covid.`proc_ThemNhuYeuPham` ('Khẩu trang kháng khuẩn', 10, null, 3500,'admin');
-call htql_covid.`proc_ThemNhuYeuPham` ('Nước sát khuẩn', 10, '2021-12-24',50000,'admin');
+call htql_covid.`proc_ThemNhuYeuPham` ('Bánh mì', 10, 1,10000,'admin');
+call htql_covid.`proc_ThemNhuYeuPham` ('Gạo', 10, 1,15000,'admin');
+call htql_covid.`proc_ThemNhuYeuPham` ('Khẩu trang kháng khuẩn', 10, 1, 3500,'admin');
+call htql_covid.`proc_ThemNhuYeuPham` ('Nước sát khuẩn', 10, 1,50000,'admin');
 
 call htql_covid.`proc_ChuyenTrangThai` ('123456789001','F0','admin');
 call htql_covid.`proc_ChuyenNoiDieuTri` ('123456789001', 21, 'admin');

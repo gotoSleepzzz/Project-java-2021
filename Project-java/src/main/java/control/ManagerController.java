@@ -127,7 +127,7 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-    //    String[] sortNYP = {"Mức giới hạn tăng dần", "Thời gian giới hạn tăng dần", "Đơn giá tằng dần",
+            //    String[] sortNYP = {"Mức giới hạn tăng dần", "Thời gian giới hạn tăng dần", "Đơn giá tằng dần",
             //            "Mức giới hạn giảm dần", "Thời gian giới hạn giảm dần", "Đơn giá giảm dần"};
             JComboBox comboBoxSort = (JComboBox) e.getSource();
             if (comboBoxSort.getSelectedItem().toString().equals(sortNYP[0]))
@@ -153,7 +153,7 @@ public class ManagerController {
         @Override
         public void actionPerformed(ActionEvent e) {
             NYP nyp = viewManager.getViewManagerNYP().getInfoNYP();
-            if (nyp!=null) {
+            if (nyp != null) {
                 ManagerService.getInstance().addNYP(nyp);
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().findAllNYP());
                 viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());

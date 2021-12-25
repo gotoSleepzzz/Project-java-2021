@@ -14,47 +14,11 @@ public class NYP {
     private int id;
     private String name;
     private int limit;
-    private Date expriredDate;
+    private int expriredDate;
     private double price;
 
     public NYP() {
 
-    }
-
-    public NYP(String name, int limit, Date expriredDate, double price) {
-        this.name = name;
-        this.limit = limit;
-        this.expriredDate = expriredDate;
-        this.price = price;
-    }
-
-    public NYP(int id, String name, int limit, Date expriredDate, double price) {
-        this.id = id;
-        this.name = name;
-        this.limit = limit;
-        this.expriredDate = expriredDate;
-        this.price = price;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public Date getExpriredDate() {
-        return expriredDate;
-    }
-
-    public double getPrice() {
-        return price;
     }
 
     public void setId(int id) {
@@ -69,22 +33,46 @@ public class NYP {
         this.limit = limit;
     }
 
-    public void setExpriredDate(Date expriredDate) {
+    public void setExpriredDate(int expriredDate) {
         this.expriredDate = expriredDate;
     }
 
-    @Override
-    public String toString() {
-        return "NYP{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", limit=" + limit +
-                ", expriredDate=" + expriredDate +
-                ", price=" + price +
-                '}';
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    void setPrice(double price) {
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getExpriredDate() {
+        return expriredDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public NYP(int id, String name, int limit, int expriredDate, double price) {
+        this.id = id;
+        this.name = name;
+        this.limit = limit;
+        this.expriredDate = expriredDate;
+        this.price = price;
+    }
+
+    public NYP(String name, int limit, int expriredDate, double price) {
+        this.name = name;
+        this.limit = limit;
+        this.expriredDate = expriredDate;
         this.price = price;
     }
 }

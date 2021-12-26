@@ -488,4 +488,13 @@ public class ManagerService {
         }
         return null;
     }
+
+    public List<UserCovid> findAllRelative(String id) {
+        List<UserCovid> list = new ArrayList<>();
+        Set<DefaultEdge> listId = directedGraph.outgoingEdgesOf(id);
+        for (DefaultEdge edge : listId) {
+            list.add(findOneUserCovid(directedGraph.getEdgeTarget(edge)));
+        }
+        return list;
+    }
 }

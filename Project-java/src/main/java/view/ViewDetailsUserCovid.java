@@ -4,11 +4,11 @@ import model.UserCovid;
 import service.ManagerService;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ViewDetailsUserCovid extends JPanel implements ActionListener {
     private JLabel title;
@@ -33,6 +33,7 @@ public class ViewDetailsUserCovid extends JPanel implements ActionListener {
     private JTextField debtTextField;
 
     private Button back;
+
     public ViewDetailsUserCovid(UserCovid userCovid) {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -122,7 +123,7 @@ public class ViewDetailsUserCovid extends JPanel implements ActionListener {
         heathCenterPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         heathCenterPanel.setMaximumSize(new Dimension(1000, 30));
 
-        debtLabel= new JLabel("Dư nợ:                            ");
+        debtLabel = new JLabel("Dư nợ:                            ");
         debtTextField = new JTextField(userCovid.getDebt() + "");
         JPanel debtPanel = new JPanel();
         debtPanel.setAlignmentX(Box.CENTER_ALIGNMENT);
@@ -133,99 +134,6 @@ public class ViewDetailsUserCovid extends JPanel implements ActionListener {
         debtPanel.add(debtTextField);
         debtPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         debtPanel.setMaximumSize(new Dimension(1000, 30));
-
-
-
-
-
-//        NQLpanel = new JPanel();
-//        Border titleBorder = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Người liên quan",
-//                TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
-//        NQLpanel.setBorder(titleBorder);
-//        NQLpanel.setLayout(new BoxLayout(NQLpanel, BoxLayout.Y_AXIS));
-//        NQLpanel.setAlignmentX((float) 0.5);
-//
-//        nameNLQField = new JTextField();
-//        namePanel1 = new JPanel();
-//        namePanel1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//        namePanel1.setLayout(new BoxLayout(namePanel1, BoxLayout.X_AXIS));
-//        namePanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        namePanel1.add(new JLabel("Họ tên "));
-//        namePanel1.add(Box.createRigidArea(new Dimension(120, 0)));
-//        namePanel1.add(nameNLQField);
-//        namePanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        namePanel1.setMaximumSize(new Dimension(1000, 30));
-
-//        idNLQField = new JTextField();
-//        idPanel1 = new JPanel();
-//        idPanel1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//        idPanel1.setLayout(new BoxLayout(idPanel1, BoxLayout.X_AXIS));
-//        idPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        idPanel1.add(new JLabel("CMND: "));
-//        idPanel1.add(Box.createRigidArea(new Dimension(119, 0)));
-//        idPanel1.add(idNLQField);
-//        idPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        idPanel1.setMaximumSize(new Dimension(1000, 30));
-//
-//        addressNLQField = new JTextField();
-//        addressPanel1 = new JPanel();
-//        addressPanel1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//        addressPanel1.setLayout(new BoxLayout(addressPanel1, BoxLayout.X_AXIS));
-//        addressPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        addressPanel1.add(new JLabel("Địa chỉ: "));
-//        addressPanel1.add(Box.createRigidArea(new Dimension(116, 0)));
-//        addressPanel1.add(addressNLQField);
-//        addressPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        addressPanel1.setMaximumSize(new Dimension(1000, 30));
-//
-//
-//
-//        dobNLQField = new JTextField();
-//        dobPanel1 = new JPanel();
-//        dobPanel1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//        dobPanel1.setLayout(new BoxLayout(dobPanel1, BoxLayout.X_AXIS));
-//        dobPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        dobPanel1.add(new JLabel("Năm sinh: "));
-//        dobPanel1.add(Box.createRigidArea(new Dimension(101, 0)));
-//        dobPanel1.add(dobNLQField);
-//        dobPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        dobPanel1.setMaximumSize(new Dimension(1000, 30));
-//
-//        curNLQField = new JTextField();
-//        curPanel1 = new JPanel();
-//        curPanel1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//        curPanel1.setLayout(new BoxLayout(curPanel1, BoxLayout.X_AXIS));
-//        curPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        curPanel1.add(new JLabel("Trạng thái hiện tại: "));
-//        curPanel1.add(Box.createRigidArea(new Dimension(48, 0)));
-//        curPanel1.add(curNLQField);
-//        curPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        curPanel1.setMaximumSize(new Dimension(1000, 30));
-//
-//        healthCenterNLQField = new JTextField();
-//        heathCenterPanel1 = new JPanel();
-//        heathCenterPanel1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//        heathCenterPanel1.setLayout(new BoxLayout(heathCenterPanel1, BoxLayout.X_AXIS));
-//        heathCenterPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        heathCenterPanel1.add(new JLabel("Nơi đang điều trị/cách ly: "));
-//        heathCenterPanel1.add(Box.createRigidArea(new Dimension(11, 0)));
-//        heathCenterPanel1.add(healthCenterNLQField);
-//        heathCenterPanel1.add(Box.createRigidArea(new Dimension(20, 0)));
-//        heathCenterPanel1.setMaximumSize(new Dimension(1000, 30));
-//
-//        NQLpanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        NQLpanel.add(namePanel1);
-//        NQLpanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        NQLpanel.add(idPanel1);
-//        NQLpanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        NQLpanel.add(addressPanel1);
-//        NQLpanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        NQLpanel.add(dobPanel1);
-//        NQLpanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        NQLpanel.add(curPanel1);
-//        NQLpanel.add(Box.createRigidArea(new Dimension(0, 20)));
-//        NQLpanel.add(heathCenterPanel1);
-//        NQLpanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
 
         add(titlePanel);
@@ -245,6 +153,59 @@ public class ViewDetailsUserCovid extends JPanel implements ActionListener {
         add(debtPanel);
         add(Box.createRigidArea(new Dimension(0, 50)));
 
+        JLabel idReachedLabel = new JLabel("Người liên quan");
+        idReachedLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        idReachedLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        idReachedLabel.setAlignmentX(Box.CENTER_ALIGNMENT);
+        add(idReachedLabel);
+
+        // create a table
+        JTable table = new JTable();
+
+        List<UserCovid> list = ManagerService.getInstance().findAllRelative(userCovid.getId());
+        if (userCovid.getIdReached() != null) {
+            list.add(ManagerService.getInstance().findOneUserCovid(userCovid.getIdReached()));
+        }
+
+        String[][] data = new String[list.size()][6];
+        for (int i = 0; i < list.size(); i++) {
+            data[i][0] = list.get(i).getName();
+            data[i][1] = list.get(i).getId();
+            data[i][2] = list.get(i).getAddress();
+            data[i][3] = String.valueOf(list.get(i).getDob());
+            data[i][4] = list.get(i).getState();
+            data[i][5] = String.valueOf(list.get(i).getHealthCenter());
+        }
+
+
+        String columnNames[] = {"Họ và tên", "Số CMND", "Địa chỉ", "Năm sinh", "Trạng thái", "Nơi đang điều trị"};
+
+        table.setModel(new DefaultTableModel(data, columnNames));
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        table.setFillsViewportHeight(true);
+        table.setAutoCreateRowSorter(true);
+        table.setRowHeight(30);
+        table.setFont(new Font("Arial", Font.PLAIN, 15));
+        table.setForeground(Color.BLACK);
+        table.setBackground(Color.WHITE);
+        table.setSelectionBackground(Color.LIGHT_GRAY);
+        table.setSelectionForeground(Color.BLACK);
+        table.setShowGrid(true);
+        table.setGridColor(Color.LIGHT_GRAY);
+        table.setShowVerticalLines(true);
+        table.setShowHorizontalLines(true);
+        table.setRowSelectionAllowed(true);
+        table.setColumnSelectionAllowed(false);
+        table.setCellSelectionEnabled(false);
+        table.setFocusable(false);
+        table.setRowHeight(30);
+        table.setRowMargin(5);
+
+        JScrollPane scrollPanel = new JScrollPane(table);
+        scrollPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        scrollPanel.setAlignmentX(Box.CENTER_ALIGNMENT);
+        add(scrollPanel);
     }
 
     public void addBackButton(ActionListener listener) {

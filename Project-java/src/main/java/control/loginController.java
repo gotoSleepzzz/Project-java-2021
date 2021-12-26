@@ -1,19 +1,18 @@
 package control;
 
+import org.mindrot.jbcrypt.BCrypt;
+import service.ManagerService;
+import utils.dbUtil;
+import view.admin.adminView;
+import view.loginView;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import model.Account;
-import org.mindrot.jbcrypt.BCrypt;
-import service.ManagerService;
-import utils.dbUtil;
-import view.ViewManager;
-import view.admin.adminView;
-import view.loginView;
 
 public class loginController {
 
@@ -56,11 +55,10 @@ public class loginController {
             newPass = newPass.trim();
             confirmPass = confirmPass.trim();
 
-            if(!newPass.equals("") && !confirmPass.equals("")){
-                if((newPass.length() < 6) || !newPass.matches(".*[a-zA-Z].*") || !newPass.matches(".*[0-9].*")){
+            if (!newPass.equals("") && !confirmPass.equals("")) {
+                if ((newPass.length() < 6) || !newPass.matches(".*[a-zA-Z].*") || !newPass.matches(".*[0-9].*")) {
                     JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else{
+                } else {
                     if (newPass.equalsIgnoreCase(confirmPass)) {
                         String hashPass = BCrypt.hashpw(newPass, BCrypt.gensalt(12));
                         String query = "update `account` set `password` = '" + hashPass + "' where `username`= '" + username + "'";
@@ -70,8 +68,7 @@ public class loginController {
                         JOptionPane.showMessageDialog(login, "Mật khẩu không trùng khớp", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(login, "Vui lòng nhập mật khẩu ít nhất 6 ký tự bao gồm cả chữ và số, không bao gồm khoảng trắng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
         }

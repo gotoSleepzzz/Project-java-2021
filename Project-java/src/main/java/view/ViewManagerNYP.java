@@ -42,7 +42,7 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
     List<NYP> list = ManagerService.getInstance().findAllNYP();
     String[][] data = new String[list.size()][4];
     private final String[] category = new String[]{
-            "< 500.000", "500.000 - 1.000.000"
+            "< 500.000", "500.000 - 1.000.000", "2.000.000 trở lên"
     };
     private final String[] headerTable = new String[]{
             "Tên gói", "Mức giới hạn", "Thời gian giới hạn", "Đơn giá", "Xoá", "Cập nhật"
@@ -302,6 +302,14 @@ public class ViewManagerNYP extends JPanel implements ActionListener {
 
     public void addDateComboboxActionListener(ActionListener actionListener) {
         typeDateCombobox.addActionListener(actionListener);
+    }
+
+    public void addTypeComboboxActionListener(ActionListener actionListener) {
+        filter.addActionListener(actionListener);
+    }
+
+    public String getFilter() {
+        return (String) filter.getSelectedItem();
     }
 
     public void addDateActionListener(ActionListener actionListener) {

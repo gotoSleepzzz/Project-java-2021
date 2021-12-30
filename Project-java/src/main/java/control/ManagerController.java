@@ -44,6 +44,7 @@ public class ManagerController {
         viewManager.getViewManagerNYP().addNewActionListener(new AddButtonNew_ViewManagerNYP());
         viewManager.getViewManagerNYP().addSearchActionListener(new AddButtonSearch_ViewManagerNYP());
         viewManager.getViewManagerNYP().addSortActionListener(new AddSortCombobox_ViewManagerNYP());
+        viewManager.getViewManagerNYP().addTypeComboboxActionListener(new AddTypeCombox_ViewMangerNYP());
 
         viewManager.getViewRegisterUserCovid().AddBackListener(new AddBackEventViewManager());
         viewManager.addStatisticListener(new AddStatisticsEvent());
@@ -332,6 +333,23 @@ public class ManagerController {
         }
     }
 
+
+    class AddTypeCombox_ViewMangerNYP implements  ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println(viewManager.getViewManagerNYP().getFilter());
+            if (viewManager.getViewManagerNYP().getFilter().equals("< 500.000")) {
+                viewManager.getViewManagerNYP().renderTable( ManagerService.getInstance().filterNYP(0, 500000));
+            } else if (viewManager.getViewManagerNYP().getFilter().equals("500.000 - 1.000.000")) {
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().filterNYP(500000, 1000000));
+            }
+            else {
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().filterNYP(2000000, 2000000000));
+            }
+            viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+            viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+        }
+    }
 
     class AddComboboxSort implements ActionListener {
 

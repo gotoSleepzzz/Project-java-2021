@@ -75,10 +75,40 @@ public class ManagerService {
     private String
             updateNYP = "{call proc_CapNhatNhuYeuPham(?, ?, ?, ?, ?, ?)}"; // id, ten, muchan,hsd,gia,quanly
 
+    // find nyp in range of price
+    private String
+            filterNYPByPrice = "SELECT * FROM nhu_pham WHERE gia BETWEEN ? AND ?";
+
+
+
+    public List<NYP> filterNYP(int min, int max) {
+        Object[] params = {min, max};
+        var rs = db.executeQuery(filterNYPByPrice, params);
+        List<NYP> nypList = new ArrayList<>();
+        while (true) {
+            try {
+                if (!rs.next()) break;
+                nypList.add(new NYP(rs.getInt("id"),
+                        rs.getString("ten"),
+                        rs.getInt("muchan"),
+                        rs.getInt("hsd"),
+                        rs.getDouble("gia")));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return nypList;
+    }
+
+
+
     public boolean updateNYP(NYP nyp) {
         Object[] params = {nyp.getId(), nyp.getName(), nyp.getLimit(), nyp.getExpriredDate(), nyp.getPrice(), this.nameManager};
         return db.excuteProc(updateNYP, params);
     }
+
+
+
 
     public NYP findOneNYPById(int id) {
         Object[] params = {id};

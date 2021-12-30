@@ -7,6 +7,7 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import service.ManagerService;
+import view.ViewChangeStateAndHospital;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +18,9 @@ public class SwingDemo {
 
     public static void main(String[] args) {
 
-        var x = new ManagerController();
+        new ManagerController();
         ManagerService.getInstance().setNameManager("Manager");
+
 //        List<UserCovid> userCovids = ManagerService.getInstance().findAllUserCovid();
 //        System.out.println(userCovids);
     }

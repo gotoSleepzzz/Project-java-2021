@@ -1,9 +1,6 @@
 package service;
 
-import model.ManagerNYP;
-import model.ManagerUserCovid;
-import model.NYP;
-import model.UserCovid;
+import model.*;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -79,6 +76,17 @@ public class ManagerService {
     private String
             filterNYPByPrice = "SELECT * FROM nhu_pham WHERE gia BETWEEN ? AND ?";
 
+    private String
+            updateStateUserCovid = "{call proc_chuyentrangthai(?,?,?)}";
+
+    private String
+            getHistoryChangeState = "select * from chuyen_trang_thai where cmnd = ?";
+
+    private String
+            countHistroyChangeState = "select count(*) from chuyen_trang_thai where cmnd = ?";
+
+    private String
+            addHistoryChangeState = "insert into chuyen_trang_thai values(?,?,?,?,?,?)";
 
 
     public List<NYP> filterNYP(int min, int max) {
@@ -101,13 +109,10 @@ public class ManagerService {
     }
 
 
-
     public boolean updateNYP(NYP nyp) {
         Object[] params = {nyp.getId(), nyp.getName(), nyp.getLimit(), nyp.getExpriredDate(), nyp.getPrice(), this.nameManager};
         return db.excuteProc(updateNYP, params);
     }
-
-
 
 
     public NYP findOneNYPById(int id) {
@@ -126,6 +131,44 @@ public class ManagerService {
         }
         return null;
     }
+
+    public Object[][] getHistoryChangeState(String id) {
+        Object[] params;
+        params = new Object[]{id};
+        var rs = db.executeQuery(countHistroyChangeState, params);
+        if (rs == null) return null;
+
+        int count = 0;
+
+        try {
+            count = rs.next() ? rs.getInt(1) : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Object[][] result = new Object[count][5];
+
+        rs = db.executeQuery(getHistoryChangeState, params);
+        int i = 0;
+        while (true) {
+            try {
+                if (!rs.next()) break;
+                result[i][3] = rs.getString(2);
+                result[i][4] = rs.getString(3);
+                result[i][1] = rs.getString(4);
+                result[i][2] = rs.getString(5);
+                result[i][0] = i;
+                // 4 5 2 3
+
+                ++i;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+
 
 
     public List<NYP> findAllNYP() {
@@ -222,6 +265,15 @@ public class ManagerService {
         if (state.equals("OK")) {
             try {
                 db.excuteProc(updateUserCovidByState, params);
+                Object [] params2 = {
+                        id,
+                        "OK",
+                        currentState,
+                        null,
+                        null,
+                        this.nameManager
+                };
+                db.executeUpdate(addHistoryChangeState, params2);
             } catch (Exception e) {
                 return false;
             }
@@ -235,6 +287,17 @@ public class ManagerService {
             params[1] = "F1";
             try {
                 db.excuteProc(updateUserCovidByState, params);
+                Object [] params2 = {
+                        id,
+                        "F1",
+                        "F2",
+                        null,
+                        null,
+                        this.nameManager
+                };
+                db.executeUpdate(addHistoryChangeState, params2);
+
+
             } catch (Exception e) {
                 return false;
             }
@@ -243,6 +306,16 @@ public class ManagerService {
             params[1] = "F0";
             try {
                 db.excuteProc(updateUserCovidByState, params);
+                Object [] params2 = {
+                        id,
+                        "F0",
+                        currentState,
+                        null,
+                        null,
+                        this.nameManager
+                };
+                db.executeUpdate(addHistoryChangeState, params2);
+
             } catch (Exception e) {
                 return false;
             }
@@ -254,6 +327,15 @@ public class ManagerService {
             params[1] = "F0";
             try {
                 db.excuteProc(updateUserCovidByState, params);
+                Object[] params2 = {
+                        id,
+                        "F0",
+                        currentState,
+                        null,
+                        null,
+                        this.nameManager
+                };
+                db.executeUpdate(addHistoryChangeState, params2);
             } catch (Exception e) {
                 return false;
             }
@@ -285,11 +367,22 @@ public class ManagerService {
                 String newState = changeState(count);
                 queue.add(next);
                 Object[] param = {
-                        next,
                         newState,
                         this.nameManager
                 };
                 try {
+
+                    Object [] params = {
+                            id,
+                            newState,
+                            findOneUserCovid(id).getState(),
+                            null,
+                            null,
+                            this.nameManager
+                    };
+
+
+                    db.executeUpdate(addHistoryChangeState, params);
                     db.excuteProc(updateUserCovidByState, param);
                 } catch (Exception e) {
                     System.out.println("Update failed");
@@ -307,8 +400,19 @@ public class ManagerService {
                 this.nameManager
         };
         try {
+
+            Object params2 [] = {
+                    id,
+                    null,
+                    null,
+                    getHealthCenterName(healthCenter),
+                    getHealthCenterName(findOneUserCovid(id).getHealthCenter()),
+                    this.nameManager
+            };
+            db.executeUpdate(addHistoryChangeState, params2);
             db.excuteProc(updateUserCovidByHealthCenterProc, params);
             managerUserCovid.updateUserCovidByHealthCenter(healthCenter, id);
+
         } catch (Exception e) {
             System.out.println("Error when change health center");
         }
@@ -496,8 +600,6 @@ public class ManagerService {
     public List<NYP> sortNYPByLimitDecrement() {
         return managerNYP.sortNYPByLimitDecrement();
     }
-
-
 
 
     public NYP getNYPByName(String name) {

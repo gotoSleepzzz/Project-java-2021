@@ -231,7 +231,6 @@ public class ManagerController {
         @Override
         public void actionPerformed(ActionEvent e) {
             var user = viewManager.getViewManagerUserCovid().getUserCovid();
-
             new ViewChangeStateAndHospital(user.getId());
         }
     }
@@ -259,7 +258,7 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String[] state = {"Không thay đổi", "F0"};
+            String[] state = {"Không thay đổi", "F0", "Khỏi bệnh"};
             var id = viewUpdateHospitalAndStatus.getUserId();
             var user = ManagerService.getInstance().findOneUserCovid(id);
             String currentState = viewUpdateHospitalAndStatus.getSelectedStatus();
@@ -280,7 +279,8 @@ public class ManagerController {
                         ManagerService.getInstance().updateUserCovidByHealthCenter(idHealthCenter, viewUpdateHospitalAndStatus.getUserId());
                     }
                     if (!currentState.equals(state[0])) {
-                        ManagerService.getInstance().updateUserCovidByState(viewUpdateHospitalAndStatus.getUserId(), "F0", viewUpdateHospitalAndStatus.getUserState());
+
+                        ManagerService.getInstance().updateUserCovidByState(viewUpdateHospitalAndStatus.getUserId(), currentState, viewUpdateHospitalAndStatus.getUserState());
                     }
 
                     viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().findAllUserCovid());

@@ -153,7 +153,7 @@ public class ViewDetailsUserCovid extends JPanel implements ActionListener {
         add(debtPanel);
         add(Box.createRigidArea(new Dimension(0, 50)));
 
-        JLabel idReachedLabel = new JLabel("Người liên quan");
+        JLabel idReachedLabel = new JLabel("Người liên đới");
         idReachedLabel.setFont(new Font("Arial", Font.BOLD, 20));
         idReachedLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         idReachedLabel.setAlignmentX(Box.CENTER_ALIGNMENT);

@@ -1,6 +1,9 @@
 package service;
 
-import model.*;
+import model.ManagerNYP;
+import model.ManagerUserCovid;
+import model.NYP;
+import model.UserCovid;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -132,6 +135,11 @@ public class ManagerService {
         return null;
     }
 
+    public String mapHealthRecovery(String name) {
+        if (name.equals("OK")) return "Khỏi bệnh";
+        return null;
+    }
+
     public Object[][] getHistoryChangeState(String id) {
         Object[] params;
         params = new Object[]{id};
@@ -149,12 +157,30 @@ public class ManagerService {
         Object[][] result = new Object[count][5];
 
         rs = db.executeQuery(getHistoryChangeState, params);
+
+
         int i = 0;
         while (true) {
             try {
                 if (!rs.next()) break;
-                result[i][3] = rs.getString(2);
-                result[i][4] = rs.getString(3);
+
+                var x = rs.getString(3);
+                var y = rs.getString(2);
+
+                if (x != null) {
+                    if (x.equals("OK")) {
+                        x = ManagerService.getInstance().mapHealthRecovery(x);
+                    }
+                }
+
+                if (y != null) {
+                    if (y.equals("OK")) {
+                        y = ManagerService.getInstance().mapHealthRecovery(y);
+                    }
+                }
+                result[i][3] = x;
+                result[i][4] = y;
+                // rs getStrign 3 and 2 if not null and then do exactly as below
                 result[i][1] = rs.getString(4);
                 result[i][2] = rs.getString(5);
                 result[i][0] = i;
@@ -167,8 +193,6 @@ public class ManagerService {
         }
         return result;
     }
-
-
 
 
     public List<NYP> findAllNYP() {
@@ -262,10 +286,13 @@ public class ManagerService {
                 this.nameManager
         };
 
-        if (state.equals("OK")) {
+
+        if (state.equals("Khỏi bệnh")) {
+            System.out.println("wao");
+            params[1] = "OK";
             try {
                 db.excuteProc(updateUserCovidByState, params);
-                Object [] params2 = {
+                Object[] params2 = {
                         id,
                         "OK",
                         currentState,
@@ -287,7 +314,7 @@ public class ManagerService {
             params[1] = "F1";
             try {
                 db.excuteProc(updateUserCovidByState, params);
-                Object [] params2 = {
+                Object[] params2 = {
                         id,
                         "F1",
                         "F2",
@@ -306,7 +333,7 @@ public class ManagerService {
             params[1] = "F0";
             try {
                 db.excuteProc(updateUserCovidByState, params);
-                Object [] params2 = {
+                Object[] params2 = {
                         id,
                         "F0",
                         currentState,
@@ -372,7 +399,7 @@ public class ManagerService {
                 };
                 try {
 
-                    Object [] params = {
+                    Object[] params = {
                             id,
                             newState,
                             findOneUserCovid(id).getState(),
@@ -401,7 +428,7 @@ public class ManagerService {
         };
         try {
 
-            Object params2 [] = {
+            Object params2[] = {
                     id,
                     null,
                     null,

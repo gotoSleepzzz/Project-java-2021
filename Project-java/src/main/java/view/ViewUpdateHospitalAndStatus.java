@@ -22,7 +22,7 @@ public class ViewUpdateHospitalAndStatus extends JFrame implements ActionListene
     private JLabel hosUser, statusUser;
     private JComboBox hosBox, statusBox;
     private JButton save;
-    String[] state = {"Không thay đổi", "F0"};
+    String[] state = {"Không thay đổi", "F0", "Khỏi bệnh"};
 
     UserCovid userCovid;
 

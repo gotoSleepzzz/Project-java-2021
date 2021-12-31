@@ -162,7 +162,14 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
             dataUser[i][1] = userCovids.get(i).getId();
             dataUser[i][2] = ManagerService.getInstance().getHealthCenterName(userCovids.get(i).getHealthCenter());
             dataUser[i][3] = String.valueOf(userCovids.get(i).getDob());
-            dataUser[i][4] = userCovids.get(i).getState();
+
+            var status = userCovids.get(i).getState();
+            if (status != null) {
+                if (status.equals("OK")) {
+                    status = ManagerService.getInstance().mapHealthRecovery(status);
+                }
+            }
+            dataUser[i][4] = status;
             dataUser[i][5] = String.valueOf(userCovids.get(i).getDebt());
         }
         DefaultTableModel model = new DefaultTableModel(dataUser, columns);
@@ -179,6 +186,14 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
             data[i][2] = ManagerService.getInstance().getHealthCenterName(list.get(i).getHealthCenter());
             data[i][3] = String.valueOf(list.get(i).getDob());
             data[i][4] = list.get(i).getState();
+
+            var status = list.get(i).getState();
+            if (status != null) {
+                if (status.equals("OK")) {
+                    status = ManagerService.getInstance().mapHealthRecovery(status);
+                }
+            }
+            data[i][4] = status;
             data[i][5] = String.valueOf(list.get(i).getDebt());
         }
         DefaultTableModel model = new DefaultTableModel(data, columns);

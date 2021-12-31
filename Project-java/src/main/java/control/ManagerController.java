@@ -2,8 +2,12 @@ package control;
 
 import model.NYP;
 import model.UserCovid;
+import model.ManagerHistory;
+import model.statusStatistics;
 import org.jfree.ui.RefineryUtilities;
 import service.ManagerService;
+import service.ConsumeHistoryService;
+import service.ManagedHistoryService;
 import view.*;
 
 import javax.swing.*;
@@ -13,9 +17,10 @@ import java.util.*;
 
 public class ManagerController {
 
-
+    private ConsumeHistoryService cosumeHistoryService; 
     private ManagerService managerService;
     private ViewManager viewManager;
+    private ManagedHistoryService managedHistoryService;
     private ViewDetailsUserCovid viewDetailsUserCovid;
     private ViewUpdateHospitalAndStatus viewUpdateHospitalAndStatus;
     private ViewUpdateNYP viewUpdateNYP;
@@ -27,6 +32,9 @@ public class ManagerController {
 
     public ManagerController() {
         viewManager = new ViewManager();
+        managerService = ManagerService.getInstance();
+        cosumeHistoryService = ConsumeHistoryService.getInstance();
+        managedHistoryService = ManagedHistoryService.getInstance();
         setActionListener();
     }
 
@@ -414,23 +422,41 @@ public class ManagerController {
         @Override
         public void actionPerformed(ActionEvent e) {
             // show message dialog
+            LinkedHashMap<String, Integer> F0 = new LinkedHashMap();
             LinkedHashMap<String, Integer> F1 = new LinkedHashMap();
-            F1.put("1970", 15);
-            F1.put("1980", 30);
-            F1.put("1990", 60);
-            F1.put("2000", 120);
-            F1.put("2010", 240);
-            F1.put("2014", 300);
             LinkedHashMap<String, Integer> F2 = new LinkedHashMap();
-            F2.put("1970", 30);
-            F2.put("1980", 45);
-            F2.put("1990", 50);
-            F2.put("2000", 100);
-            F2.put("2010", 60);
-            F2.put("2014", 150);
+            LinkedHashMap<String, Integer> F3 = new LinkedHashMap();
+            LinkedHashMap<String, Integer> F4 = new LinkedHashMap();
+            LinkedHashMap<String, Integer> OK = new LinkedHashMap();
+            List<statusStatistics> result = managerService.findAllStatus();
+            for (int i = result.size() - 1; i >= 0; i--){
+                statusStatistics value = result.get(i);
+                if (value.getStatus().equals("F0")){
+                    F0.put(value.getTime().toString(), value.getQuantity());
+                }
+                else if(value.getStatus().equals("F1")){
+                    F1.put(value.getTime().toString(), value.getQuantity());
+                }
+                else if(value.getStatus().equals("F2")){
+                    F2.put(value.getTime().toString(), value.getQuantity());
+                }
+                else if(value.getStatus().equals("F3")){
+                    F3.put(value.getTime().toString(), value.getQuantity());
+                }
+                else if(value.getStatus().equals("F4")){
+                    F4.put(value.getTime().toString(), value.getQuantity());
+                }
+                else if(value.getStatus().equals("OK")){
+                    OK.put(value.getTime().toString(), value.getQuantity());
+                }
+            }
             HashMap<String, LinkedHashMap<String, Integer>> status = new HashMap();
+            status.put("F0", F0);
             status.put("F1", F1);
             status.put("F2", F2);
+            status.put("F3", F3);
+            status.put("F4", F4);
+            status.put("OK", OK);
             ChartStatus chart = new ChartStatus(status);
             chart.pack();
             RefineryUtilities.centerFrameOnScreen(chart);
@@ -441,9 +467,13 @@ public class ManagerController {
     class AddTransactionEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            ArrayList<ManagerHistory> result = managedHistoryService.findAll();
+            int statusOK = 0;
+            for (ManagerHistory value : result)
+                if(value.getNewStatus() != null && value.getNewStatus().equals("OK")) statusOK++;
             LinkedHashMap<String, Integer> data = new LinkedHashMap();
-            data.put("Chuyển trạng thái", 100);
-            data.put("Khỏi bệnh", 300);
+            data.put("Chuyển trạng thái", result.size() - statusOK);
+            data.put("Khỏi bệnh", statusOK);
             ChartTransition chart = new ChartTransition(data);
             chart.pack();
             RefineryUtilities.centerFrameOnScreen(chart);
@@ -455,10 +485,13 @@ public class ManagerController {
     class AddConsumeEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            ArrayList<NYP> temp = (ArrayList<NYP>) managerService.findAllNYP();
             LinkedHashMap<String, Integer> data = new LinkedHashMap();
-            data.put("Food 1", 100);
-            data.put("Food 2", 300);
-            data.put("Food 3", 900);
+            for (int i = 0; i < temp.size(); i++){
+                NYP temp1 = temp.get(i);
+                int idProduct = temp1.getId();
+                data.put(temp1.getName(), cosumeHistoryService.getConsumeTotal(idProduct));
+            }
             ChartConsume chart = new ChartConsume(data);
             chart.pack();
             RefineryUtilities.centerFrameOnScreen(chart);
@@ -470,9 +503,21 @@ public class ManagerController {
     class AddViewDebtEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            String[] intervalsHeader = new String[]{"<= 500.000","500.000 - 1.000.000","> 1.000.000"};
+            int[] intervals = new int[intervalsHeader.length];
+            List<UserCovid> result = managerService.findAllUserCovid();
+            int defaultMoney = 500000; 
+            for (UserCovid user: result){
+                double temp = user.getDebt() / defaultMoney;
+                if (temp == 0) temp = 1.0;
+                if (temp > intervalsHeader.length) temp = (double)intervalsHeader.length;
+                intervals[((int) Math.ceil(temp)) - 1]++;
+            }
             LinkedHashMap<String, Double> data = new LinkedHashMap();
-            data.put("<500", 60d);
-            data.put("500-1000", 40d);
+            for (int i = 0; i < intervalsHeader.length; i++){
+                double temp = (double) ((intervals[i] * 100) / result.size());
+                data.put(intervalsHeader[i],temp);
+            }
             ChartDebt chart = new ChartDebt(data);
             chart.pack();
             RefineryUtilities.centerFrameOnScreen(chart);

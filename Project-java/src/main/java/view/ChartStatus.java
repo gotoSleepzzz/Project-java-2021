@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.BasicStroke;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -14,6 +15,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 
 /**
  * @author TRUNG
@@ -45,7 +48,8 @@ public class ChartStatus extends JFrame {
                 true,             // include legend
                 true,
                 false);
-
+        LineAndShapeRenderer renderer = (LineAndShapeRenderer)((CategoryPlot)chart.getPlot()).getRenderer();
+        renderer.setDefaultShapesVisible(true);
         return chart;
     }
 

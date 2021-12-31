@@ -65,7 +65,7 @@ public class userController {
     class ShowConsumeHistoryEvent implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            listConsumeHistory = consumeHistory.findAll(user.getId());
+            listConsumeHistory = consumeHistory.findbyUserId(user.getId());
             view.setDataConsumeHistoryTable(convertConsumeListToArray2D(listConsumeHistory));
             view.ConsumeHistory(view);
         }  
@@ -73,7 +73,7 @@ public class userController {
     class ShowManagedHistoryEvent implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            listManagerHistory = managerHistory.findAll(user.getId());
+            listManagerHistory = managerHistory.findbyUserId(user.getId());
             view.setDataManageHistoryTable(convertManagedListToArray2D(listManagerHistory));
             view.ManageHistory(view);
         }  

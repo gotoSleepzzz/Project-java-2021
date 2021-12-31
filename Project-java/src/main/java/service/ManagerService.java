@@ -4,6 +4,7 @@ import model.ManagerNYP;
 import model.ManagerUserCovid;
 import model.NYP;
 import model.UserCovid;
+import model.statusStatistics;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -90,7 +91,8 @@ public class ManagerService {
 
     private String
             addHistoryChangeState = "insert into chuyen_trang_thai values(?,?,?,?,?,?)";
-
+    private String
+            getAllStatistics = "Select * from `ThongKeTrangThai` order by thoigian desc limit 180";
 
     public List<NYP> filterNYP(int min, int max) {
         Object[] params = {min, max};
@@ -655,5 +657,20 @@ public class ManagerService {
             list.add(findOneUserCovid(directedGraph.getEdgeTarget(edge)));
         }
         return list;
+    }
+    
+    public List<statusStatistics> findAllStatus() {
+        List<statusStatistics> list = new ArrayList<>();
+        var rs = db.executeQuery(getAllStatistics);
+        try {
+            while(rs.next()){
+                statusStatistics temp = new statusStatistics(rs.getString("trangthai"),rs.getInt("soluong"),rs.getDate("thoigian"));
+                list.add(temp);
+            }
+            return list;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 }

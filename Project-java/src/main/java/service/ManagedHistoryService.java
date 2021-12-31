@@ -19,12 +19,39 @@ import model.ManagerHistory;
  */
 public class ManagedHistoryService {
     dbUtil db;
+    private static ManagedHistoryService single_instance;
     public ManagedHistoryService(){
         db = dbUtil.getDbUtil();
     }
-    public ArrayList<ManagerHistory> findAll(String userId){
+    public static ManagedHistoryService getInstance() {
+        if (single_instance == null)
+            single_instance = new ManagedHistoryService();
+        return single_instance;
+    }
+    public ArrayList<ManagerHistory> findbyUserId(String userId){
         ArrayList<ManagerHistory> result = new ArrayList<>() ;
         ResultSet rs = db.executeQuery("select * from `LICH_SU_CHUYEN_TRANG_THAI` where doituong = ?", new Object[]{userId});
+        try {
+            while (rs.next()){
+                ManagerHistory temp = new ManagerHistory();
+                temp.setId(rs.getInt("id"));
+                temp.setNguoiQL(rs.getString("nguoiquanly"));
+                temp.setUserId(rs.getString("doituong"));
+                temp.setOldStatus(rs.getString("trangthaicu"));
+                temp.setNewStatus(rs.getString("trangthaimoi"));
+                temp.setIdOldHospital(rs.getInt("noiquanlycu"));
+                temp.setIdNewHospital(rs.getInt("noiquanlymoi"));
+                temp.setTime(rs.getDate("thoigian"));
+                result.add(temp);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsumeHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+    public ArrayList<ManagerHistory> findAll(){
+        ArrayList<ManagerHistory> result = new ArrayList<>() ;
+        ResultSet rs = db.executeQuery("select * from `LICH_SU_CHUYEN_TRANG_THAI`");
         try {
             while (rs.next()){
                 ManagerHistory temp = new ManagerHistory();

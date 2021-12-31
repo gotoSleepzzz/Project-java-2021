@@ -109,7 +109,26 @@ create table `chuyen_trang_thai`
 
 insert into `chuyen_trang_thai` values("123321222", "F0", "F1", null, null, "manager");
 
+create table `ThongKeTrangThai`(
+	id int not null primary key auto_increment,
+	trangthai varchar(2),
+    soluong int,
+    thoigian timestamp default current_timestamp
+);
 
+insert into `ThongKeTrangThai`(trangthai,soluong) value("F0",0);
+insert into `ThongKeTrangThai`(trangthai,soluong) value("F1",0);
+insert into `ThongKeTrangThai`(trangthai,soluong) value("F2",0);
+insert into `ThongKeTrangThai`(trangthai,soluong) value("F3",0);
+insert into `ThongKeTrangThai`(trangthai,soluong) value("F4",0);
+insert into `ThongKeTrangThai`(trangthai,soluong) value("OK",0);
+
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F0",5,"2022-01-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F1",10,"2022-01-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F2",15,"2022-01-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F3",11,"2022-01-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F4",20,"2022-01-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("OK",50,"2022-01-01");
 
 /* ================================================================================== */
 
@@ -180,8 +199,11 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE `proc_ThemNguoi` (_ten nvarchar(35), _cmnd varchar(12), _namsinh int, _diachi nvarchar(70), _trangthai varchar(2), _noiquanly int, _nguonlay varchar(12) , _quanly varchar(12))
 BEGIN
+	DECLARE _id int;
 	DECLARE _soluong int;
     DECLARE _msg nvarchar(100);
+    DECLARE thoigian timestamp;
+    SET thoigian = current_timestamp;
 	IF ((select 'username' from htql_covid.`account` WHERE 'username' = _cmnd) IS NULL) THEN
 		INSERT INTO htql_covid.`nguoi_lien_quan` (ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,nguonlay)
 		VALUES
@@ -199,6 +221,24 @@ BEGIN
 		set _msg = concat("Thêm người mới: (",_ten,", ",_cmnd,")");
 		INSERT INTO htql_covid.LICH_SU_HOAT_DONG (username, hanhdong, tb, msg)
 		VALUES	(_quanly, "them", "nguoi_lien_quan", _msg);
+        
+        select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = _trangthai order by thoigian desc limit 1;
+        IF ((select id from htql_covid.`ThongKeTrangThai` WHERE DATE(thoigian) = CURDATE() AND trangthai = _trangthai) IS NULL) THEN
+			select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F0" order by thoigian desc limit 1;
+			insert into `ThongKeTrangThai`(trangthai,soluong) value("F0",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F1" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F1",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F2" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F2",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F3" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F3",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F4" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F4",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "OK" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("OK",_soluong);
+		END IF;
+        select soluong,id into _soluong,_id from htql_covid.`ThongKeTrangThai` WHERE trangthai = _trangthai order by thoigian desc limit 1;
+        update htql_covid.`ThongKeTrangThai` set soluong = _soluong + 1 WHERE id = _id;
 	ELSE 
 		SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "Nguoi nay da co trong danh sach";
 	END IF;
@@ -208,6 +248,8 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE `proc_ChuyenTrangThai` (_doituong varchar(12),  _trangthaimoi varchar(2), _quanly varchar(12))
 BEGIN
+	DECLARE _id int;
+	DECLARE _soluong int;
 	declare _trangthaicu varchar(2);
     declare _msg  nvarchar(100);
 	IF ((select cmnd from htql_covid.nguoi_lien_quan WHERE cmnd = _doituong) IS NOT NULL) THEN
@@ -220,6 +262,25 @@ BEGIN
         set _msg = concat(_doituong," chuyển từ ",_trangthaicu," sang ",_trangthaimoi);
 		INSERT INTO htql_covid.LICH_SU_HOAT_DONG (username, hanhdong, tb, msg)
 		VALUES	(_quanly, "cap nhat", "nguoi_lien_quan", _msg);
+        
+        IF ((select id from htql_covid.`ThongKeTrangThai` WHERE DATE(thoigian) = CURDATE() AND trangthai = _trangthaimoi) IS NULL) THEN
+			select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F0" order by thoigian desc limit 1;
+			insert into `ThongKeTrangThai`(trangthai,soluong) value("F0",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F1" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F1",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F2" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F2",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F3" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F3",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "F4" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("F4",_soluong);
+            select soluong into _soluong from htql_covid.`ThongKeTrangThai` WHERE trangthai = "OK" order by thoigian desc limit 1;
+            insert into `ThongKeTrangThai`(trangthai,soluong) value("OK",_soluong);
+		END IF;
+        select soluong,id into _soluong,_id from htql_covid.`ThongKeTrangThai` WHERE trangthai = _trangthaimoi order by thoigian desc limit 1;
+        update htql_covid.`ThongKeTrangThai` set soluong = _soluong + 1 WHERE id = _id;
+        select soluong,id into _soluong,_id from htql_covid.`ThongKeTrangThai` WHERE trangthai = _trangthaicu order by thoigian desc limit 1;
+        update htql_covid.`ThongKeTrangThai` set soluong = _soluong - 1 WHERE id = _id;
 	ELSE 
 		SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "Khong tim thay nguoi nay";
     END IF;
@@ -362,6 +423,9 @@ call htql_covid.`proc_ThemNhuYeuPham` ('Nước sát khuẩn', 10, 1,50000,'admi
 
 call htql_covid.`proc_ChuyenTrangThai` ('123456789001','F0','admin');
 call htql_covid.`proc_ChuyenNoiDieuTri` ('123456789001', 21, 'admin');
+call htql_covid.`proc_ChuyenTrangThai` ('123456789002', 'OK', 'admin');
+call htql_covid.`proc_ChuyenTrangThai` ('123456789003', 'F4', 'admin');
+call htql_covid.`proc_ChuyenTrangThai` ('123456789004', 'OK', 'admin');
 
 call htql_covid.`proc_MuaNhuPham` ('123456789008', 10, 2);
 call htql_covid.`proc_MuaNhuPham` ('123456789008', 11, 10);
@@ -370,10 +434,16 @@ call htql_covid.`proc_MuaNhuPham` ('123456789008', 13, 1);
 
 call htql_covid.`proc_TaoQuanLy` ('manager','manager','admin');
 
-select * from htql_covid.`account`;
+insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,ghino) 
+	values('abc', '123456789011',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 100000 );
+insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,ghino) 
+	values('def','123456789012',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 2000000);
+    
+-- select * from htql_covid.`account`;
 -- select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;
 -- select * from htql_covid.nhu_pham;
 -- select * from htql_covid.lich_su_chuyen_trang_thai;
 -- select * from htql_covid.lich_su_hoat_dong;
 -- select * from htql_covid.lich_su_mua;
+select * from htql_covid.`ThongKeTrangThai`;

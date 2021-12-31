@@ -19,10 +19,16 @@ import model.ConsumeHistory;
  */
 public class ConsumeHistoryService {
     dbUtil db;
+    private static ConsumeHistoryService single_instance;
     public ConsumeHistoryService(){
         db = dbUtil.getDbUtil();
     }
-    public ArrayList<ConsumeHistory> findAll(String userId){
+    public static ConsumeHistoryService getInstance() {
+        if (single_instance == null)
+            single_instance = new ConsumeHistoryService();
+        return single_instance;
+    }
+    public ArrayList<ConsumeHistory> findbyUserId(String userId){
         ArrayList<ConsumeHistory> result = new ArrayList<>() ;
         ResultSet rs = db.executeQuery("select * from `LICH_SU_MUA` where nguoimua = ?", new Object[]{userId});
         try {
@@ -40,5 +46,17 @@ public class ConsumeHistoryService {
             Logger.getLogger(ConsumeHistoryService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+    public int getConsumeTotal(int ProductId){
+        int total = 0;
+        ResultSet rs = db.executeQuery("select * from `LICH_SU_MUA` where idgoinhupham = ?", new Object[]{ProductId});
+        try {
+            while(rs.next()){
+                total += rs.getInt("soluong");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsumeHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return total;
     }
 }

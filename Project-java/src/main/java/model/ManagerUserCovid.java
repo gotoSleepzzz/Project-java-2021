@@ -1,8 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.text.Collator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ManagerUserCovid {
@@ -49,10 +48,13 @@ public class ManagerUserCovid {
     }
 
     public List<UserCovid> sortUserCovidByNameIncrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getName)).collect(Collectors.toList());
+        // sort with vietnamese
+        Collator collate = Collator.getInstance(new Locale("vi"));
+        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getName, collate)).collect(Collectors.toList());
     }
 
     public List<UserCovid> sortUserCovidByDobIncrement() {
+
         return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getDob)).collect(Collectors.toList());
     }
 
@@ -69,7 +71,9 @@ public class ManagerUserCovid {
     }
 
     public List<UserCovid> sortUserCovidByNameDecrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getName).reversed()).collect(Collectors.toList());
+        // sort with vietnamese
+        Collator collate = Collator.getInstance(new Locale("vi"));
+        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getName, collate).reversed()).collect(Collectors.toList());
     }
 
     public List<UserCovid> sortUserCovidByDobDecrement() {

@@ -397,9 +397,46 @@ END$$
 DELIMITER ;
 
 
+DELIMITER $$
+CREATE PROCEDURE `proc_ThanhToanGiaoDich` (_tkgui varchar(12), _tknhan varchar(12), _sotien float)
+BEGIN 
+	declare _sodutkgui float(15,2);
+    
+    select sodu into _sodutkgui from htql_covid.tai_khoan_giao_dich where tk = _tkgui;
+    if (_sodutkgui - _sotien > 0) then
+		update htql_covid.tai_khoan_giao_dich set sodu = sodu - _sotien where tk = _tkgui;
+		update htql_covid.tai_khoan_giao_dich set sodu = sodu + _sotien where tk = _tknhan;
+    
+		insert into htql_covid.lich_su_giao_dich (tk_gui, tk_nhan,sotien)
+		values (_tkgui, _tknhan, _sotien);
+	else 
+		rollback;
+	end if;
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE PROCEDURE `proc_ThanhToan` (_cmnd varchar(12), _sotien float(15,2))
+BEGIN     
+	declare _msg varchar(100);
+        
+    insert into htql_covid.lich_su_thanh_toan (cmnd, sotien)
+    values (_cmnd, _sotien);
+    
+    set _msg = concat(_cmnd, " thanh toan ", _sotien, "vnd cho he thong");
+	INSERT INTO htql_covid.LICH_SU_HOAT_DONG (username, hanhdong, tb, msg)
+	VALUES	(_cmnd, "them", "lich_thanh_toan", _msg);
+END$$
+DELIMITER ;
+
+
 
 /* ================================================================================== */
-insert into htql_covid.`account` (`username`,`password`,`role`) values ('admin','admin','admin');
+insert into htql_covid.`account` (`username`,`password`,`role`) value ('admin','admin','admin');
+
+insert into htql_covid.tai_khoan_giao_dich value ('admin',0);
 
 call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 1', 1000, 0);
 call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 2', 1000, 0);

@@ -8,10 +8,9 @@ package service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utils.dbUtil;
 import model.ManagerHistory;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
@@ -20,6 +19,7 @@ import model.ManagerHistory;
 public class ManagedHistoryService {
     dbUtil db;
     private static ManagedHistoryService single_instance;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(ManagedHistoryService.class);
     public ManagedHistoryService(){
         db = dbUtil.getDbUtil();
     }
@@ -45,7 +45,7 @@ public class ManagedHistoryService {
                 result.add(temp);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsumeHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return result;
     }
@@ -66,7 +66,7 @@ public class ManagedHistoryService {
                 result.add(temp);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsumeHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return result;
     }

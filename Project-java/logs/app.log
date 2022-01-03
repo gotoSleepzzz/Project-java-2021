@@ -1,0 +1,26 @@
+2022-01-03 02:10:12.063 INFO [main] [main.mainTest.main(mainTest.java:41)] - info
+2022-01-03 02:10:12.064 WARN [main] [main.mainTest.main(mainTest.java:42)] - warn
+2022-01-03 02:10:12.065 ERROR [main] [main.mainTest.main(mainTest.java:43)] - error
+2022-01-03 12:32:25.719 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:32:25.848 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:33:27.773 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:33:27.887 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:35:12.076 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:35:12.194 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:35:30.911 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:35:36.131 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:37:40.897 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:37:41.024 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:40:40.775 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:40:40.894 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:41:18.384 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:41:24.530 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:47:37.748 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:47:42.012 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:48:02.698 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:48:03.303 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:48:27.241 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 12:48:32.619 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:138)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-03 21:32:09.900 INFO [main] [main.mainTest.main(mainTest.java:41)] - info
+2022-01-03 21:32:09.902 WARN [main] [main.mainTest.main(mainTest.java:42)] - warn
+2022-01-03 21:32:09.902 ERROR [main] [main.mainTest.main(mainTest.java:43)] - error

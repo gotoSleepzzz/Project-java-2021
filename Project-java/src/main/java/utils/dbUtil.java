@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class dbUtil {
     private static dbUtil db;
@@ -16,7 +17,7 @@ public class dbUtil {
     private PreparedStatement ps;
     private CallableStatement cs;
     private ResultSet rs;
-    
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(dbUtil.class);
     private dbUtil(){
         getConn();
     }
@@ -37,7 +38,7 @@ public class dbUtil {
             ps = conn.prepareStatement(sql);
             result = ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return result;
     }
@@ -55,7 +56,7 @@ public class dbUtil {
             result = ps.executeUpdate();
             close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return result;
     }
@@ -74,7 +75,7 @@ public class dbUtil {
 
             result = cs.execute();
         } catch (SQLException ex) {
-            Logger.getLogger(dbUtil.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return result;
     }
@@ -87,7 +88,7 @@ public class dbUtil {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return rs;
     }
@@ -103,9 +104,8 @@ public class dbUtil {
             }
             rs = ps.executeQuery();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
-
         return rs;
     }
 
@@ -119,7 +119,7 @@ public class dbUtil {
             statement.close();
             return true;
         } catch (SQLException e) {
-//			e.printStackTrace();
+            logger.error(e);
             return false;
         }
     }
@@ -133,9 +133,9 @@ public class dbUtil {
             }
         } catch (ClassNotFoundException e) {
             System.out.println("jdbc driver is not found.");
-            e.printStackTrace();
+            logger.error(e);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return conn;
     }
@@ -155,7 +155,7 @@ public class dbUtil {
                 conn.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 }

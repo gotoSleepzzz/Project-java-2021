@@ -8,9 +8,8 @@ package service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.PaymentHistory;
+import org.apache.logging.log4j.LogManager;
 import utils.dbUtil;
 /**
  *
@@ -18,6 +17,7 @@ import utils.dbUtil;
  */
 public class PaymentHistoryService {
     dbUtil db;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(PaymentHistoryService.class);
     public PaymentHistoryService(){
         db = dbUtil.getDbUtil();
     }
@@ -33,7 +33,7 @@ public class PaymentHistoryService {
                 result.add(temp);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(PaymentHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return result;
     }

@@ -12,6 +12,7 @@ import utils.dbUtil;
 
 import java.sql.SQLException;
 import java.util.*;
+import org.apache.logging.log4j.LogManager;
 
 public class ManagerService {
 
@@ -23,6 +24,7 @@ public class ManagerService {
     DirectedGraph<String, DefaultEdge> directedGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
     List<UserCovid> userCovidList;
     ManagerNYP managerNYP = new ManagerNYP();
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(ManagerService.class);
 
     public ManagerService() {
 
@@ -107,7 +109,7 @@ public class ManagerService {
                         rs.getInt("hsd"),
                         rs.getDouble("gia")));
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return nypList;
@@ -132,7 +134,7 @@ public class ManagerService {
                         rs.getDouble("gia"));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            logger.error(throwables);
         }
         return null;
     }
@@ -153,7 +155,7 @@ public class ManagerService {
         try {
             count = rs.next() ? rs.getInt(1) : 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
 
         Object[][] result = new Object[count][5];
@@ -190,7 +192,7 @@ public class ManagerService {
 
                 ++i;
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return result;
@@ -211,7 +213,7 @@ public class ManagerService {
                         rs.getDouble("gia")));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            logger.error(throwables);
         }
         return managerNYP.getList();
     }
@@ -231,6 +233,7 @@ public class ManagerService {
             findAllNYP();
             return true;
         } catch (Exception e) {
+            logger.error(e);
             return false;
         }
     }
@@ -247,6 +250,7 @@ public class ManagerService {
             db.excuteProc(removeNYP, params);
             return true;
         } catch (Exception e) {
+            logger.error(e);
             return false;
         }
     }
@@ -271,7 +275,7 @@ public class ManagerService {
             }
 
         } catch (Exception e) {
-            System.out.println("Insert failed due some bug or id duplicated");
+            logger.error("Insert failed due some bug or id duplicated");
         }
         return false;
     }
@@ -304,6 +308,7 @@ public class ManagerService {
                 };
                 db.executeUpdate(addHistoryChangeState, params2);
             } catch (Exception e) {
+                logger.error(e);
                 return false;
             }
             return true;
@@ -328,6 +333,7 @@ public class ManagerService {
 
 
             } catch (Exception e) {
+                logger.error(e);
                 return false;
             }
 
@@ -346,6 +352,7 @@ public class ManagerService {
                 db.executeUpdate(addHistoryChangeState, params2);
 
             } catch (Exception e) {
+                logger.error(e);
                 return false;
             }
             traversalAndUpdate(currentUser.getIdReached(), 2, id);
@@ -366,6 +373,7 @@ public class ManagerService {
                 };
                 db.executeUpdate(addHistoryChangeState, params2);
             } catch (Exception e) {
+                logger.error(e);
                 return false;
             }
             traversalAndUpdate(id, 1, "");
@@ -414,7 +422,7 @@ public class ManagerService {
                     db.executeUpdate(addHistoryChangeState, params);
                     db.excuteProc(updateUserCovidByState, param);
                 } catch (Exception e) {
-                    System.out.println("Update failed");
+                    logger.error("Update failed");
                 }
             }
             count++;
@@ -443,7 +451,7 @@ public class ManagerService {
             managerUserCovid.updateUserCovidByHealthCenter(healthCenter, id);
 
         } catch (Exception e) {
-            System.out.println("Error when change health center");
+            logger.error("Error when change health center");
         }
         return false;
     }
@@ -465,7 +473,7 @@ public class ManagerService {
                 ));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            logger.error(throwables);
         }
         return managerUserCovid.getListUserCovid();
     }
@@ -485,7 +493,7 @@ public class ManagerService {
                         rs.getDouble("ghino"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -498,7 +506,7 @@ public class ManagerService {
                 healthCenter.put(rs.getInt("id"), rs.getString("ten"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -527,7 +535,7 @@ public class ManagerService {
                         rs.getDouble("ghino")));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            logger.error(throwables);
         }
         return managerUserCovid.getListUserCovid();
     }
@@ -669,7 +677,7 @@ public class ManagerService {
             }
             return list;
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            logger.error(throwables);
         }
         return null;
     }

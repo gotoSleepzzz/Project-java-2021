@@ -5,13 +5,11 @@
  */
 package service;
 
-import control.QLNoiDieuTriController;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Account;
+import org.apache.logging.log4j.LogManager;
 import utils.dbUtil;
 
 /**
@@ -22,6 +20,7 @@ import utils.dbUtil;
 
 public class AccountService{
     dbUtil db;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(AccountService.class);
     public AccountService(){
         db = dbUtil.getDbUtil();
     }
@@ -38,7 +37,7 @@ public class AccountService{
                 accounts.add(acc);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(QLNoiDieuTriController.class.getName()).log(Level.SEVERE, null, ex);
+           logger.error(ex);
         }
         return accounts;
     }

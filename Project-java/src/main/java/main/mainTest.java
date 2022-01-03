@@ -13,16 +13,19 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class mainTest {
     
+    static Logger logger = LogManager.getLogger(mainTest.class);
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e1) {
 
         }
-        new loginController();
+        //new loginController();
         //new ViewManager();
         //new UserView();
         //adminView a = new adminView();
@@ -35,5 +38,8 @@ public class mainTest {
 //        frame.setSize(1000,750);
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setVisible(true);
+        logger.info("info");
+        logger.warn("warn");
+        logger.error("error");
     }
 }

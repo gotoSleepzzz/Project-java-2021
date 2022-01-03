@@ -448,6 +448,12 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     public void AddEventShowPaymentHistory(ActionListener e){
         jpaymenthistory.addActionListener(e);
     }
+    public void AddEventBuy(ActionListener e){
+        jbuy.addActionListener(e);
+    }
+    public void AddEventPay(ActionListener e){
+        jpay.addActionListener(e);
+    }
     public void setDataPaymentHistoryTable(String[][] data){
         hisTable.setModel(new DefaultTableModel(data, hisPaymentHeaders));
         hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package service;
+import control.QLNoiDieuTriController;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,12 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.dbUtil;
 import model.ActivityHistory;
+import org.apache.logging.log4j.LogManager;
 /**
  *
  * @author TRUNG
  */
 public class ActivityHistoryService {
     dbUtil db;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(ActivityHistoryService.class);
     public ActivityHistoryService(){
         db = dbUtil.getDbUtil();
     }
@@ -28,7 +31,7 @@ public class ActivityHistoryService {
                temp.add(new ActivityHistory(rs.getString("username"),rs.getString("hanhdong"),rs.getString("tb"),rs.getString("msg"),rs.getDate("thoigian"))); 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ActivityHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return temp;
     }

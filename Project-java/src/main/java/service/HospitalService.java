@@ -51,8 +51,8 @@ public class HospitalService {
         }
         return hospitals;
     }
-    public void delete(int id){
-        db.executeUpdate("delete from `NOI_QUAN_LY` where id = ?", new Object[]{id});
+    public int delete(int id){
+        return db.executeUpdate("delete from `NOI_QUAN_LY` where id = ?", new Object[]{id});
     }
     public void update(Hospital hos){
         Object[] temp = {hos.getTen(),hos.getSucChua(), hos.getSLHienTai(), hos.getId()};
@@ -63,7 +63,7 @@ public class HospitalService {
         db.excuteProc("{CALL proc_ThemNoiQuanLy(?,?,?)}", temp);
     }
     public boolean existsUser(int id){
-        ResultSet rs = db.executeQuery("select * from `NGUOI_LIEN_QUAN` where idnoiquanly = ?", new Object[]{id});
+        ResultSet rs = db.executeQuery("select * from `noi_quan_ly` where id = ? and soluongtiep > 0", new Object[]{id});
         try {
             if (rs.next()){
                 return true;

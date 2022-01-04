@@ -4,15 +4,19 @@
  * and open the template in the editor.
  */
 package control;
+
+import model.Hospital;
+import service.HospitalService;
+import utils.dbUtil;
+import view.admin.qlndt_Admin;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
-import view.admin.qlndt_Admin;
-import utils.dbUtil;
-import model.Hospital;
-import service.HospitalService;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  *
  * @author TRUNG
@@ -33,6 +37,7 @@ public class QLNoiDieuTriController {
         this.view.handlerAddButton(new AddEvent());
         this.view.handlerDelButton(new DelEvent());
         this.view.handlerUpdateButton(new UpdateEvent());
+        this.view.addSearchButtonListener(new AddSearchButtonListener());
         this.view.setVisible(true);
     }
     class AddEvent implements ActionListener{
@@ -78,9 +83,14 @@ public class QLNoiDieuTriController {
                     JOptionPane.showMessageDialog(view, response, "Thông báo",JOptionPane.INFORMATION_MESSAGE);
                 }
                 else{
-                    hospitalService.delete(hospital.getId());
-                    list.remove(index);
-                    view.getTableModel().removeRow(index);
+                    if (hospitalService.delete(hospital.getId()) != -1) {
+                        view.getTableModel().removeRow(index);
+                        list.remove(index);
+                        JOptionPane.showMessageDialog(view, "Xóa thành công", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(view, "Xóa thất bại", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    // show message success
                 }
             }
         }
@@ -128,4 +138,47 @@ public class QLNoiDieuTriController {
         }
         return data;
     }
+
+
+    class AddSearchButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String search = view.getSearchField();
+            // show message if search is empty
+            if (search.equals("") || search.equals("Nhập tên cơ sở điều trị")) {
+                // find all hospital
+                view.setTableModel(convertToArray2D(list));
+            } else {
+                // find hospital by name
+
+                ArrayList<Hospital> listSearch = new ArrayList<>();
+
+                for (Hospital hospital : list) {
+                    // get the name of hospital
+                    String name = hospital.getTen();
+
+                    Pattern pattern = Pattern.compile("(?:[a-zA-Z]|[^\\x00-\\x7F])++", Pattern.CANON_EQ | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+                    Matcher matcher = pattern.matcher(name);
+                    // check if the name contains the search
+                    if (matcher.find()) {
+                        // add to list
+                        if (name.toLowerCase().contains(search.toLowerCase())) {
+                            listSearch.add(hospital);
+                        }
+                    }
+
+                }
+
+                if (listSearch.size() == 0) {
+                    response = "Không tìm thấy cơ sở điều trị";
+                    JOptionPane.showMessageDialog(view, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    view.setTableModel(convertToArray2D(listSearch));
+                }
+            }
+        }
+    }
+
+
+
 }

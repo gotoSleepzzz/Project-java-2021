@@ -61,7 +61,7 @@ public class ManagerService {
             getUserById = "SELECT * FROM nguoi_lien_quan WHERE cmnd = ?";
 
     private String
-            getByPage = "SELECT * FROM nguoi_lien_quan LIMIT ?, ?";
+            getUserCovidByPage = "SELECT * FROM nguoi_lien_quan LIMIT ?";
 
     private String
             getAllHealthCenter = "SELECT * FROM noi_quan_ly";
@@ -294,7 +294,6 @@ public class ManagerService {
 
 
         if (state.equals("Khỏi bệnh")) {
-            System.out.println("wao");
             params[1] = "OK";
             try {
                 db.excuteProc(updateUserCovidByState, params);
@@ -456,6 +455,35 @@ public class ManagerService {
         return false;
     }
 
+
+
+    public List<UserCovid> findAllUserCovidByLimit(int limit) {
+        Object[] params = {limit};
+        var rs = db.executeQuery(getUserCovidByPage, params);
+        List<UserCovid> userCovids = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                userCovids.add((new UserCovid(rs.getString("ten"),
+                        rs.getString("cmnd"),
+                        Integer.parseInt(rs.getString("namsinh")),
+                        rs.getString("diachi"),
+                        rs.getString("trangthai"),
+                        rs.getInt("idnoiquanly"),
+                        rs.getString("nguonlay"),
+                        rs.getDouble("ghino")
+                )));
+            }
+        } catch (SQLException throwables) {
+            logger.error(throwables);
+        }
+        return userCovids;
+    }
+
+
+
+
+
+
     public List<UserCovid> findAllUserCovid() {
         Object[] params = {};
         var rs = db.executeQuery(getAllUserCovid, params);
@@ -522,7 +550,7 @@ public class ManagerService {
 
     public List<UserCovid> getByPage(int page, int size) {
         Object[] params = {page, size};
-        var rs = db.executeQuery(getByPage, params);
+        var rs = db.executeQuery(getUserCovidByPage, params);
         try {
             while (rs.next()) {
                 managerUserCovid.addUserCovid(new UserCovid(rs.getString("ten"),

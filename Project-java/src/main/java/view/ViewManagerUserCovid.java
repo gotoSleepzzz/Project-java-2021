@@ -127,7 +127,7 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         table.getColumnModel().getColumn(7).setPreferredWidth(100);
 
         table.setRowHeight(30);
-        table.setFont(new Font("Arial", Font.PLAIN, 15));
+        table.setFont(new Font("Serif", Font.PLAIN, 15));
         table.setRowHeight(30);
         table.setRowMargin(5);
         table.setShowGrid(true);
@@ -179,8 +179,11 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
 
 
     public void showTable() {
-        data = new String[list.size()][6];
-        for (int i = 0; i < list.size(); i++) {
+
+        int n = Math.min(list.size(), 5);
+
+        data = new String[n][6];
+        for (int i = 0; i < n; i++) {
             data[i][0] = list.get(i).getName();
             data[i][1] = list.get(i).getId();
             data[i][2] = ManagerService.getInstance().getHealthCenterName(list.get(i).getHealthCenter());
@@ -288,4 +291,8 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         comboBoxSort.addActionListener(actionListener);
     }
 
+    // get watch more button
+    public JButton getWatchMore() {
+        return watchMore;
+    }
 }

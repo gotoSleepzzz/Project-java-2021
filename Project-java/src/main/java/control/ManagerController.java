@@ -25,6 +25,10 @@ public class ManagerController {
     private ViewUpdateHospitalAndStatus viewUpdateHospitalAndStatus;
     private ViewUpdateNYP viewUpdateNYP;
 
+    private int limit = 2;
+    private int displayTotal = 10;
+
+
     String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
             "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
     String[] sortNYP = {"Mức giới hạn tăng dần", "Thời gian giới hạn tăng dần", "Đơn giá tằng dần",
@@ -45,6 +49,7 @@ public class ManagerController {
         viewManager.getViewManagerUserCovid().addHistoryActionListener(new AddButtonHistory_ViewManagerUserCovid());
         viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
         viewManager.getViewManagerUserCovid().addDropdownListener(new AddComboboxSort());
+        viewManager.getViewManagerUserCovid().addWatchMoreActionListener(new AddWatchMoreEvent());
 
         viewManager.getViewManagerNYP().addBackListener(new AddBackEventViewManager());
         viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
@@ -59,6 +64,17 @@ public class ManagerController {
         viewManager.addTransitionListener(new AddTransactionEvent());
         viewManager.addComsumeListener(new AddConsumeEvent());
         viewManager.addDebtListener(new AddViewDebtEvent());
+    }
+
+    class AddWatchMoreEvent implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            var list = managerService.findAllUserCovidByLimit(displayTotal);
+            viewManager.getViewManagerUserCovid().renderTable(list);
+            viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
+            viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+            displayTotal += limit;
+        }
     }
 
 
@@ -168,7 +184,9 @@ public class ManagerController {
                 viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
                 viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
             }
+
         }
+
     }
 
     class AddSortCombobox_ViewManagerNYP implements ActionListener {
@@ -403,12 +421,16 @@ public class ManagerController {
                 viewManager.getViewManagerUserCovid().showTable();
                 viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
                 viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+                viewManager.getViewManagerUserCovid().getWatchMore().setEnabled(true);
+
             } else {
                 var user = ManagerService.getInstance().findOneUserCovid(textSearch);
                 if (user != null) {
                     list.add(user);
                     viewManager.getViewManagerUserCovid().renderTable(list);
                     renderActionListenerTable();
+                    // disable watchmore button
+                    viewManager.getViewManagerUserCovid().getWatchMore().setEnabled(false);
 
                 } else {
                     // show message dialog Khong tim thay nguoi lien quan

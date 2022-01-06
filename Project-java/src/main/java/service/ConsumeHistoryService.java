@@ -8,10 +8,9 @@ package service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utils.dbUtil;
 import model.ConsumeHistory;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
@@ -20,6 +19,7 @@ import model.ConsumeHistory;
 public class ConsumeHistoryService {
     dbUtil db;
     private static ConsumeHistoryService single_instance;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(ConsumeHistoryService.class);
     public ConsumeHistoryService(){
         db = dbUtil.getDbUtil();
     }
@@ -43,7 +43,7 @@ public class ConsumeHistoryService {
                 result.add(temp);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsumeHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return result;
     }
@@ -55,7 +55,7 @@ public class ConsumeHistoryService {
                 total += rs.getInt("soluong");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsumeHistoryService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return total;
     }

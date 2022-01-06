@@ -11,14 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class loginController {
 
     static dbUtil db;
     loginView login;
     String username;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(loginController.class);
 
     public loginController() {
         db = dbUtil.getDbUtil();
@@ -35,12 +35,7 @@ public class loginController {
     private boolean isFirstRun() {
 
         ResultSet rs = db.executeQuery("Select * from `account` where `role` = 'admin'");
-        try {
-            return !(rs.next());
-        } catch (SQLException ex) {
-            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+        return rs == null;
     }
 
     public class createNewPass implements ActionListener {
@@ -136,7 +131,7 @@ public class loginController {
                             JOptionPane.showMessageDialog(login, "Tài khoản hoặc mật khẩu không chính xác!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
-                        Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+                        logger.error(ex);
                     }
                 }
             }

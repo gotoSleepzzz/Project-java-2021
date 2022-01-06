@@ -8,9 +8,8 @@ package service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Hospital;
+import org.apache.logging.log4j.LogManager;
 import utils.dbUtil;
 
 /**
@@ -19,6 +18,7 @@ import utils.dbUtil;
  */
 public class HospitalService {
     dbUtil db;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(HospitalService.class);
     public HospitalService(){
         db = dbUtil.getDbUtil();
     }
@@ -30,7 +30,7 @@ public class HospitalService {
                 result = new Hospital(rs.getInt("id"),rs.getString("ten"),rs.getInt("succhua"),rs.getInt("soluongtiep"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(HospitalService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return result;
     }
@@ -47,12 +47,12 @@ public class HospitalService {
                 hospitals.add(hos);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(HospitalService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return hospitals;
     }
-    public void delete(int id){
-        db.executeUpdate("delete from `NOI_QUAN_LY` where id = ?", new Object[]{id});
+    public int delete(int id){
+        return db.executeUpdate("delete from `NOI_QUAN_LY` where id = ?", new Object[]{id});
     }
     public void update(Hospital hos){
         Object[] temp = {hos.getTen(),hos.getSucChua(), hos.getSLHienTai(), hos.getId()};
@@ -63,12 +63,12 @@ public class HospitalService {
         db.excuteProc("{CALL proc_ThemNoiQuanLy(?,?,?)}", temp);
     }
     public boolean existsUser(int id){
-        ResultSet rs = db.executeQuery("select * from `NGUOI_LIEN_QUAN` where idnoiquanly = ?", new Object[]{id});
+        ResultSet rs = db.executeQuery("select * from `noi_quan_ly` where id = ? and soluongtiep > 0", new Object[]{id});
         try {
             if (rs.next()){
                 return true;
             }       } catch (SQLException ex) {
-            Logger.getLogger(HospitalService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return false;
     }
@@ -78,7 +78,7 @@ public class HospitalService {
             if (rs.next())
                 return rs.getString(1);
         } catch (SQLException ex) {
-            Logger.getLogger(HospitalService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return "";
     }

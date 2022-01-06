@@ -4,8 +4,24 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import view.UserView;
 
-public class mainTest {
+import control.*;
+import view.*;
+import view.admin.*;
+import control.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+public class mainTest {
+    
+    static Logger logger = LogManager.getLogger(mainTest.class);
     public static void main(String[] args) {
 
         try {
@@ -19,6 +35,7 @@ public class mainTest {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
 //        new loginController();
+        //new loginController();
         //new ViewManager();
         new UserView();
 //        adminView a = new adminView();
@@ -31,5 +48,8 @@ public class mainTest {
 //        frame.setSize(1000,750);
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setVisible(true);
+        logger.info("info");
+        logger.warn("warn");
+        logger.error("error");
     }
 }

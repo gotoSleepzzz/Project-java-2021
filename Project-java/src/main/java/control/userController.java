@@ -58,6 +58,8 @@ public class userController {
         view.AddEventShowConsumeHistory(new ShowConsumeHistoryEvent());
         view.AddEventShowManageHistory(new ShowManagedHistoryEvent());
         view.AddEventShowPaymentHistory(new ShowPaymentHistoryEvent());
+        view.AddEventBuy(new BuyEvent());
+        view.AddEventPay(new PayEvent());
         
         view.setLocationRelativeTo(null);
         view.setVisible(true);
@@ -84,6 +86,18 @@ public class userController {
             listPaymentHistory = paymentHistory.findAll(user.getId());
             view.setDataPaymentHistoryTable(convertPaymentListToArray2D(listPaymentHistory));
             view.PaymentHistory(view);
+        }  
+    }
+    class BuyEvent implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.Buy(view);
+        }  
+    }
+    class PayEvent implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.Pay(view);
         }  
     }
     public String[][] convertConsumeListToArray2D(ArrayList<ConsumeHistory> list){

@@ -476,11 +476,11 @@ insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,g
 insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,ghino) 
 	values('def','123456789012',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 2000000);
     
--- select * from htql_covid.`account`;
+select * from htql_covid.`account`;
 -- select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;
 -- select * from htql_covid.nhu_pham;
 -- select * from htql_covid.lich_su_chuyen_trang_thai;
 -- select * from htql_covid.lich_su_hoat_dong;
 -- select * from htql_covid.lich_su_mua;
-select * from htql_covid.`ThongKeTrangThai`;
+-- select * from htql_covid.`ThongKeTrangThai`;

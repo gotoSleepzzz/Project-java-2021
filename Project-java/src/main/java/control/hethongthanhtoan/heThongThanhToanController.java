@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.LogManager;
 import utils.AppConstraints;
 import utils.dbUtil;
 import view.thanhtoan_server.ThanhtoanServer;
@@ -24,6 +25,7 @@ public class heThongThanhToanController {
     private boolean isOn;
     private SSLServerSocket server = null;
     private List<Socket> clientList;
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(heThongThanhToanController.class);
 
     public heThongThanhToanController() {
         tts = new ThanhtoanServer();
@@ -57,7 +59,7 @@ public class heThongThanhToanController {
                 isOn = true;
             }
         } catch (IOException ex) {
-            Logger.getLogger(heThongThanhToanController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
 
         Thread thrd = new StartServer();
@@ -73,7 +75,7 @@ public class heThongThanhToanController {
                 server.close();
                 tts.turnOff();
             } catch (IOException ex) {
-                Logger.getLogger(heThongThanhToanController.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error(ex);
             }
         }
     }
@@ -86,7 +88,7 @@ public class heThongThanhToanController {
                 try {
                     new HandleClient(server.accept()).start();
                 } catch (IOException ex) {
-                    
+                    logger.error(ex);
                 }
             }
         }
@@ -133,7 +135,7 @@ public class heThongThanhToanController {
                 clientList.remove(s);
                 s.close();
             } catch (IOException ex) {
-                Logger.getLogger(heThongThanhToanController.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error(ex);
             }
         }
     }

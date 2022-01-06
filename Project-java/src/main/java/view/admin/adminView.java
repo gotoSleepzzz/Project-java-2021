@@ -26,7 +26,7 @@ public class adminView extends JFrame implements ActionListener {
     
     private void init(){
         this.setTitle("ADMIN");
-        this.setBounds(10, 10, 1300, 600);
+        this.setBounds(20, 20, 1300, 610);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(null);
         
@@ -85,6 +85,7 @@ public class adminView extends JFrame implements ActionListener {
         add(qlndt);
         add(qltk);
         add(mainPanel);
+        setLocationRelativeTo(null);
     }
     
     private JPanel mainPanel;
@@ -108,7 +109,10 @@ public class adminView extends JFrame implements ActionListener {
         }
         else if(e.getSource() == qlndtBtn){
             mainPanel.setVisible(false);
+            setSize(new Dimension(1300, 700));
             qlndt.setBounds(1, 1, this.getWidth(), this.getHeight());
+            qlndt.setSize(this.getWidth(), this.getHeight());
+
             if (qlNoiDieuTriController == null)
                 qlNoiDieuTriController = new QLNoiDieuTriController(qlndt);
             else{
@@ -117,6 +121,7 @@ public class adminView extends JFrame implements ActionListener {
             backBtn.setVisible(true);
         }
         else if (e.getSource() == backBtn){
+            setSize(new Dimension(1300, 610));
             mainPanel.setVisible(true);
             qltk.setVisible(false);
             qlndt.setVisible(false);

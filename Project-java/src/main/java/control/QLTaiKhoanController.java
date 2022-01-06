@@ -25,12 +25,11 @@ public class QLTaiKhoanController {
     dbUtil db;
     String response;
     ArrayList<Account> accounts;
-    AccountService accountService;
+    AccountService accountService = AccountService.getInstance();
     ActivityHistoryService historyService;
 
     public QLTaiKhoanController(qltk_Admin view) {
         response = "";
-        accountService = new AccountService();
         historyService = new ActivityHistoryService();
         accounts = accountService.findAll();
         db = dbUtil.getDbUtil();
@@ -38,21 +37,24 @@ public class QLTaiKhoanController {
         this.view.handlerShowHisBtn(new ShowHistoryEvent());
         this.view.handlerBanBtn(new BanEvent());
         this.view.setTableAccountModel(convertAccountToArray2D(accounts));
+        this.view.addSearchBtnListener(new AddSearchButtonListener());
         this.view.setVisible(true);
     }
 
     public String[][] convertAccountToArray2D(ArrayList<Account> list) {
-        String data[][] = new String[list.size()][4];
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        String data[][] = new String[list.size()][3];
         // convert list to data object 
         for (int i = 0; i < list.size(); i++) {
             Account acc = list.get(i);
             data[i][0] = acc.getUsername();
-            data[i][1] = acc.getPass();
-            data[i][2] = acc.getRole();
+            data[i][1] = acc.getRole();
             if (acc.getStatus())
-                data[i][3] = "Unlocked";
+                data[i][2] = "Không khoá";
             else
-                data[i][3] = "Locked";
+                data[i][2] = "Bị khoá";
         }
         return data;
     }
@@ -73,11 +75,10 @@ public class QLTaiKhoanController {
         @Override
         public void actionPerformed(ActionEvent e) {
             int index = view.getSelectedRowTableAcc();
-            if(index == -1){
+            if (index == -1) {
                 response = "Vui lòng chọn tài khoản mà bạn muốn xem lịch sử";
-                JOptionPane.showMessageDialog(view, response, "Notification",JOptionPane.INFORMATION_MESSAGE);
-            }
-            else{
+                JOptionPane.showMessageDialog(view, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
+            } else {
                 Account account = accounts.get(index);
                 String username = account.getUsername();
                 ArrayList<ActivityHistory> temp = historyService.findById(username);
@@ -100,10 +101,32 @@ public class QLTaiKhoanController {
                 account.setStatus(status);
                 accountService.LockAccount(account, status);
                 if (status)
-                    view.getTableAccountModel().setValueAt("Unlocked", index, 3);
+                    view.getTableAccountModel().setValueAt("Không Khoá", index, 2);
                 else
-                    view.getTableAccountModel().setValueAt("Locked", index, 3);
+                    view.getTableAccountModel().setValueAt("Bị Khoá", index, 2);
 
+            }
+        }
+    }
+
+    class AddSearchButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String search = view.getContentSearch();
+            // show message if search is empty
+            if (search.equals("") || search.equals("Nhập tên tài khoản")) {
+                // find all account
+                view.setTableAccountModel(convertAccountToArray2D(accounts));
+            } else {
+                ArrayList<Account> list = new ArrayList<>();
+                var account = AccountService.getInstance().findOne(search);
+                if (account == null) {
+                    response = "Không tìm thấy tài khoản";
+                    JOptionPane.showMessageDialog(view, response, "Notification", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    list.add(account);
+                    view.setTableAccountModel(convertAccountToArray2D(list));
+                }
             }
         }
     }

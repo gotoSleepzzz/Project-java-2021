@@ -9,12 +9,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
 
 public class Province {
 
     // make singleton
     private static Province instance = null;
-
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(Province.class);
     JSONParser jsonParser = new JSONParser();
     JSONArray provinces;
     JSONArray districts;
@@ -25,7 +26,7 @@ public class Province {
             try {
                 instance = new Province();
             } catch (IOException | ParseException e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return instance;
@@ -36,7 +37,7 @@ public class Province {
         try {
             reader = new FileReader("D:\\HK1_YEAR3\\Java\\Project-java-2021\\db.json");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         Object obj = jsonParser.parse(reader);
         JSONObject text = (JSONObject) obj;

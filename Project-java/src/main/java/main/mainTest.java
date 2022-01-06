@@ -1,32 +1,28 @@
 package main;
 
 import javax.swing.UIManager;
-import control.*;
-import view.*;
-import view.admin.*;
-import control.*;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.UIManager.LookAndFeelInfo;
+import view.UserView;
 
 public class mainTest {
-    
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception e1) {
 
+    public static void main(String[] args) {
+
+        try {
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
         }
-        new loginController();
+//        new loginController();
         //new ViewManager();
-        //new UserView();
-        //adminView a = new adminView();
-        //a.setVisible(true);
+        new UserView();
+//        adminView a = new adminView();
+//        a.setVisible(true);
         //new ManagerController();
         //new ViewManager();
 

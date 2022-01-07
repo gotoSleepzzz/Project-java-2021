@@ -92,6 +92,27 @@ public class ManagerService {
     private String
             getAllStatistics = "Select * from `ThongKeTrangThai` order by thoigian desc limit 180";
 
+    private String
+            getHospital = "Select * from noi_quan_ly where id = ?";
+
+
+    public boolean isFull(int id) {
+        Object[] params = {id};
+        var rs = db.executeQuery(getHospital, params);
+        int capacity = 0;
+        int count = 0;
+        while (true) {
+            try {
+                if (!rs.next()) break;
+                capacity = rs.getInt("succhua");
+                count = rs.getInt("soluongtiep");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return count < capacity;
+    }
+
     public List<NYP> filterNYP(int min, int max) {
         Object[] params = {min, max};
         var rs = db.executeQuery(filterNYPByPrice, params);

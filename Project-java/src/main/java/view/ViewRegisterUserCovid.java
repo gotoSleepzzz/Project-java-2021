@@ -255,11 +255,31 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
             else if (!peopleReachedField.getText().equals(placeholderPeopleReached) && (!peopleReachedField.getText().strip().matches(regex) || peopleReachedField.getText().length() != 9 && peopleReachedField.getText().length() != 12))
                 showMessage("Chứng minh nhân dân của người liên quan phải đúng 9 ký tự số hoặc 12 ký tự số", "danger");
             else {
-                if (ManagerService.getInstance().addUserCovid(getInfoUser()))
-                    showMessage("Đăng ký thông tin thành công", "success");
-                else {
-                    showMessage("Đăng ký thất bại", "danger");
+
+
+                // get number of people in hospital
+                boolean numberOfPeopleInHospital = ManagerService.getInstance().isFull(getInfoUser().getHealthCenter());
+                // check that user in database
+                var user = ManagerService.getInstance().findOneUserCovid(getInfoUser().getId());
+
+                if (user != null) {
+                    showMessage("Người dùng đã tồn tại", "danger");
+                } else {
+                    if (numberOfPeopleInHospital) {
+
+                        if (ManagerService.getInstance().addUserCovid(getInfoUser())) {
+                            showMessage("Đăng ký thông tin thành công", "success");
+                        }
+                        else {
+                            showMessage("Đăng ký thất bại", "danger");
+                        }
+                    } else {
+                        showMessage("Bệnh viện đã đầy, vui lòng chọn bệnh viện khác", "danger");
+                    }
                 }
+
+
+
             }
         }
 

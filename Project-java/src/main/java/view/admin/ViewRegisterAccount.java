@@ -101,7 +101,7 @@ public class ViewRegisterAccount extends JFrame implements ActionListener {
 
     public String mapRole(String role){
         HashMap<String, String> map = new HashMap<>();
-        map.put("admin", "admin");
+        map.put("Admin", "admin");
         map.put("Quản lý", "manager");
         map.put("Người dùng", "user");
         return map.get(role);

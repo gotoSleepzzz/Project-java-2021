@@ -24,3 +24,65 @@
 2022-01-03 21:32:09.900 INFO [main] [main.mainTest.main(mainTest.java:41)] - info
 2022-01-03 21:32:09.902 WARN [main] [main.mainTest.main(mainTest.java:42)] - warn
 2022-01-03 21:32:09.902 ERROR [main] [main.mainTest.main(mainTest.java:43)] - error
+2022-01-07 13:44:57.266 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 13:44:57.271 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 13:44:57.272 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 13:57:11.969 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 13:57:11.974 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 13:57:11.975 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 13:58:56.195 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 13:58:56.198 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 13:58:56.198 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:01:50.629 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:01:50.633 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:01:50.634 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:03:03.361 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:03:03.364 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:03:03.365 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:03:43.046 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:03:43.051 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:03:43.052 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:05:40.615 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:05:40.623 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:05:40.624 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:05:55.863 ERROR [AWT-EventQueue-0] [utils.dbUtil.executeUpdate(dbUtil.java:52)] - java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'admin' for key 'account.PRIMARY'
+2022-01-07 14:07:42.574 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:07:42.579 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:07:42.581 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:17:32.255 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:17:32.257 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:17:32.257 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:21:05.039 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:21:05.043 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:21:05.044 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:26:04.708 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:26:04.718 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:26:04.719 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:32:31.155 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:32:31.158 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:32:31.158 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:37:28.205 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:37:28.215 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:37:28.215 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:40:21.844 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:40:21.847 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:40:21.848 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:45:42.616 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:45:42.623 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:45:42.624 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:45:57.790 ERROR [AWT-EventQueue-0] [view.Province.<init>(Province.java:40)] - java.io.FileNotFoundException: D:\HK1_YEAR3\Java\Project-java-2021\db.json (The system cannot find the path specified)
+2022-01-07 14:46:00.833 ERROR [AWT-EventQueue-0] [view.Province.<init>(Province.java:40)] - java.io.FileNotFoundException: D:\HK1_YEAR3\Java\Project-java-2021\db.json (The system cannot find the path specified)
+2022-01-07 14:46:23.778 ERROR [AWT-EventQueue-0] [view.Province.<init>(Province.java:40)] - java.io.FileNotFoundException: D:\HK1_YEAR3\Java\Project-java-2021\db.json (The system cannot find the path specified)
+2022-01-07 14:46:34.260 ERROR [AWT-EventQueue-0] [view.Province.<init>(Province.java:40)] - java.io.FileNotFoundException: D:\HK1_YEAR3\Java\Project-java-2021\db.json (The system cannot find the path specified)
+2022-01-07 14:46:36.642 ERROR [AWT-EventQueue-0] [view.Province.<init>(Province.java:40)] - java.io.FileNotFoundException: D:\HK1_YEAR3\Java\Project-java-2021\db.json (The system cannot find the path specified)
+2022-01-07 14:46:36.959 ERROR [AWT-EventQueue-0] [view.Province.<init>(Province.java:40)] - java.io.FileNotFoundException: D:\HK1_YEAR3\Java\Project-java-2021\db.json (The system cannot find the path specified)
+2022-01-07 14:46:37.295 ERROR [AWT-EventQueue-0] [view.Province.<init>(Province.java:40)] - java.io.FileNotFoundException: D:\HK1_YEAR3\Java\Project-java-2021\db.json (The system cannot find the path specified)
+2022-01-07 14:49:33.737 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:49:33.748 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:49:33.749 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:55:41.546 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:55:41.553 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:55:41.556 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error
+2022-01-07 14:58:03.187 INFO [main] [main.mainTest.main(mainTest.java:51)] - info
+2022-01-07 14:58:03.196 WARN [main] [main.mainTest.main(mainTest.java:52)] - warn
+2022-01-07 14:58:03.197 ERROR [main] [main.mainTest.main(mainTest.java:53)] - error

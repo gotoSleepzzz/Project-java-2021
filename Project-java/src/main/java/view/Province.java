@@ -35,7 +35,7 @@ public class Province {
     public Province() throws IOException, ParseException {
         FileReader reader = null;
         try {
-            reader = new FileReader("D:\\HK1_YEAR3\\Java\\Project-java-2021\\db.json");
+            reader = new FileReader("../db.json");
         } catch (FileNotFoundException e) {
             logger.error(e);
         }

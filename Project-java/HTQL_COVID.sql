@@ -475,7 +475,9 @@ insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,g
 	values('abc', '123456789011',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 100000 );
 insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,ghino) 
 	values('def','123456789012',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 2000000);
-    
+
+update htql_covid.`account` set `role` = 'user' where `username` = 'admin';
+
 select * from htql_covid.`account`;
 -- select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;

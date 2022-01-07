@@ -11,7 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.logging.log4j.LogManager;
+import service.AccountService;
 
 public class loginController {
 
@@ -34,8 +37,15 @@ public class loginController {
 
     private boolean isFirstRun() {
 
-        ResultSet rs = db.executeQuery("Select * from `account` where `role` = 'admin'");
-        return rs == null;
+        try {
+            ResultSet rs = db.executeQuery("Select * from `account` where `role` = 'admin'");
+            if(rs.next()){
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
     }
 
     public class createNewPass implements ActionListener {
@@ -79,8 +89,10 @@ public class loginController {
                 if (username.length() < 1 || password.length() < 1) {
                     JOptionPane.showMessageDialog(login, "Vui lòng điền đầy đủ thông tin", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    String query = "Insert into `account` (`username`,`password`,`role`) values (?,?,?)";
-                    db.executeUpdate(query, new Object[]{username, password, "admin"});
+                    
+//                    String query = "Insert into `account` (`username`,`password`,`role`) values (?,?,?)";
+//                    db.executeUpdate(query, new Object[]{username, password, "admin"});
+                    AccountService.getInstance().addOne(username, password, "admin");
                     login.showLoginView();
                 }
             }
@@ -114,6 +126,8 @@ public class loginController {
                                         login.dispose();
                                         new adminView().setVisible(true);
                                     } else if (role.equalsIgnoreCase("manager")) {
+                                        login.setVisible(false);
+                                        login.dispose();
                                         new ManagerController();
                                         ManagerService.getInstance().setNameManager(username);
                                     } else {
@@ -131,7 +145,7 @@ public class loginController {
                             JOptionPane.showMessageDialog(login, "Tài khoản hoặc mật khẩu không chính xác!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
-                        logger.error(ex);
+                        
                     }
                 }
             }

@@ -7,12 +7,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-
 public class qlndt_Admin extends JPanel {
+
     private JLabel label;
 
     private CustomTextField searchField;
@@ -33,7 +34,7 @@ public class qlndt_Admin extends JPanel {
     private JButton updateBtn;
 
     private final String[] headers = new String[]{
-            "Tên", "Sức chứa", "Số lượng tiếp"
+        "Tên", "Sức chứa", "Số lượng tiếp"
     };
 
     private String placeHolder = "Nhập tên cơ sở điều trị";
@@ -44,9 +45,7 @@ public class qlndt_Admin extends JPanel {
         init();
     }
 
-
     private void init() {
-
 
         label = new JLabel("QUẢN LÝ NƠI ĐIỀU TRỊ");
         label.setAlignmentX(CENTER_ALIGNMENT);
@@ -63,15 +62,14 @@ public class qlndt_Admin extends JPanel {
         searchPanel.add(searchField);
         searchPanel.add(searchBtn);
 
-
         table = new JTable();
         scroll = new JScrollPane();
         table.setModel(new DefaultTableModel((Object[][]) data, headers));
+
         scroll.setViewportView(table);
         scroll.setPreferredSize(new Dimension(600, 500));
         table.setFont(new Font("Serif", Font.PLAIN, 15));
         table.setAutoCreateRowSorter(true);
-
 
         addBtn = new JButton("Thêm");
         addBtn.setPreferredSize(new Dimension(100, 30));
@@ -89,12 +87,11 @@ public class qlndt_Admin extends JPanel {
         btnPanel.add(delBtn);
         btnPanel.add(updateBtn);
 
-
         nameLabel = new JLabel("Tên nơi điều trị");
         nameField = new JTextField();
         totalLabel = new JLabel("Sức chứa");
         totalField = new JTextField();
-        curLabel = new JLabel("Số lương hiện tại");
+        curLabel = new JLabel("Số lượng hiện tại");
         curField = new JTextField();
 
         JPanel fieldPanel = new JPanel();
@@ -141,12 +138,9 @@ public class qlndt_Admin extends JPanel {
                 totalField.setText(total);
                 curField.setText(cur);
 
-
-
             }
         });
     }
-
 
     public String getNameField() {
         return nameField.getText();
@@ -187,6 +181,7 @@ public class qlndt_Admin extends JPanel {
     public String getSearchField() {
         return searchField.getText();
     }
+
     public void addSearchButtonListener(ActionListener e) {
         searchBtn.addActionListener(e);
     }

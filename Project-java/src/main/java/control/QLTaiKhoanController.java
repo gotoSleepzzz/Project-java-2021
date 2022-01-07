@@ -101,9 +101,9 @@ public class QLTaiKhoanController {
                 account.setStatus(status);
                 accountService.LockAccount(account, status);
                 if (status)
-                    view.getTableAccountModel().setValueAt("Không Khoá", index, 2);
+                    view.getTableAccountModel().setValueAt("Không khoá", index, 2);
                 else
-                    view.getTableAccountModel().setValueAt("Bị Khoá", index, 2);
+                    view.getTableAccountModel().setValueAt("Bị khoá", index, 2);
 
             }
         }
@@ -116,6 +116,7 @@ public class QLTaiKhoanController {
             // show message if search is empty
             if (search.equals("") || search.equals("Nhập tên tài khoản")) {
                 // find all account
+                accounts = accountService.findAll();
                 view.setTableAccountModel(convertAccountToArray2D(accounts));
             } else {
                 ArrayList<Account> list = new ArrayList<>();

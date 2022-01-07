@@ -47,6 +47,8 @@ public class AccountService {
 
     private String addUser = "INSERT INTO account(username, password, role) VALUES(?,?,?)";
 
+    private String updateAccount = "UPDATE account SET password = ?,role = ? WHERE username = ?";
+
 
     public Account addOne(String username, String password, String role) {
 
@@ -58,20 +60,34 @@ public class AccountService {
         return findOne(username);
     }
 
+    public int updateOne(String username, String password, String role) {
+        String hashPass = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        if (password.equals(""))
+            hashPass = "";
+        Object[] params = {hashPass, role, username};
+        System.out.println(params);
+
+        return db.executeUpdate(updateAccount, params);
+    }
+
     public Account findOne(String username) {
         Object[] params = {username};
-        ResultSet rs = db.executeQuery(queryUser, params);
-        try {
-            if (rs.next()) {
-                String username1 = rs.getString("username");
-                String password = rs.getString("password");
-                String role = rs.getString("role");
-                boolean status = rs.getBoolean("status");
-                Account acc = new Account(username1, password, role, status);
-                return acc;
+        try (ResultSet rs = db.executeQuery(queryUser, params)) {
+            try {
+
+                if (rs.next()) {
+                    String username1 = rs.getString("username");
+                    String password = rs.getString("password");
+                    String role = rs.getString("role");
+                    boolean status = rs.getBoolean("status");
+                    Account acc = new Account(username1, password, role, status);
+                    return acc;
+                }
+            } catch (SQLException ex) {
+                logger.error(ex);
             }
-        } catch (SQLException ex) {
-            logger.error(ex);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return null;
     }

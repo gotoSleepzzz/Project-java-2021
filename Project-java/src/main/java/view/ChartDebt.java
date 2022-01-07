@@ -5,12 +5,16 @@
  */
 package view;
 
+import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
@@ -42,7 +46,11 @@ public class ChartDebt extends JFrame{
       return chart;
     }
     private JPanel createContent(LinkedHashMap<String,Double> data){
-      JFreeChart chart = createChart(createDataset(data) );  
+      JFreeChart chart = createChart(createDataset(data));  
+      PiePlot plot = (PiePlot) chart.getPlot();
+      PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(
+            "{0}: {1} người ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
+      plot.setLabelGenerator(gen);
       return new ChartPanel( chart ); 
     }
 }

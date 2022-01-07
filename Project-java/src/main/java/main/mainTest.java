@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class mainTest {
     
@@ -34,10 +35,7 @@ public class mainTest {
         } catch (Exception e) {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
-        new loginController();
         //new loginController();
-        //new ViewManager();
-//        new UserView();
 //        adminView a = new adminView();
 //        a.setVisible(true);
         //new ManagerController();
@@ -48,8 +46,5 @@ public class mainTest {
 //        frame.setSize(1000,750);
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setVisible(true);
-        logger.info("info");
-        logger.warn("warn");
-        logger.error("error");
     }
 }

@@ -123,12 +123,12 @@ insert into `ThongKeTrangThai`(trangthai,soluong) value("F3",0);
 insert into `ThongKeTrangThai`(trangthai,soluong) value("F4",0);
 insert into `ThongKeTrangThai`(trangthai,soluong) value("OK",0);
 
--- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F0",5,"2022-01-01");
--- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F1",10,"2022-01-01");
--- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F2",15,"2022-01-01");
--- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F3",11,"2022-01-01");
--- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F4",20,"2022-01-01");
--- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("OK",50,"2022-01-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F0",5,"2022-08-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F1",10,"2022-08-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F2",15,"2022-08-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F3",11,"2022-08-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("F4",20,"2022-08-01");
+-- insert into `ThongKeTrangThai`(trangthai,soluong,thoigian) value("OK",50,"2022-08-01");
 
 /* ================================================================================== */
 

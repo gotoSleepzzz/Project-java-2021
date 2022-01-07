@@ -124,10 +124,7 @@ public class dbUtil {
                 Class.forName(AppConstraints.JDBC_DRIVER);
                 conn = DriverManager.getConnection(AppConstraints.JDBC_URL, AppConstraints.JDBC_USERNAME, AppConstraints.JDBC_PASSWORD);
             }
-        } catch (ClassNotFoundException e) {
-            System.out.println("jdbc driver is not found.");
-            logger.error(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             logger.error(e);
         }
         return conn;

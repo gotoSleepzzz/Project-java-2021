@@ -537,8 +537,7 @@ public class ManagerController {
             }
             LinkedHashMap<String, Double> data = new LinkedHashMap();
             for (int i = 0; i < intervalsHeader.length; i++){
-                double temp = (double) ((intervals[i] * 100) / result.size());
-                data.put(intervalsHeader[i],temp);
+                data.put(intervalsHeader[i],(double)intervals[i]);
             }
             ChartDebt chart = new ChartDebt(data);
             chart.pack();

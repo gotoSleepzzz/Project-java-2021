@@ -71,7 +71,7 @@ public class AccountService {
                 return acc;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(QLNoiDieuTriController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return null;
     }
@@ -90,7 +90,7 @@ public class AccountService {
                 accounts.add(acc);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(QLNoiDieuTriController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         return accounts;
     }

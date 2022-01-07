@@ -418,9 +418,12 @@ DELIMITER ;
 /* ================================================================================== */
 insert into htql_covid.`account` (`username`,`password`,`role`) values ('admin','admin','admin');
 
-call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 1', 1000, 0);
-call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 2', 1000, 0);
-call htql_covid.`proc_ThemNoiQuanLy` ('Benh vien da chien so 3', 1000, 0);
+call htql_covid.`proc_ThemNoiQuanLy` ('Bệnh viện Phạm Ngọc Thạch', 1000, 0);
+call htql_covid.`proc_ThemNoiQuanLy` ('Bệnh viện Nhiệt Đới TP. HCM', 1000, 0);
+call htql_covid.`proc_ThemNoiQuanLy` ('Bệnh viện Trưng Vương', 1000, 0);
+call htql_covid.`proc_ThemNoiQuanLy` ('Bệnh viện Đa Khoa Gò Vấp', 1000, 0);
+call htql_covid.`proc_ThemNoiQuanLy` ('Bệnh viện Đa Khoa khu vực Thủ Đức', 1000, 0);
+
 
 call htql_covid.`proc_ThemNguoi` ('Kiều Nhật Hùng','123456789001',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, null ,"admin");
 call htql_covid.`proc_ThemNguoi` ('Vương Hiếu Phong','123456789002',1984,'Thành phố Hồ Chí Minh, Huyện Củ Chi, Xã Trung Lập Thượng','F0',20,null,"admin");
@@ -455,6 +458,8 @@ insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,g
 values('abc', '123456789011',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 100000 );
 insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,ghino)
 values('def','123456789012',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 2000000);
+
+update htql_covid.`account` set `role` = 'user' where `username` = 'admin';
 
 -- select * from htql_covid.`account`;
 -- select * from htql_covid.noi_quan_ly;

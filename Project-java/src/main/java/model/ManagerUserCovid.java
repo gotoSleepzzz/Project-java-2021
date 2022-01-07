@@ -1,5 +1,7 @@
 package model;
 
+import service.ManagerService;
+
 import java.text.Collator;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,48 +49,69 @@ public class ManagerUserCovid {
         userCovid.setHealthCenter(idHealthCenter);
     }
 
-    public List<UserCovid> sortUserCovidByNameIncrement() {
+    public List<UserCovid> sortUserCovidByNameIncrement(int previousTotal) {
+        // sort with vietnamese
+        // just get previsousTotal element
+
+        Collator collate = Collator.getInstance(new Locale("vi"));
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getName, collate)).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
+    }
+
+    public List<UserCovid> sortUserCovidByDobIncrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return ManagerService.getInstance().findAllUserCovid().stream().sorted(Comparator.comparing(UserCovid::getDob)).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
+    }
+
+    public List<UserCovid> sortUserCovidByIdIncrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return ManagerService.getInstance().findAllUserCovid().stream().sorted(Comparator.comparing(UserCovid::getId)).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
+    }
+
+    public List<UserCovid> sortUserCovidByStateIncrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getState)).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
+    }
+
+    public List<UserCovid> sortUserByDebtIncrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getDebt)).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
+    }
+
+    public List<UserCovid> sortUserCovidByNameDecrement(int previousTotal) {
         // sort with vietnamese
         Collator collate = Collator.getInstance(new Locale("vi"));
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getName, collate)).collect(Collectors.toList());
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getName, collate).reversed()).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
     }
 
-    public List<UserCovid> sortUserCovidByDobIncrement() {
-
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getDob)).collect(Collectors.toList());
+    public List<UserCovid> sortUserCovidByDobDecrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getDob).reversed()).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
     }
 
-    public List<UserCovid> sortUserCovidByIdIncrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getId)).collect(Collectors.toList());
+    public List<UserCovid> sortUserCovidByIdDecrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getId).reversed()).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
     }
 
-    public List<UserCovid> sortUserCovidByStateIncrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getState)).collect(Collectors.toList());
+    public List<UserCovid> sortUserCovidByStateDecrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getState).reversed()).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
     }
 
-    public List<UserCovid> sortUserByDebtIncrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getDebt)).collect(Collectors.toList());
-    }
-
-    public List<UserCovid> sortUserCovidByNameDecrement() {
-        // sort with vietnamese
-        Collator collate = Collator.getInstance(new Locale("vi"));
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getName, collate).reversed()).collect(Collectors.toList());
-    }
-
-    public List<UserCovid> sortUserCovidByDobDecrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getDob).reversed()).collect(Collectors.toList());
-    }
-
-    public List<UserCovid> sortUserCovidByIdDecrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getId).reversed()).collect(Collectors.toList());
-    }
-
-    public List<UserCovid> sortUserCovidByStateDecrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getState).reversed()).collect(Collectors.toList());
-    }
-
-    public List<UserCovid> sortUserByDebtDecrement() {
-        return listUserCovid.stream().sorted(Comparator.comparing(UserCovid::getDebt).reversed()).collect(Collectors.toList());
+    public List<UserCovid> sortUserByDebtDecrement(int previousTotal) {
+        var list = ManagerService.getInstance().findAllUserCovid();
+        int size = list.size();
+        return list.stream().sorted(Comparator.comparing(UserCovid::getDebt).reversed()).collect(Collectors.toList()).subList(0, Math.min(previousTotal, size));
     }
 }

@@ -287,6 +287,10 @@ public class ViewManagerUserCovid extends JPanel implements ActionListener {
         this.viewDetailsUserCovid = viewDetailsUserCovid;
     }
 
+    public JComboBox getComboBox() {
+        return comboBoxSort;
+    }
+
     public void addDropdownListener(ActionListener actionListener) {
         comboBoxSort.addActionListener(actionListener);
     }

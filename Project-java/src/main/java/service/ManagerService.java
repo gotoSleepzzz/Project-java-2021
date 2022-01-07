@@ -1,10 +1,7 @@
 package service;
 
-import model.ManagerNYP;
-import model.ManagerUserCovid;
-import model.NYP;
-import model.UserCovid;
-import model.statusStatistics;
+import model.*;
+import org.apache.logging.log4j.LogManager;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -12,7 +9,6 @@ import utils.dbUtil;
 
 import java.sql.SQLException;
 import java.util.*;
-import org.apache.logging.log4j.LogManager;
 
 public class ManagerService {
 
@@ -456,7 +452,6 @@ public class ManagerService {
     }
 
 
-
     public List<UserCovid> findAllUserCovidByLimit(int limit) {
         Object[] params = {limit};
         var rs = db.executeQuery(getUserCovidByPage, params);
@@ -478,10 +473,6 @@ public class ManagerService {
         }
         return userCovids;
     }
-
-
-
-
 
 
     public List<UserCovid> findAllUserCovid() {
@@ -601,44 +592,44 @@ public class ManagerService {
         return new ArrayList<>(healthCenter.values());
     }
 
-    public List<UserCovid> sortByNameIncrement() {
-        return managerUserCovid.sortUserCovidByNameIncrement();
+    public List<UserCovid> sortByNameIncrement(int previousTotal) {
+        return managerUserCovid.sortUserCovidByNameIncrement(previousTotal);
     }
 
-    public List<UserCovid> sortByDobIncrement() {
-        return managerUserCovid.sortUserCovidByDobIncrement();
+    public List<UserCovid> sortByDobIncrement(int previousTotal) {
+        return managerUserCovid.sortUserCovidByDobIncrement(previousTotal);
     }
 
-    public List<UserCovid> sortByDebtIncrement() {
-        return managerUserCovid.sortUserByDebtIncrement();
+    public List<UserCovid> sortByDebtIncrement(int previousTotal) {
+        return managerUserCovid.sortUserByDebtIncrement(previousTotal);
     }
 
-    public List<UserCovid> sortByStatusIncrement() {
-        return managerUserCovid.sortUserCovidByStateIncrement();
+    public List<UserCovid> sortByStatusIncrement(int previousTotal) {
+        return managerUserCovid.sortUserCovidByStateIncrement(previousTotal);
     }
 
-    public List<UserCovid> sortByIdIncrement() {
-        return managerUserCovid.sortUserCovidByIdIncrement();
+    public List<UserCovid> sortByIdIncrement(int previsousTotal) {
+        return managerUserCovid.sortUserCovidByIdIncrement(previsousTotal);
     }
 
-    public List<UserCovid> sortByNameDecrement() {
-        return managerUserCovid.sortUserCovidByNameDecrement();
+    public List<UserCovid> sortByNameDecrement(int previsousTotal) {
+        return managerUserCovid.sortUserCovidByNameDecrement(previsousTotal);
     }
 
-    public List<UserCovid> sortByDobDecrement() {
-        return managerUserCovid.sortUserCovidByDobDecrement();
+    public List<UserCovid> sortByDobDecrement(int previsousTotal) {
+        return managerUserCovid.sortUserCovidByDobDecrement(previsousTotal);
     }
 
-    public List<UserCovid> sortByDebtDecrement() {
-        return managerUserCovid.sortUserByDebtDecrement();
+    public List<UserCovid> sortByDebtDecrement(int previsousTotal) {
+        return managerUserCovid.sortUserByDebtDecrement(previsousTotal);
     }
 
-    public List<UserCovid> sortByStatusDecrement() {
-        return managerUserCovid.sortUserCovidByStateDecrement();
+    public List<UserCovid> sortByStatusDecrement(int previsousTotal) {
+        return managerUserCovid.sortUserCovidByStateDecrement(previsousTotal);
     }
 
-    public List<UserCovid> sortByIdDecrement() {
-        return managerUserCovid.sortUserCovidByIdDecrement();
+    public List<UserCovid> sortByIdDecrement(int previsousTotal) {
+        return managerUserCovid.sortUserCovidByIdDecrement(previsousTotal);
     }
 
 
@@ -694,13 +685,13 @@ public class ManagerService {
         }
         return list;
     }
-    
+
     public List<statusStatistics> findAllStatus() {
         List<statusStatistics> list = new ArrayList<>();
         var rs = db.executeQuery(getAllStatistics);
         try {
-            while(rs.next()){
-                statusStatistics temp = new statusStatistics(rs.getString("trangthai"),rs.getInt("soluong"),rs.getDate("thoigian"));
+            while (rs.next()) {
+                statusStatistics temp = new statusStatistics(rs.getString("trangthai"), rs.getInt("soluong"), rs.getDate("thoigian"));
                 list.add(temp);
             }
             return list;

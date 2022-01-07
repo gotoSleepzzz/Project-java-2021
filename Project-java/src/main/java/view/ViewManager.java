@@ -137,7 +137,7 @@ public class ViewManager extends JFrame implements ActionListener {
             getContentPane().removeAll();
             getContentPane().repaint();
             getContentPane().add(viewManagerUserCovid);
-            setSize(1170, 800);
+            setSize(1190, 800);
             setLocation(100, 70);
             getContentPane().revalidate();
         }

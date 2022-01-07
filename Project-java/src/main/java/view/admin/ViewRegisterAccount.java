@@ -110,7 +110,6 @@ public class ViewRegisterAccount extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == register) {
-
             // get username, password and role from the JTextField
             String user = username.getText();
             String pass = password.getText();
@@ -147,8 +146,8 @@ public class ViewRegisterAccount extends JFrame implements ActionListener {
 
     public void showMessage(String message, String state) {
         // get current
-        String path = new File("").getAbsolutePath() + "/Project-java/" + state.toLowerCase() + ".png";
-        System.out.println(path);
+
+        String path = "." +  state.toLowerCase() + ".png";
         icon = new ImageIcon(path);
         icon.setImage(icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
 

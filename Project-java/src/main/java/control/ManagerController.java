@@ -1,13 +1,13 @@
 package control;
 
+import model.ManagerHistory;
 import model.NYP;
 import model.UserCovid;
-import model.ManagerHistory;
 import model.statusStatistics;
 import org.jfree.ui.RefineryUtilities;
-import service.ManagerService;
 import service.ConsumeHistoryService;
 import service.ManagedHistoryService;
+import service.ManagerService;
 import view.*;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ import java.util.*;
 
 public class ManagerController {
 
-    private ConsumeHistoryService cosumeHistoryService; 
+    private ConsumeHistoryService cosumeHistoryService;
     private ManagerService managerService;
     private ViewManager viewManager;
     private ManagedHistoryService managedHistoryService;
@@ -27,7 +27,7 @@ public class ManagerController {
 
     private int limit = 2;
     private int displayTotal = 10;
-
+    private int previousTotal = 5;
 
     String[] sortBy = {"Họ tên tăng dần theo thứ tự từ điển", "Năm sinh tăng dần", "Trạng thái hiện tại tăng dần theo thứ tự từ điển", "Dư nợ tăng dần", "CMND tăng dần theo thứ tự từ điển",
             "Họ tên giảm dần theo thứ tự từ điển", "Năm sinh giảm dần", "Trạng thái hiện tại giảm dần theo thứ tự từ điển", "Dư nợ giảm dần", "CMND giảm dần theo thứ tự từ điển"};
@@ -69,11 +69,11 @@ public class ManagerController {
     class AddWatchMoreEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            var list = managerService.findAllUserCovidByLimit(displayTotal);
-            viewManager.getViewManagerUserCovid().renderTable(list);
-            viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
-            viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
+            previousTotal = displayTotal;
+            JComboBox comboBoxSort = viewManager.getViewManagerUserCovid().getComboBox();
+            sortTable(comboBoxSort);
             displayTotal += limit;
+
         }
     }
 
@@ -114,7 +114,6 @@ public class ManagerController {
             viewUpdateNYP.addSaveButtonListener(new AddButtonSave_ViewUpdateNYP());
         }
     }
-
 
 
     class AddButtonSearch_ViewManagerNYP implements ActionListener {
@@ -231,8 +230,6 @@ public class ManagerController {
     }
 
 
-
-
     class AddButtonRemove_ViewManagerNYP implements ActionListener {
 
         @Override
@@ -266,10 +263,10 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
             var user = viewManager.getViewManagerUserCovid().getUserCovid();
             viewUpdateHospitalAndStatus = new ViewUpdateHospitalAndStatus(user);
             viewUpdateHospitalAndStatus.addSaveListener(new AddButtonSave_ViewUpdateHopitalAndStatus());
+
         }
     }
 
@@ -305,17 +302,27 @@ public class ManagerController {
                         ManagerService.getInstance().updateUserCovidByHealthCenter(idHealthCenter, viewUpdateHospitalAndStatus.getUserId());
                     }
                     if (!currentState.equals(state[0])) {
-
                         ManagerService.getInstance().updateUserCovidByState(viewUpdateHospitalAndStatus.getUserId(), currentState, viewUpdateHospitalAndStatus.getUserState());
                     }
 
-                    viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().findAllUserCovid());
-                    viewManager.getViewManagerUserCovid().repaint();
-                    renderActionListenerTable();
-
+                    List<UserCovid> list = new ArrayList<>();
+                    String textSearch = viewManager.getViewManagerUserCovid().getContentSearch();
+                    if (textSearch.equals(viewManager.getViewManagerUserCovid().getPlaceHolderSearchTextField())) {
+                        JComboBox comboBox = viewManager.getViewManagerUserCovid().getComboBox();
+                        sortTable(comboBox);
+                    } else {
+                        var userUpdate = ManagerService.getInstance().findOneUserCovid(textSearch);
+                        if (userUpdate != null) {
+                            list.add(userUpdate);
+                            viewManager.getViewManagerUserCovid().renderTable(list);
+                            renderActionListenerTable();
+                        }
+                    }
 
                 }
+
                 viewUpdateHospitalAndStatus.dispose();
+
             }
         }
     }
@@ -342,7 +349,7 @@ public class ManagerController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            viewManager.setSize(1150, 800);
+            viewManager.setSize(1190, 800);
             viewManager.setLocationRelativeTo(null);
             viewManager.getContentPane().removeAll();
             viewManager.getContentPane().add(viewManager.getViewManagerUserCovid());
@@ -362,21 +369,45 @@ public class ManagerController {
     }
 
 
-    class AddTypeCombox_ViewMangerNYP implements  ActionListener {
+    class AddTypeCombox_ViewMangerNYP implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(viewManager.getViewManagerNYP().getFilter());
             if (viewManager.getViewManagerNYP().getFilter().equals("< 500.000")) {
-                viewManager.getViewManagerNYP().renderTable( ManagerService.getInstance().filterNYP(0, 500000));
+                viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().filterNYP(0, 500000));
             } else if (viewManager.getViewManagerNYP().getFilter().equals("500.000 - 1.000.000")) {
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().filterNYP(500000, 1000000));
-            }
-            else {
+            } else {
+
                 viewManager.getViewManagerNYP().renderTable(ManagerService.getInstance().filterNYP(2000000, 2000000000));
             }
             viewManager.getViewManagerNYP().addModifyActionListener(new AddButtonModify_ViewManagerNYP());
             viewManager.getViewManagerNYP().addRemoveActionListener(new AddButtonRemove_ViewManagerNYP());
         }
+    }
+
+    public void sortTable(JComboBox comboBoxSort) {
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[0]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByNameIncrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[1]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDobIncrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[2]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByStatusIncrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[3]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDebtIncrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[4]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByIdIncrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[5]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByNameDecrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[6]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDobDecrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[7]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByStatusDecrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[8]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDebtDecrement(previousTotal));
+        if (comboBoxSort.getSelectedItem().toString().equals(sortBy[9]))
+            viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByIdDecrement(previousTotal));
+
+        renderActionListenerTable();
     }
 
     class AddComboboxSort implements ActionListener {
@@ -385,29 +416,7 @@ public class ManagerController {
         public void actionPerformed(ActionEvent e) {
 
             JComboBox comboBoxSort = (JComboBox) e.getSource();
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[0]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByNameIncrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[1]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDobIncrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[2]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByStatusIncrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[3]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDebtIncrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[4]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByIdIncrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[5]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByNameDecrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[6]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDobDecrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[7]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByStatusDecrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[8]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByDebtDecrement());
-            if (comboBoxSort.getSelectedItem().toString().equals(sortBy[9]))
-                viewManager.getViewManagerUserCovid().renderTable(ManagerService.getInstance().sortByIdDecrement());
-
-            renderActionListenerTable();
-
+            sortTable(comboBoxSort);
         }
     }
 
@@ -418,9 +427,8 @@ public class ManagerController {
             List<UserCovid> list = new ArrayList<>();
             String textSearch = viewManager.getViewManagerUserCovid().getContentSearch();
             if (textSearch.equals(viewManager.getViewManagerUserCovid().getPlaceHolderSearchTextField())) {
-                viewManager.getViewManagerUserCovid().showTable();
-                viewManager.getViewManagerUserCovid().addButtonWatchDetailsListener(new AddButtonDetails_ViewManagerUserCovid());
-                viewManager.getViewManagerUserCovid().addButtonModifyListener(new AddButtonModify_ViewMangerUserCovid());
+                JComboBox comboBoxSort = viewManager.getViewManagerUserCovid().getComboBox();
+                sortTable(comboBoxSort);
                 viewManager.getViewManagerUserCovid().getWatchMore().setEnabled(true);
 
             } else {
@@ -451,24 +459,20 @@ public class ManagerController {
             LinkedHashMap<String, Integer> F4 = new LinkedHashMap();
             LinkedHashMap<String, Integer> OK = new LinkedHashMap();
             List<statusStatistics> result = managerService.findAllStatus();
-            for (int i = result.size() - 1; i >= 0; i--){
+            for (int i = result.size() - 1; i >= 0; i--) {
                 statusStatistics value = result.get(i);
-                if (value.getStatus().equals("F0")){
+                if (value.getStatus().equals("F0")) {
                     F0.put(value.getTime().toString(), value.getQuantity());
-                }
-                else if(value.getStatus().equals("F1")){
+                } else if (value.getStatus().equals("F1")) {
                     F1.put(value.getTime().toString(), value.getQuantity());
-                }
-                else if(value.getStatus().equals("F2")){
+                } else if (value.getStatus().equals("F2")) {
                     F2.put(value.getTime().toString(), value.getQuantity());
-                }
-                else if(value.getStatus().equals("F3")){
+
+                } else if (value.getStatus().equals("F3")) {
                     F3.put(value.getTime().toString(), value.getQuantity());
-                }
-                else if(value.getStatus().equals("F4")){
+                } else if (value.getStatus().equals("F4")) {
                     F4.put(value.getTime().toString(), value.getQuantity());
-                }
-                else if(value.getStatus().equals("OK")){
+                } else if (value.getStatus().equals("OK")) {
                     OK.put(value.getTime().toString(), value.getQuantity());
                 }
             }
@@ -492,7 +496,7 @@ public class ManagerController {
             ArrayList<ManagerHistory> result = managedHistoryService.findAll();
             int statusOK = 0;
             for (ManagerHistory value : result)
-                if(value.getNewStatus() != null && value.getNewStatus().equals("OK")) statusOK++;
+                if (value.getNewStatus() != null && value.getNewStatus().equals("OK")) statusOK++;
             LinkedHashMap<String, Integer> data = new LinkedHashMap();
             data.put("Chuyển trạng thái", result.size() - statusOK);
             data.put("Khỏi bệnh", statusOK);
@@ -509,7 +513,7 @@ public class ManagerController {
         public void actionPerformed(ActionEvent e) {
             ArrayList<NYP> temp = (ArrayList<NYP>) managerService.findAllNYP();
             LinkedHashMap<String, Integer> data = new LinkedHashMap();
-            for (int i = 0; i < temp.size(); i++){
+            for (int i = 0; i < temp.size(); i++) {
                 NYP temp1 = temp.get(i);
                 int idProduct = temp1.getId();
                 data.put(temp1.getName(), cosumeHistoryService.getConsumeTotal(idProduct));
@@ -525,19 +529,20 @@ public class ManagerController {
     class AddViewDebtEvent implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String[] intervalsHeader = new String[]{"<= 500.000","500.000 - 1.000.000","> 1.000.000"};
+            String[] intervalsHeader = new String[]{"<= 500.000", "500.000 - 1.000.000", "> 1.000.000"};
             int[] intervals = new int[intervalsHeader.length];
             List<UserCovid> result = managerService.findAllUserCovid();
-            int defaultMoney = 500000; 
-            for (UserCovid user: result){
+            int defaultMoney = 500000;
+            for (UserCovid user : result) {
                 double temp = user.getDebt() / defaultMoney;
                 if (temp == 0) temp = 1.0;
-                if (temp > intervalsHeader.length) temp = (double)intervalsHeader.length;
+                if (temp > intervalsHeader.length) temp = (double) intervalsHeader.length;
                 intervals[((int) Math.ceil(temp)) - 1]++;
             }
             LinkedHashMap<String, Double> data = new LinkedHashMap();
-            for (int i = 0; i < intervalsHeader.length; i++){
-                data.put(intervalsHeader[i],(double)intervals[i]);
+
+            for (int i = 0; i < intervalsHeader.length; i++) {
+                data.put(intervalsHeader[i], (double)intervals[i]);
             }
             ChartDebt chart = new ChartDebt(data);
             chart.pack();

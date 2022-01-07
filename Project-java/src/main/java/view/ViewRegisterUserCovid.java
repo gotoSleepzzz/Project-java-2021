@@ -220,8 +220,7 @@ public class ViewRegisterUserCovid extends JPanel implements ActionListener {
 
     public void showMessage(String message, String state) {
         // get current
-        String path = new File("").getAbsolutePath() + "/Project-java/" + state.toLowerCase() + ".png";
-        System.out.println(path);
+        String path = "./" +  state.toLowerCase() + ".png";
         icon = new ImageIcon(path);
         icon.setImage(icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
 

@@ -36,10 +36,7 @@ public class loginController {
     private boolean isFirstRun() {
 
         ResultSet rs = db.executeQuery("Select * from `account` where `role` = 'admin'");
-        if (rs == null) {
-            return true;
-        }
-        return true;
+        return rs == null;
     }
 
     public class createNewPass implements ActionListener {

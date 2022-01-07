@@ -65,8 +65,6 @@ public class AccountService {
         if (password.equals(""))
             hashPass = "";
         Object[] params = {hashPass, role, username};
-        System.out.println(params);
-
         return db.executeUpdate(updateAccount, params);
     }
 

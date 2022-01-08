@@ -30,6 +30,7 @@ public class ConsumeHistoryService {
     }
     public ArrayList<ConsumeHistory> findbyUserId(String userId){
         ArrayList<ConsumeHistory> result = new ArrayList<>() ;
+        logger.info("Select from lich_su_mua with nguoimua = " + userId);
         ResultSet rs = db.executeQuery("select * from `LICH_SU_MUA` where nguoimua = ?", new Object[]{userId});
         try {
             while (rs.next()){

@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
@@ -27,6 +24,7 @@ import model.ManagerHistory;
 import model.PaymentHistory;
 import org.mindrot.jbcrypt.BCrypt;
 import service.AccountService;
+import org.apache.logging.log4j.LogManager;
 import service.ManagerService;
 import service.ConsumeHistoryService;
 import service.ManagedHistoryService;
@@ -37,6 +35,7 @@ import service.PaymentHistoryService;
  * @author TRUNG
  */
 public class userController {
+    static org.apache.logging.log4j.Logger logger = LogManager.getLogger(userController.class);
     dbUtil db;
     UserView view;
     UserCovid user;
@@ -137,6 +136,7 @@ public class userController {
                 view.Pay(view,sodu,ghino,hanmuc,new PayAction());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(view, "Không thể kết nối server", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                logger.error(ex);
             }
             
         }  
@@ -200,7 +200,7 @@ public class userController {
                 sslSocket.close();
                 view.closePayment();
             } catch (IOException ex) {
-                Logger.getLogger(userController.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error(ex);
             }
             
         }

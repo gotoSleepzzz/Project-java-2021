@@ -25,6 +25,7 @@ public class ActivityHistoryService {
     }
     public ArrayList<ActivityHistory> findById(String id){
         ArrayList<ActivityHistory> temp = new ArrayList<>();
+        logger.info("Select from table lich_su_hoat_dong with username = " + id);
         ResultSet rs = db.executeQuery("select * from `LICH_SU_HOAT_DONG` where username = ?", new Object[]{id});
         try {
             while(rs.next()){

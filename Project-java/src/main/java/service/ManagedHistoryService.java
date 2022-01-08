@@ -30,6 +30,7 @@ public class ManagedHistoryService {
     }
     public ArrayList<ManagerHistory> findbyUserId(String userId){
         ArrayList<ManagerHistory> result = new ArrayList<>() ;
+        logger.info("Select from table lich_su_chuyen_trang_thai with doituong = " + userId);
         ResultSet rs = db.executeQuery("select * from `LICH_SU_CHUYEN_TRANG_THAI` where doituong = ?", new Object[]{userId});
         try {
             while (rs.next()){
@@ -50,7 +51,8 @@ public class ManagedHistoryService {
         return result;
     }
     public ArrayList<ManagerHistory> findAll(){
-        ArrayList<ManagerHistory> result = new ArrayList<>() ;
+        ArrayList<ManagerHistory> result = new ArrayList<>();
+        logger.info("Select all from lich_su_chuyen_trang_thai");
         ResultSet rs = db.executeQuery("select * from `LICH_SU_CHUYEN_TRANG_THAI`");
         try {
             while (rs.next()){

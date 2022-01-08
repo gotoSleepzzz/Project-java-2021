@@ -4,6 +4,23 @@ public class NYPCart {
     private String name;
     private int soluong;
     private double price;
+    private int expriredDate;
+
+    public int getExpriredDate() {
+        return expriredDate;
+    }
+
+    public NYPCart(int id, String name, int soluong, double price, int expriredDate) {
+        this.id = id;
+        this.name = name;
+        this.soluong = soluong;
+        this.price = price;
+        this.expriredDate = expriredDate;
+    }
+
+    public void setExpriredDate(int expriredDate) {
+        this.expriredDate = expriredDate;
+    }
 
     public NYPCart(String name, int soluong, double price) {
         this.name = name;

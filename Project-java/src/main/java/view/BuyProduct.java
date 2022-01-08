@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class BuyProduct extends javax.swing.JFrame {
      */
     List<NYP> productItems;
     List<NYPCart> cartItems = new ArrayList<NYPCart>();
+    HashMap<Integer, Integer> limitProduct = new HashMap<Integer, Integer>();
     float total = 0;
     
     private final String[] headerTableProduct = new String[]{
@@ -53,12 +55,22 @@ public class BuyProduct extends javax.swing.JFrame {
         filterCombobox.setModel(new DefaultComboBoxModel<String>(category));
         setLocationRelativeTo(null);
         loadProduct();
+        loadLimit();
         renderTableProduct(productItems);
         renderTableCart(cartItems);
     }
     
     public void loadProduct(){
          productItems = ManagerService.getInstance().findAllNYP();
+    }
+    
+    public void loadLimit(){
+        for(int i=0;i<productItems.size();i++){
+            int res = ManagerService.getInstance().getLimitNYP(username, productItems.get(i).getId());
+            if (res == -1)
+                res = productItems.get(i).getLimit();
+            limitProduct.put(productItems.get(i).getId(),res);
+        }
     }
 
     /**
@@ -330,6 +342,7 @@ public class BuyProduct extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel(data, headerTableProduct);
         productTable.setModel(model);
     }
+    
     public void renderTableCart(List<NYPCart> nyps) {
         String[][] data = new String[nyps.size()][3];
         for (int i = 0; i < nyps.size(); i++) {
@@ -470,27 +483,20 @@ public class BuyProduct extends javax.swing.JFrame {
 
     private void muaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_muaBtnActionPerformed
         int i = productTable.getSelectedRow();
-        int limit;
-        if(ManagerService.getInstance().isFirstBuy(username, productItems.get(i).getId())){
-            limit = productItems.get(i).getLimit();
-        }else{
-            limit = ManagerService.getInstance().getLimitNYP(username, productItems.get(i).getId());
-            if(limit == -1)
-                limit = productItems.get(i).getLimit();
-        }
+        int limit = limitProduct.get(productItems.get(i).getId());
         if(limit == 0){
             JOptionPane.showMessageDialog(null, "Bạn đã đạt mức giới hạn mua!!!");
             return;
         }
         String soluong =  JOptionPane.showInputDialog("Nhập số lượng (số lượng tối đa: "+limit + " )" );
-        System.out.println(soluong);
+        if (soluong == null) return;
         int num = Integer.parseInt(soluong);
         if(num > limit){
             JOptionPane.showMessageDialog(null, "Không được mua quá giới hạn!!!");
             return;
         }
-        ManagerService.getInstance().saveBuyNYP(username, productItems.get(i).getId(),limit - num, productItems.get(i).getExpriredDate());
-        addToCart(new NYPCart(productItems.get(i).getId(),productItems.get(i).getName(),num,productItems.get(i).getPrice()));
+        limitProduct.put(productItems.get(i).getId(),limit-num);
+        addToCart(new NYPCart(productItems.get(i).getId(),productItems.get(i).getName(),num,productItems.get(i).getPrice(),productItems.get(i).getExpriredDate()));
     }//GEN-LAST:event_muaBtnActionPerformed
 
     private void thanhtoanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thanhtoanBtnActionPerformed
@@ -500,6 +506,8 @@ public class BuyProduct extends javax.swing.JFrame {
         }else{
             for(int i=0;i<cartItems.size();i++){
                 dbUtil.getDbUtil().excuteProc("call proc_MuaNhuPham (?,?,?)", new Object[] {username,cartItems.get(i).getId(),cartItems.get(i).getSoluong()});
+                int limit = limitProduct.get(cartItems.get(i).getId());
+                ManagerService.getInstance().saveBuyNYP(username, cartItems.get(i).getId(),limit, cartItems.get(i).getExpriredDate());
             }
             cartItems.clear();
             total = 0;

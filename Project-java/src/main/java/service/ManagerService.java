@@ -116,7 +116,6 @@ public class ManagerService {
         try {
             ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username,idProduct});
             if(rs.next()){
-//                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                 int id = rs.getInt("id");
                 Date release = rs.getDate("thoigian");
                 Date now = new Date();
@@ -130,7 +129,7 @@ public class ManagerService {
         } catch (SQLException ex) {
             Logger.getLogger(ManagerService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return 0;
+        return -1;
     }
     
     public void saveBuyNYP(String username, int idProduct, int soluong, int expDate){

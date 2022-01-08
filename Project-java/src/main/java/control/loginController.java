@@ -41,6 +41,7 @@ public class loginController {
             return !rs.next();
         } catch (SQLException ex) {
             Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
+
         }
         return false;
     }
@@ -146,6 +147,8 @@ public class loginController {
                             } catch (Exception ex) {
 //                                JOptionPane.showMessageDialog(login, "Mật khẩu không đúng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                             }
+                        } else {
+                            JOptionPane.showMessageDialog(login, "Tài khoản không tồn tại", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(login, "Tài khoản hoặc mật khẩu không chính xác!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);

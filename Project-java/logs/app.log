@@ -90,3 +90,47 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2022-01-08 17:36:03.006 INFO [AWT-EventQueue-0] [service.ManagerService.findAllNYP(ManagerService.java:227)] - Select all from nhu_pham
 2022-01-08 17:36:46.991 INFO [AWT-EventQueue-0] [service.ConsumeHistoryService.findbyUserId(ConsumeHistoryService.java:33)] - Select from lich_su_mua with nguoimua = 123456789008
 2022-01-08 17:37:20.062 INFO [AWT-EventQueue-0] [service.PaymentHistoryService.findAll(PaymentHistoryService.java:27)] - Select from lich_su_thanh_toan where cmnd = 123456789008
+2022-01-08 19:43:55.952 INFO [main] [main.mainTest.main(mainTest.java:38)] - Start program
+2022-01-08 19:43:57.625 INFO [main] [control.loginController.isFirstRun(loginController.java:39)] - Select an account with the role of admin
+2022-01-08 19:44:06.257 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:113)] - Select an acount with username: 123456789001
+2022-01-08 19:44:06.965 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:141)] - User is login
+2022-01-08 19:44:07.074 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:44:07.102 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:44:07.178 INFO [AWT-EventQueue-0] [service.ManagerService.findOneUserCovid(ManagerService.java:600)] - Select user with id = 123456789001
+2022-01-08 19:44:10.082 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:44:10.089 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:44:10.099 INFO [AWT-EventQueue-0] [service.ManagerService.findAllNYP(ManagerService.java:282)] - Select all from nhu_pham
+2022-01-08 19:44:58.092 ERROR [AWT-EventQueue-0] [utils.dbUtil.executeUpdate(dbUtil.java:52)] - java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'limit = 0 where cmnd = '123456789001' and idsp = 10' at line 1
+2022-01-08 19:45:09.504 ERROR [AWT-EventQueue-0] [utils.dbUtil.executeUpdate(dbUtil.java:52)] - java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'limit = 1 where cmnd = '123456789001' and idsp = 10' at line 1
+2022-01-08 19:49:36.277 INFO [main] [main.mainTest.main(mainTest.java:38)] - Start program
+2022-01-08 19:49:37.188 INFO [main] [control.loginController.isFirstRun(loginController.java:39)] - Select an account with the role of admin
+2022-01-08 19:49:47.569 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:113)] - Select an acount with username: 123456789
+2022-01-08 19:49:52.603 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:113)] - Select an acount with username: 123456789001
+2022-01-08 19:49:53.339 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:141)] - User is login
+2022-01-08 19:49:53.467 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:49:53.510 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:49:53.576 INFO [AWT-EventQueue-0] [service.ManagerService.findOneUserCovid(ManagerService.java:600)] - Select user with id = 123456789001
+2022-01-08 19:49:56.407 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:49:56.412 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:49:56.420 INFO [AWT-EventQueue-0] [service.ManagerService.findAllNYP(ManagerService.java:282)] - Select all from nhu_pham
+2022-01-08 19:50:05.510 ERROR [AWT-EventQueue-0] [utils.dbUtil.executeUpdate(dbUtil.java:52)] - java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'limit = 1 where cmnd = '123456789001' and idsp = 10' at line 1
+2022-01-08 19:52:20.459 INFO [main] [main.mainTest.main(mainTest.java:38)] - Start program
+2022-01-08 19:52:21.551 INFO [main] [control.loginController.isFirstRun(loginController.java:39)] - Select an account with the role of admin
+2022-01-08 19:52:30.543 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:113)] - Select an acount with username: 123456789001
+2022-01-08 19:52:31.371 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:141)] - User is login
+2022-01-08 19:52:31.425 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:52:31.431 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:52:31.489 INFO [AWT-EventQueue-0] [service.ManagerService.findOneUserCovid(ManagerService.java:600)] - Select user with id = 123456789001
+2022-01-08 19:52:34.007 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:52:34.013 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:52:34.021 INFO [AWT-EventQueue-0] [service.ManagerService.findAllNYP(ManagerService.java:282)] - Select all from nhu_pham
+2022-01-08 19:58:45.878 INFO [main] [main.mainTest.main(mainTest.java:38)] - Start program
+2022-01-08 19:58:47.120 INFO [main] [control.loginController.isFirstRun(loginController.java:39)] - Select an account with the role of admin
+2022-01-08 19:58:56.464 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:113)] - Select an acount with username: 123456789001
+2022-01-08 19:58:57.113 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:141)] - User is login
+2022-01-08 19:58:57.170 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:58:57.179 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:58:57.211 INFO [AWT-EventQueue-0] [service.ManagerService.findOneUserCovid(ManagerService.java:600)] - Select user with id = 123456789001
+2022-01-08 19:58:59.464 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:621)] - Select all from noi_quan_ly
+2022-01-08 19:58:59.479 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:577)] - Select all from nguoi_lien_quan
+2022-01-08 19:58:59.485 INFO [AWT-EventQueue-0] [service.ManagerService.findAllNYP(ManagerService.java:282)] - Select all from nhu_pham

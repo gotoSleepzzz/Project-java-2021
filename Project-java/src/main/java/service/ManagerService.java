@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.ResultSet;
 import model.*;
 import org.apache.logging.log4j.LogManager;
 import org.jgrapht.DirectedGraph;
@@ -8,7 +9,11 @@ import org.jgrapht.graph.DefaultEdge;
 import utils.dbUtil;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ManagerService {
 
@@ -95,9 +100,55 @@ public class ManagerService {
     private String
             getHospital = "Select * from noi_quan_ly where id = ?";
 
+    public boolean isFirstBuy(String username,int idProduct){
+        try {
+            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username,idProduct});
+            if(rs.next())
+                return false;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
     
     public int getLimitNYP(String username,int idProduct){
+        try {
+            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username,idProduct});
+            if(rs.next()){
+//                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                int id = rs.getInt("id");
+                Date release = rs.getDate("thoigian");
+                Date now = new Date();
+                if( now.after(release)){
+                    db.executeUpdate("Delete from Quy_dinh_muc_han where id = '" + id+"'" );
+                    return -1;
+                }else{
+                    return rs.getInt("limit");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return 0;
+    }
+    
+    public void saveBuyNYP(String username, int idProduct, int soluong, int expDate){
+        try {
+            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username,idProduct});
+            if(rs.next()){
+                db.executeUpdate("update Quy_dinh_muc_han set `limit` = ? where cmnd = ? and idsp = ?", new Object[]{soluong,username,idProduct});
+            }else{
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(new Date());
+                cal.add(Calendar.DATE, expDate);
+                Date resDate = cal.getTime();
+                
+                db.executeUpdate("Insert into Quy_dinh_muc_han (cmnd,idsp,`limit`,thoigian) values (?,?,?,?)", new Object[]{username,idProduct,soluong,resDate});
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public boolean isFull(int id) {

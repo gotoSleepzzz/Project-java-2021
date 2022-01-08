@@ -107,6 +107,17 @@ create table `chuyen_trang_thai`
     nguoiquanly varchar(12)
 );
 
+create table `Quy_dinh_muc_han` (
+	id int not null primary key auto_increment,
+    cmnd varchar(12),
+    idsp int,
+    `limit` int,
+    thoigian date
+);
+
+
+update Quy_dinh_muc_han set thoigian = '2022-01-07' where cmnd = '123456789001' and idsp = 10;
+
 insert into `chuyen_trang_thai` values("123321222", "F0", "F1", null, null, "manager");
 
 create table `ThongKeTrangThai`(

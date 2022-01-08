@@ -1,10 +1,10 @@
 package view;
 
-import control.ManagerController;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.NYP;
 import model.NYPCart;
+import org.jfree.date.DateUtilities;
 import service.ManagerService;
 import utils.dbUtil;
 
@@ -47,6 +48,7 @@ public class BuyProduct extends javax.swing.JFrame {
         this.username = username;
         
         initComponents();
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         sortCombobox.setModel(new DefaultComboBoxModel<String>(sortBy));
         filterCombobox.setModel(new DefaultComboBoxModel<String>(category));
         setLocationRelativeTo(null);
@@ -468,15 +470,26 @@ public class BuyProduct extends javax.swing.JFrame {
 
     private void muaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_muaBtnActionPerformed
         int i = productTable.getSelectedRow();
-        int limit = ManagerService.getInstance().getLimitNYP(username, productItems.get(i).getId());
-        String soluong = JOptionPane.showInputDialog("Nhập số lượng (số lượng tối đa: "+limit + " )" );
+        int limit;
+        if(ManagerService.getInstance().isFirstBuy(username, productItems.get(i).getId())){
+            limit = productItems.get(i).getLimit();
+        }else{
+            limit = ManagerService.getInstance().getLimitNYP(username, productItems.get(i).getId());
+            if(limit == -1)
+                limit = productItems.get(i).getLimit();
+        }
+        if(limit == 0){
+            JOptionPane.showMessageDialog(null, "Bạn đã đạt mức giới hạn mua!!!");
+            return;
+        }
+        String soluong =  JOptionPane.showInputDialog("Nhập số lượng (số lượng tối đa: "+limit + " )" );
+        System.out.println(soluong);
         int num = Integer.parseInt(soluong);
-        
         if(num > limit){
             JOptionPane.showMessageDialog(null, "Không được mua quá giới hạn!!!");
             return;
         }
-        
+        ManagerService.getInstance().saveBuyNYP(username, productItems.get(i).getId(),limit - num, productItems.get(i).getExpriredDate());
         addToCart(new NYPCart(productItems.get(i).getId(),productItems.get(i).getName(),num,productItems.get(i).getPrice()));
     }//GEN-LAST:event_muaBtnActionPerformed
 

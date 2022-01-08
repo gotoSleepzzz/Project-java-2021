@@ -36,7 +36,10 @@ public class loginController {
     private boolean isFirstRun() {
 
         ResultSet rs = db.executeQuery("Select * from `account` where `role` = 'admin'");
-        return rs == null;
+        if (rs != null) {
+            return false;
+        }
+        return true;
     }
 
     public class createNewPass implements ActionListener {
@@ -137,6 +140,8 @@ public class loginController {
                             } catch (Exception ex) {
                                 JOptionPane.showMessageDialog(login, "Mật khẩu không đúng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                             }
+                        } else {
+                            JOptionPane.showMessageDialog(login, "Tài khoản không tồn tại", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(login, "Tài khoản hoặc mật khẩu không chính xác!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);

@@ -56,6 +56,7 @@ public class AccountService {
         if (password.equals(""))
             hashPass = "";
         Object[] params = {username, hashPass, role};
+        logger.info("insert account with role = " + role + " and username = " + username);
         db.executeUpdate(addUser, params);
         return findOne(username);
     }
@@ -65,14 +66,15 @@ public class AccountService {
         if (password.equals(""))
             hashPass = "";
         Object[] params = {hashPass, role, username};
+        logger.info("update account with username = " + username + " and role = " + role);
         return db.executeUpdate(updateAccount, params);
     }
 
     public Account findOne(String username) {
         Object[] params = {username};
+        logger.info("Select an account with username = " + username);
         try (ResultSet rs = db.executeQuery(queryUser, params)) {
             try {
-
                 if (rs.next()) {
                     String username1 = rs.getString("username");
                     String password = rs.getString("password");
@@ -94,6 +96,7 @@ public class AccountService {
     public ArrayList<Account> findAll() {
         ArrayList<Account> accounts = new ArrayList<>();
         try {
+            logger.info("Select all account");
             ResultSet rs = db.executeQuery("select * from `account`");
             while (rs.next()) {
                 String username = rs.getString("username");
@@ -110,6 +113,7 @@ public class AccountService {
     }
 
     public void LockAccount(Account account, boolean status) {
+        logger.info("Update status = " + status + " of account = " + account.getUsername());
         db.executeUpdate("update `account` set status = ? where username = ?", new Object[]{status, account.getUsername()});
     }
 

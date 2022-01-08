@@ -36,12 +36,12 @@ public class loginController {
     }
 
     private boolean isFirstRun() {
+        logger.info("Select an account with the role of admin");
         ResultSet rs = db.executeQuery("Select * from `account` where `role` = 'admin'");
         try {
             return !rs.next();
         } catch (SQLException ex) {
             Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
-
         }
         return false;
     }
@@ -62,6 +62,7 @@ public class loginController {
                 } else {
                     if (newPass.equalsIgnoreCase(confirmPass)) {
                         String hashPass = BCrypt.hashpw(newPass, BCrypt.gensalt(12));
+                        logger.info("Update password of account: " + username);
                         String query = "update `account` set `password` = '" + hashPass + "' where `username`= '" + username + "'";
                         db.executeUpdate(query);
                         login.showLoginView();
@@ -109,6 +110,7 @@ public class loginController {
                     JOptionPane.showMessageDialog(login, "Vui lòng điền đầy đủ thông tin", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     try {
+                        logger.info("Select an acount with username: " + username);
                         ResultSet rs = db.executeQuery("Select * from `account` where `username` = '" + username + "'");
                         if (rs.next()) {
                             username = rs.getString("username");
@@ -125,15 +127,18 @@ public class loginController {
                                 if (status) {
                                     String role = rs.getString(3);
                                     if (role.equalsIgnoreCase("admin")) {
+                                        logger.info("Admin is login");
                                         login.setVisible(false);
                                         login.dispose();
                                         new adminView().setVisible(true);
                                     } else if (role.equalsIgnoreCase("manager")) {
+                                        logger.info("Manager is login");
                                         login.setVisible(false);
                                         login.dispose();
                                         new ManagerController();
                                         ManagerService.getInstance().setNameManager(username);
                                     } else {
+                                        logger.info("User is login");
                                         login.setVisible(false);
                                         login.dispose();
                                         new userController(username);

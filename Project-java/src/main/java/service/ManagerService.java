@@ -98,6 +98,7 @@ public class ManagerService {
 
     public boolean isFull(int id) {
         Object[] params = {id};
+        logger.info("Select * from noi_quan_ly where id = " + id);
         var rs = db.executeQuery(getHospital, params);
         int capacity = 0;
         int count = 0;
@@ -107,7 +108,7 @@ public class ManagerService {
                 capacity = rs.getInt("succhua");
                 count = rs.getInt("soluongtiep");
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return count < capacity;
@@ -115,6 +116,7 @@ public class ManagerService {
 
     public List<NYP> filterNYP(int min, int max) {
         Object[] params = {min, max};
+        logger.info("Select from nhu_pham with " + min + " <= gia <= " + max);
         var rs = db.executeQuery(filterNYPByPrice, params);
         List<NYP> nypList = new ArrayList<>();
         while (true) {
@@ -135,12 +137,14 @@ public class ManagerService {
 
     public boolean updateNYP(NYP nyp) {
         Object[] params = {nyp.getId(), nyp.getName(), nyp.getLimit(), nyp.getExpriredDate(), nyp.getPrice(), this.nameManager};
+        logger.info("Update NYP with id = " + nyp.getId());
         return db.excuteProc(updateNYP, params);
     }
 
 
     public NYP findOneNYPById(int id) {
         Object[] params = {id};
+        logger.info("Select NYP with id = " + id);
         var rs = db.executeQuery(getOneNYP, params);
         try {
             if (rs.next()) {
@@ -164,6 +168,7 @@ public class ManagerService {
     public Object[][] getHistoryChangeState(String id) {
         Object[] params;
         params = new Object[]{id};
+        logger.info("Select count(*) from chuyen_trang_thai where cmnd = " + id);
         var rs = db.executeQuery(countHistroyChangeState, params);
         if (rs == null) return null;
 
@@ -176,7 +181,7 @@ public class ManagerService {
         }
 
         Object[][] result = new Object[count][5];
-
+        logger.info("Select from chuyen_trang_thai where cmnd = "+ id);
         rs = db.executeQuery(getHistoryChangeState, params);
 
 
@@ -219,6 +224,7 @@ public class ManagerService {
     public List<NYP> findAllNYP() {
 
         Object[] params = {};
+        logger.info("Select all from nhu_pham");
         var rs = db.executeQuery(getAllNYP, params);
         try {
             managerNYP.removeAll();
@@ -246,6 +252,7 @@ public class ManagerService {
         };
 
         try {
+            logger.info("Insert NYP with name = " + nyp.getName());
             db.excuteProc(addNYP, params);
             findAllNYP();
             return true;
@@ -264,6 +271,7 @@ public class ManagerService {
         };
         try {
             managerNYP.removeNYP(id);
+            logger.info("remove NYP with id = " + id);
             db.excuteProc(removeNYP, params);
             return true;
         } catch (Exception e) {
@@ -286,6 +294,7 @@ public class ManagerService {
         };
 
         try {
+            logger.info("Insert user with " + userCovid.getId());
             if (db.excuteProc(addUserCovid, params)) {
                 managerUserCovid.addUserCovid(userCovid);
                 return true;
@@ -313,6 +322,7 @@ public class ManagerService {
         if (state.equals("Khỏi bệnh")) {
             params[1] = "OK";
             try {
+                logger.info("Update user state = " + params[1] + "with id = " + params[0]);
                 db.excuteProc(updateUserCovidByState, params);
                 Object[] params2 = {
                         id,
@@ -322,6 +332,7 @@ public class ManagerService {
                         null,
                         this.nameManager
                 };
+                logger.info("Insert into chuyen_trang_thai with id = " + params2[0] + ", trang thai moi = " + params2[1] + ", trang thai cu = " + params2[2]);
                 db.executeUpdate(addHistoryChangeState, params2);
             } catch (Exception e) {
                 logger.error(e);
@@ -336,6 +347,7 @@ public class ManagerService {
             params[0] = currentUser.getIdReached();
             params[1] = "F1";
             try {
+                logger.info("Update user state = " + params[1] + "with id = " + params[0]);
                 db.excuteProc(updateUserCovidByState, params);
                 Object[] params2 = {
                         id,
@@ -345,6 +357,7 @@ public class ManagerService {
                         null,
                         this.nameManager
                 };
+                logger.info("Insert into chuyen_trang_thai with id = " + params2[0] + ", trang thai moi = " + params2[1] + ", trang thai cu = " + params2[2]);
                 db.executeUpdate(addHistoryChangeState, params2);
 
 
@@ -356,6 +369,7 @@ public class ManagerService {
             params[0] = id;
             params[1] = "F0";
             try {
+                logger.info("Update user state = " + params[1] + "with id = " + params[0]);
                 db.excuteProc(updateUserCovidByState, params);
                 Object[] params2 = {
                         id,
@@ -365,6 +379,7 @@ public class ManagerService {
                         null,
                         this.nameManager
                 };
+                logger.info("Insert into chuyen_trang_thai with id = " + params2[0] + ", trang thai moi = " + params2[1] + ", trang thai cu = " + params2[2]);
                 db.executeUpdate(addHistoryChangeState, params2);
 
             } catch (Exception e) {
@@ -378,6 +393,7 @@ public class ManagerService {
             params[0] = id;
             params[1] = "F0";
             try {
+                logger.info("Update user state = " + params[1] + "with id = " + params[0]);
                 db.excuteProc(updateUserCovidByState, params);
                 Object[] params2 = {
                         id,
@@ -387,6 +403,7 @@ public class ManagerService {
                         null,
                         this.nameManager
                 };
+                logger.info("Insert into chuyen_trang_thai with id = " + params2[0] + ", trang thai moi = " + params2[1] + ", trang thai cu = " + params2[2]);
                 db.executeUpdate(addHistoryChangeState, params2);
             } catch (Exception e) {
                 logger.error(e);
@@ -434,8 +451,9 @@ public class ManagerService {
                             this.nameManager
                     };
 
-
+                    logger.info("Insert into chuyen_trang_thai with id = " + params[0] + ", trang thai moi = " + params[1] + ", trang thai cu = " + params[2]);
                     db.executeUpdate(addHistoryChangeState, params);
+                    logger.info("Update user state = " + params[1] + "with id = " + params[0]);
                     db.excuteProc(updateUserCovidByState, param);
                 } catch (Exception e) {
                     logger.error("Update failed");
@@ -462,7 +480,9 @@ public class ManagerService {
                     getHealthCenterName(findOneUserCovid(id).getHealthCenter()),
                     this.nameManager
             };
+            logger.info("Insert into chuyen_trang_thai with id = " + params2[0] + ", noi quan ly moi = " + params2[3] + ", noi quan ly cu = " + params2[4]);
             db.executeUpdate(addHistoryChangeState, params2);
+            logger.info("Update user noi quan ly = " + params[1] + "with id = " + params[0]);
             db.excuteProc(updateUserCovidByHealthCenterProc, params);
             managerUserCovid.updateUserCovidByHealthCenter(healthCenter, id);
 
@@ -475,6 +495,7 @@ public class ManagerService {
 
     public List<UserCovid> findAllUserCovidByLimit(int limit) {
         Object[] params = {limit};
+        logger.info("Select all from nguoi_lien_quan LIMIT = " + limit);
         var rs = db.executeQuery(getUserCovidByPage, params);
         List<UserCovid> userCovids = new ArrayList<>();
         try {
@@ -498,6 +519,7 @@ public class ManagerService {
 
     public List<UserCovid> findAllUserCovid() {
         Object[] params = {};
+        logger.info("Select all from nguoi_lien_quan");
         var rs = db.executeQuery(getAllUserCovid, params);
         try {
             managerUserCovid.removeListUserCovid();
@@ -520,6 +542,7 @@ public class ManagerService {
 
     public UserCovid findOneUserCovid(String id) {
         Object[] params = {id};
+        logger.info("Select user with id = " + id);
         var rs = db.executeQuery(getUserById, params);
         try {
             if (rs.next()) {
@@ -540,6 +563,7 @@ public class ManagerService {
 
     public void MapUserCovidToHealthCenter() {
         Object[] params = {};
+        logger.info("Select all from noi_quan_ly");
         var rs = db.executeQuery(getAllHealthCenter, params);
         try {
             while (rs.next()) {
@@ -562,6 +586,7 @@ public class ManagerService {
 
     public List<UserCovid> getByPage(int page, int size) {
         Object[] params = {page, size};
+        logger.info("Select all from nguoi_lien_quan LIMIT = " + size);
         var rs = db.executeQuery(getUserCovidByPage, params);
         try {
             while (rs.next()) {
@@ -709,6 +734,7 @@ public class ManagerService {
 
     public List<statusStatistics> findAllStatus() {
         List<statusStatistics> list = new ArrayList<>();
+        logger.info("Select from `ThongKeTrangThai` order by thoigian desc limit 180");
         var rs = db.executeQuery(getAllStatistics);
         try {
             while (rs.next()) {

@@ -23,6 +23,7 @@ public class PaymentHistoryService {
     }
     public ArrayList<PaymentHistory> findAll(String userId){
         ArrayList<PaymentHistory> result = new ArrayList<>() ;
+        logger.info("Select from lich_su_thanh_toan where cmnd = " + userId);
         ResultSet rs = db.executeQuery("select * from `LICH_SU_THANH_TOAN` where cmnd = ?", new Object[]{userId});
         try {
             while (rs.next()){

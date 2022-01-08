@@ -35,15 +35,12 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         "Số tiền", "Thời gian"
     };
 
-    private Object hisConsumeData = new Object[][]{};
-    private Object hisManageData = new Object[][]{};
-    private Object hisPaymentData = new Object[][]{};
     private Object productData = new Object[][]{};
 
     public UserView() {
         this.setTitle("User");
         this.setLayout(new FlowLayout());
-        this.setResizable(false);
+        //this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Panel thông tin cá nhân
@@ -111,14 +108,6 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         buttons.add(jmanagehistory);
         buttons.add(jpaymenthistory);
 
-        // Add action listener
-        /*jbuy.addActionListener(this);
-        jpay.addActionListener(this);
-        jchange.addActionListener(this);
-        jconsumehistory.addActionListener(this);
-        jmanagehistory.addActionListener(this);
-        jpaymenthistory.addActionListener(this);*/
-
         // Layout
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -129,9 +118,9 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         hisTable.setRowHeight(50);
         
         this.add(panel);
-        this.pack();
+        //this.pack();
         this.setVisible(true);
-        this.setSize(900, 400);
+        this.setSize(1000, 550);
         this.setLocationRelativeTo(null);
     }
 
@@ -154,36 +143,6 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     public void setDebtField(String t) {
         debt.setText(t + "đ");
     }
-
-    //Handle buttons action events.
-    /*@Override
-    public void actionPerformed(ActionEvent ae) {
-        String comStr = ae.getActionCommand();
-
-        if (comStr.equals("Mua gói nhu yếu phẩm")) {
-            Buy(this);
-        }
-
-        if (comStr.equals("Thanh toán chi phí")) {
-            Pay(this);
-        }
-
-        if (comStr.equals("Đổi mật khẩu")) {
-            ChangePassword(this);
-        }
-
-        if (comStr.equals("Lịch sử tiêu thụ gói nhu yếu phẩm")) {
-            ConsumeHistory(this);
-        }
-
-        if (comStr.equals("Lịch sử được quản lý")) {
-            ManageHistory(this);
-        }
-
-        if (comStr.equals("Lịch sử thanh toán")) {
-            PaymentHistory(this);
-        }
-    }*/
 
     public void Buy(JFrame frame) {
         searchBar = new JTextField(50);
@@ -317,15 +276,6 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         payBtn.addActionListener(act);
         panel.add(jpanel, BorderLayout.SOUTH);
 
-//        payBtn.addActionListener((ActionEvent ae) -> {
-//            if (true) {
-//                dialog.dispose();
-//                dialog.setVisible(false);
-//            } else {
-//
-//            }
-//        });
-
         dialog = new JDialog(this, "Thanh toán dư nợ", false);
         dialog.setSize(400, 200);
         dialog.setResizable(false);
@@ -399,7 +349,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         changePassButton.addActionListener(act);
 
         dialog = new JDialog(this, "Đổi mật khẩu", false);
-        dialog.setSize(400, 200);
+        dialog.setSize(800, 200);
         dialog.setResizable(false);
         dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent cho tới khi hoàn thành đổi mật khẩu
         dialog.setLocationRelativeTo(null);

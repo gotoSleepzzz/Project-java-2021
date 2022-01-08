@@ -147,7 +147,7 @@ public class heThongThanhToanController {
                     return;
                 }
 
-                int sotien = Integer.parseInt(recv);
+                float sotien = Float.parseFloat(recv);
 
                 ResultSet rs2 = dbUtil.getDbUtil().executeQuery("call proc_ThanhToanGiaoDich (?,?,?);", new Object[]{"admin", cmnd, sotien});
                 rs2.next();

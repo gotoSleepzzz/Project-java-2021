@@ -121,7 +121,7 @@ public class ThanhtoanServer extends JFrame {
         log.setCaretPosition(log.getDocument().getLength());
     }
     
-    public synchronized void updateTotal(int sotien) {
+    public synchronized void updateTotal(float sotien) {
         DecimalFormat df = new DecimalFormat("###,###,###");
         total += sotien;
         doanhthu.setText("Tổng doanh thu: "+df.format(total)+"vnđ");

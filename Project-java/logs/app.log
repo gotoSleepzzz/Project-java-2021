@@ -17,3 +17,24 @@
 2022-01-08 11:34:48.011 ERROR [Thread-0] [control.hethongthanhtoan.heThongThanhToanController$StartServer.run(heThongThanhToanController.java:110)] - java.net.SocketException: Socket closed
 2022-01-08 11:44:40.344 ERROR [Thread-2] [control.hethongthanhtoan.heThongThanhToanController$HandleClient.run(heThongThanhToanController.java:172)] - javax.net.ssl.SSLException: Connection reset
 2022-01-08 13:12:42.197 ERROR [Thread-0] [control.hethongthanhtoan.heThongThanhToanController$StartServer.run(heThongThanhToanController.java:110)] - java.net.SocketException: Socket closed
+2022-01-08 17:24:22.455 INFO [main] [main.mainTest.main(mainTest.java:38)] - Start program
+2022-01-08 17:24:22.961 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:128)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-08 17:24:23.049 INFO [main] [control.loginController.isFirstRun(loginController.java:39)] - Select an account with the role of admin
+2022-01-08 17:24:23.079 ERROR [main] [utils.dbUtil.getConn(dbUtil.java:128)] - java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+2022-01-08 17:24:52.087 INFO [main] [main.mainTest.main(mainTest.java:38)] - Start program
+2022-01-08 17:24:52.499 INFO [main] [control.loginController.isFirstRun(loginController.java:39)] - Select an account with the role of admin
+2022-01-08 17:25:01.462 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:113)] - Select an acount with username: 123456789002
+2022-01-08 17:25:01.744 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:141)] - User is login
+2022-01-08 17:25:01.792 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:566)] - Select all from noi_quan_ly
+2022-01-08 17:25:01.795 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:522)] - Select all from nguoi_lien_quan
+2022-01-08 17:25:01.826 INFO [AWT-EventQueue-0] [service.ManagerService.findOneUserCovid(ManagerService.java:545)] - Select user with id = 123456789002
+2022-01-08 17:25:06.071 ERROR [AWT-EventQueue-0] [control.userController$PayEvent.actionPerformed(userController.java:140)] - java.net.ConnectException: Connection refused: connect
+2022-01-08 17:27:10.360 ERROR [AWT-EventQueue-0] [control.userController$PayAction.actionPerformed(userController.java:204)] - javax.net.ssl.SSLException: Connection reset
+2022-01-08 17:27:30.253 INFO [main] [main.mainTest.main(mainTest.java:38)] - Start program
+2022-01-08 17:27:30.943 INFO [main] [control.loginController.isFirstRun(loginController.java:39)] - Select an account with the role of admin
+2022-01-08 17:27:41.837 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:113)] - Select an acount with username: 123456789002
+2022-01-08 17:27:42.125 INFO [AWT-EventQueue-0] [control.loginController$loginEvent.actionPerformed(loginController.java:141)] - User is login
+2022-01-08 17:27:42.177 INFO [AWT-EventQueue-0] [service.ManagerService.MapUserCovidToHealthCenter(ManagerService.java:566)] - Select all from noi_quan_ly
+2022-01-08 17:27:42.194 INFO [AWT-EventQueue-0] [service.ManagerService.findAllUserCovid(ManagerService.java:522)] - Select all from nguoi_lien_quan
+2022-01-08 17:27:42.233 INFO [AWT-EventQueue-0] [service.ManagerService.findOneUserCovid(ManagerService.java:545)] - Select user with id = 123456789002
+2022-01-08 17:28:25.479 ERROR [Thread-3] [control.hethongthanhtoan.heThongThanhToanController$HandleClient.run(heThongThanhToanController.java:172)] - javax.net.ssl.SSLException: Connection reset

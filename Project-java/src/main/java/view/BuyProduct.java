@@ -33,6 +33,7 @@ public class BuyProduct extends javax.swing.JFrame {
     List<NYP> productItems;
     List<NYPCart> cartItems = new ArrayList<NYPCart>();
     float total = 0;
+    
     private final String[] headerTableProduct = new String[]{
             "Tên sản phẩm","Giá sản phẩm"
     };
@@ -474,6 +475,7 @@ public class BuyProduct extends javax.swing.JFrame {
         
         String soluong = JOptionPane.showInputDialog("Nhập số lượng (số lượng tối đa: "+ " )" );
         int num = Integer.parseInt(soluong);
+        
         addToCart(new NYPCart(productItems.get(i).getId(),productItems.get(i).getName(),num,productItems.get(i).getPrice()));
     }//GEN-LAST:event_muaBtnActionPerformed
 

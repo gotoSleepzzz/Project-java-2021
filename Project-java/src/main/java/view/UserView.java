@@ -20,6 +20,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     JTextField name, dob, address, id, balance, debt, searchBar, productname, limit, time, cost, PassWarning;
     JTextField current, jdebt, minimum,payment;
     JPasswordField oldPass, newPass, reEnterPass;
+    BuyProduct viewBuyProduct;
 
     int editableCell = 3;
 
@@ -39,8 +40,9 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     private Object hisManageData = new Object[][]{};
     private Object hisPaymentData = new Object[][]{};
     private Object productData = new Object[][]{};
-
-    public UserView() {
+    String username;
+    public UserView(String username) {
+        this.username = username;
         this.setTitle("User");
         this.setLayout(new FlowLayout());
         this.setResizable(false);
@@ -186,98 +188,8 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     }*/
 
     public void Buy(JFrame frame) {
-        searchBar = new JTextField(50);
-        searchBtn = new JButton("Tìm kiếm");
-        buyBtn = new JButton("Chọn mua");
-
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        //topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topPanel.add(searchBar);
-        topPanel.add(searchBtn);
-        topPanel.add(buyBtn);
-        
-        // Chọn mua là kiểu boolean
-        String[] headerTable = new String[]{
-            "Chọn mua", "Tên gói", "Số lượng", "Đơn giá"
-        };
-        productData = new Object[][]{{false, "Gói số 1", 0, "200.000"}};
-        DefaultTableModel model = new DefaultTableModel((Object[][]) productData, headerTable);
-        
-        JTable table = new JTable(model) {
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Boolean.class;
-                    case 1:
-                        return String.class;
-                    case 2:
-                        return Integer.class;
-                    case 3:
-                        return String.class;
-                    default:
-                        return String.class;
-                }
-            }
-        };
-        table.setAutoCreateRowSorter(true);
-        
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setViewportView(table);
-        
-        // Sử dụng spinner cho Số lượng
-        TableColumn col = table.getColumnModel().getColumn(2);
-        col.setCellEditor(new SpinnerEditor());
-
-        FlowLayout flowLayout = new FlowLayout();
-        flowLayout.setAlignment(FlowLayout.CENTER);
-        flowLayout.setHgap(30);
-        flowLayout.setVgap(30);
-
-        productname = new JTextField();
-        limit = new JTextField();
-        time = new JTextField();
-        cost = new JTextField();
-        String[] category = new String[]{
-            "< 500.000", "500.000 - 1.000.000"
-        };
-        JComboBox filter = new JComboBox(category);
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(5, 2, 20, 19));
-        infoPanel.add(new JLabel("Lọc"));
-        infoPanel.add(filter);
-        infoPanel.add(new JLabel("Chọn mua"));
-        infoPanel.add(productname);
-        infoPanel.add(new JLabel("Tên gói"));
-        infoPanel.add(limit);
-        infoPanel.add(new JLabel("Số lượng"));
-        infoPanel.add(time);
-        infoPanel.add(new JLabel("Đơn giá"));
-        infoPanel.add(cost);
-
-        JPanel utilPanel = new JPanel();
-        utilPanel.setBorder(new TitledBorder("Thông tin"));
-        utilPanel.setLayout(new GridLayout(2, 1));
-        utilPanel.add(infoPanel);
-
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new FlowLayout());
-        contentPanel.add(scroll);
-        contentPanel.add(utilPanel);
-
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(topPanel);
-        mainPanel.add(contentPanel);
-
-        dialog = new JDialog(this, "Mua gói nhu yếu phẩm", false);
-        dialog.setSize(950, 600);
-        dialog.setResizable(false);
-        dialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL); // Chặn parent cho tới khi hoàn thành mua gói nhu yếu phẩm hoặc thoát
-        dialog.setLocationRelativeTo(null);
-        dialog.add(mainPanel);
-        dialog.setVisible(true);
+        viewBuyProduct = new BuyProduct(username);
+        viewBuyProduct.setVisible(true);
     }
 
     public void Pay(JFrame frame,int sodu, float ghino,float hanmuc, ActionListener act) {

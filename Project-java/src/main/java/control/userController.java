@@ -62,7 +62,7 @@ public class userController {
         hospitalService = new HospitalService();
         
         user = managerService.findOneUserCovid(username);
-        view = new UserView();
+        view = new UserView(username);
         
         // Set thông tin cá nhân
         view.setNameField(user.getName());
@@ -113,6 +113,7 @@ public class userController {
         @Override
         public void actionPerformed(ActionEvent e) {
             view.Buy(view);
+            
         }  
     }
     class PayEvent implements ActionListener{

@@ -18,12 +18,15 @@ import java.util.logging.Logger;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
+import model.Account;
 import utils.dbUtil;
 import view.UserView;
 import model.UserCovid;
 import model.ConsumeHistory;
 import model.ManagerHistory;
 import model.PaymentHistory;
+import org.mindrot.jbcrypt.BCrypt;
+import service.AccountService;
 import service.ManagerService;
 import service.ConsumeHistoryService;
 import service.ManagedHistoryService;
@@ -37,10 +40,12 @@ public class userController {
     dbUtil db;
     UserView view;
     UserCovid user;
+    Account acc;
     ArrayList<ConsumeHistory> listConsumeHistory;
     ArrayList<ManagerHistory> listManagerHistory;
     ArrayList<PaymentHistory> listPaymentHistory;
     ManagerService managerService;
+    AccountService accountService;
     ConsumeHistoryService consumeHistory;
     ManagedHistoryService managerHistory;
     PaymentHistoryService paymentHistory;
@@ -72,6 +77,8 @@ public class userController {
         view.AddEventShowConsumeHistory(new ShowConsumeHistoryEvent());
         view.AddEventShowManageHistory(new ShowManagedHistoryEvent());
         view.AddEventShowPaymentHistory(new ShowPaymentHistoryEvent());
+        view.AddEventChangePassword(new ShowChangePasswordEvent()); // show change password form
+        //view.AddEventClickChangePassword(new ClickChangePasswordEvent()); // click change password
         view.AddEventBuy(new BuyEvent());
         view.AddEventPay(new PayEvent());
         
@@ -135,17 +142,49 @@ public class userController {
         }  
     }
     
+    class ShowChangePasswordEvent implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.ChangePassword(view, new ClickChangePasswordEvent());
+        }  
+    }
+    class ClickChangePasswordEvent implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            acc = AccountService.getInstance().findOne(username);
+            String oldPass = view.getOldPass();
+            String newPass = view.getNewPass();
+            String reEnterPass = view.getReEnterPass();
+            
+            if (oldPass == null || newPass == null || reEnterPass == null) {
+                view.setPasswordWarning("Vui lòng nhập thông tin đầy đủ");
+            } else {
+                if (!newPass.equals(reEnterPass))
+                    view.setPasswordWarning("Mật khẩu mới không trùng khớp");
+                else if (BCrypt.checkpw(oldPass, acc.getPass())) {
+                    if (AccountService.getInstance().updateOne(username, newPass, "user") != -1)
+                        view.setPasswordWarning("Đổi mật khẩu thành công");
+                } else view.setPasswordWarning("Mật khẩu hiện tại không chính xác");
+            }
+        }
+    }
+    
     class PayAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                int sotien = view.getSoTienThanhToan();
+                float sotien = view.getSoTienThanhToan();
                 float hanmuc = view.getHanMuc();
                 float ghino = view.getGhiNo();
-                if(sotien < 0 || hanmuc <0 || ghino<0 || sotien < hanmuc || sotien > ghino){
+                System.out.println(sotien + ", " + hanmuc + ", " + ghino);
+                if (ghino < 0.00001) {
+                    JOptionPane.showMessageDialog(view, "Không có ghi nợ", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                if (sotien < 0 || hanmuc < 0 || ghino < 0 || sotien < hanmuc || sotien > ghino) {
                     JOptionPane.showMessageDialog(view, "Vui lòng nhập đúng thông tin", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     return;
-                }   
+                }
                 PrintWriter pw = new PrintWriter(sslSocket.getOutputStream(), true);
                 BufferedReader br = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
                 

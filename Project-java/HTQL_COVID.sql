@@ -419,6 +419,7 @@ select sodu into _sodutkgui from tai_khoan_giao_dich where tk = _tkgui;
 if(_sodutkgui-_sotien>0) then
 update tai_khoan_giao_dich set sodu= sodu-_sotien where tk=_tkgui;
 update tai_khoan_giao_dich set sodu= sodu+_sotien where tk=_tknhan;
+insert into lich_su_giao_dich (tk_gui,tk_nhan,sotien) values(_tknhan,_tkgui,_sotien);
 select 1;
 else
 select 0;

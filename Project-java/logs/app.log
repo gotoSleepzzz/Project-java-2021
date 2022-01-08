@@ -15,3 +15,5 @@
 2022-01-08 11:32:06.505 ERROR [Thread-1] [control.hethongthanhtoan.heThongThanhToanController$HandleClient.run(heThongThanhToanController.java:173)] - javax.net.ssl.SSLException: Connection reset
 2022-01-08 11:33:14.509 ERROR [Thread-3] [control.hethongthanhtoan.heThongThanhToanController$HandleClient.run(heThongThanhToanController.java:173)] - javax.net.ssl.SSLException: Connection reset
 2022-01-08 11:34:48.011 ERROR [Thread-0] [control.hethongthanhtoan.heThongThanhToanController$StartServer.run(heThongThanhToanController.java:110)] - java.net.SocketException: Socket closed
+2022-01-08 11:44:40.344 ERROR [Thread-2] [control.hethongthanhtoan.heThongThanhToanController$HandleClient.run(heThongThanhToanController.java:172)] - javax.net.ssl.SSLException: Connection reset
+2022-01-08 13:12:42.197 ERROR [Thread-0] [control.hethongthanhtoan.heThongThanhToanController$StartServer.run(heThongThanhToanController.java:110)] - java.net.SocketException: Socket closed

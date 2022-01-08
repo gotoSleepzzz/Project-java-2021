@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package view;
 
 import control.ManagerController;
@@ -472,9 +468,14 @@ public class BuyProduct extends javax.swing.JFrame {
 
     private void muaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_muaBtnActionPerformed
         int i = productTable.getSelectedRow();
-        
-        String soluong = JOptionPane.showInputDialog("Nhập số lượng (số lượng tối đa: "+ " )" );
+        int limit = ManagerService.getInstance().getLimitNYP(username, productItems.get(i).getId());
+        String soluong = JOptionPane.showInputDialog("Nhập số lượng (số lượng tối đa: "+limit + " )" );
         int num = Integer.parseInt(soluong);
+        
+        if(num > limit){
+            JOptionPane.showMessageDialog(null, "Không được mua quá giới hạn!!!");
+            return;
+        }
         
         addToCart(new NYPCart(productItems.get(i).getId(),productItems.get(i).getName(),num,productItems.get(i).getPrice()));
     }//GEN-LAST:event_muaBtnActionPerformed

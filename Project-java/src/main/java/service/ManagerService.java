@@ -95,7 +95,11 @@ public class ManagerService {
     private String
             getHospital = "Select * from noi_quan_ly where id = ?";
 
-
+    
+    public int getLimitNYP(String username,int idProduct){
+        return 0;
+    }
+    
     public boolean isFull(int id) {
         Object[] params = {id};
         logger.info("Select * from noi_quan_ly where id = " + id);

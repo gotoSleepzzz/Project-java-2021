@@ -7,6 +7,7 @@ package service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import model.PaymentHistory;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +31,7 @@ public class PaymentHistoryService {
                 PaymentHistory temp = new PaymentHistory();
                 temp.setUserId(userId);
                 temp.setMoney(rs.getFloat("sotien"));
-                temp.setTime(rs.getDate("thoigian"));
+                temp.setTime(rs.getTimestamp("thoigian"));
                 result.add(temp);
             }
         } catch (SQLException ex) {

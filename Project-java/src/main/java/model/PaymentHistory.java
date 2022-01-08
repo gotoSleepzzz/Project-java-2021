@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /*
@@ -15,9 +16,9 @@ import java.util.Date;
 public class PaymentHistory {
     private String userId;
     private float money;
-    private Date time;
+    private Timestamp time;
 
-    public PaymentHistory(String userId, float money, Date time) {
+    public PaymentHistory(String userId, float money, Timestamp time) {
         this.userId = userId;
         this.money = money;
         this.time = time;
@@ -34,7 +35,7 @@ public class PaymentHistory {
         return money;
     }
 
-    public Date getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
@@ -46,7 +47,7 @@ public class PaymentHistory {
         this.money = money;
     }
 
-    public void setTime(Date time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
     

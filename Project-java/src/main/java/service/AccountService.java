@@ -83,7 +83,6 @@ public class AccountService {
                     Account acc = new Account(username1, password, role, status);
                     return acc;
                 }
-                logger.debug("Select error");
             } catch (SQLException ex) {
                 logger.error(ex);
             }

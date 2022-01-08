@@ -1,4 +1,3 @@
-
 create database `htql_covid`;
 use `htql_covid`;
 
@@ -143,8 +142,6 @@ alter table `LICH_SU_CHUYEN_TRANG_THAI`	add
 
 alter table `LICH_SU_MUA` add
     constraint fk_nguoimua foreign key (nguoimua) references NGUOI_LIEN_QUAN(cmnd);
-alter table `LICH_SU_MUA` add
-    constraint fk_idgoinhupham foreign key (idgoinhupham) references NHU_PHAM(id);
 
 alter table `LICH_SU_HOAT_DONG` add
     constraint fk_acc foreign key (username) references `account`(`username`);
@@ -416,7 +413,7 @@ DELIMITER ;
 
 
 /* ================================================================================== */
-insert into htql_covid.`account` (`username`,`password`,`role`) values ('admin','admin','admin');
+insert into htql_covid.`account` (`username`,`password`,`role`) values ('admin','','admin');
 
 call htql_covid.`proc_ThemNoiQuanLy` ('Bệnh viện Phạm Ngọc Thạch', 1000, 0);
 call htql_covid.`proc_ThemNoiQuanLy` ('Bệnh viện Nhiệt Đới TP. HCM', 1000, 0);

@@ -18,6 +18,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     JDialog dialog;
     JButton jbuy, jpay, jchange, jconsumehistory, jmanagehistory, jpaymenthistory, changePassButton, searchBtn, buyBtn, payBtn;
     JTextField name, dob, address, id, balance, debt, searchBar, productname, limit, time, cost, PassWarning;
+    JTextField current, jdebt, minimum,payment;
 
     int editableCell = 3;
 
@@ -278,28 +279,33 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         dialog.setVisible(true);
     }
 
-    public void Pay(JFrame frame) {
+    public void Pay(JFrame frame,int sodu, float ghino,float hanmuc, ActionListener act) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
-        label.add(new JLabel("Số dư hiện tại", SwingConstants.RIGHT));
-        label.add(new JLabel("Dư nợ", SwingConstants.RIGHT));
-        label.add(new JLabel("Hạn mức tối thiểu", SwingConstants.RIGHT));
-        label.add(new JLabel("Số tiền muốn thanh toán:", SwingConstants.RIGHT));
+        label.add(new JLabel("Số dư hiện tại (vnd)", SwingConstants.RIGHT));
+        label.add(new JLabel("Dư nợ (vnd)", SwingConstants.RIGHT));
+        label.add(new JLabel("Hạn mức tối thiểu (vnd)", SwingConstants.RIGHT));
+        label.add(new JLabel("Số tiền muốn thanh toán (vnd):", SwingConstants.RIGHT));
         panel.add(label, BorderLayout.WEST);
 
         JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2));
-        JTextField current = new JTextField();
+        current = new JTextField();
         current.setHorizontalAlignment(JTextField.CENTER);
         controls.add(current);
-        JTextField jdebt = new JTextField();
+        current.setText(sodu+"");
+        current.setEditable(false);
+        jdebt = new JTextField();
         jdebt.setHorizontalAlignment(JTextField.CENTER);
         jdebt.setText(debt.getText());
+        jdebt.setText(ghino+"");
         jdebt.setEditable(false);
         controls.add(jdebt);
-        JTextField minimum = new JTextField();
+        minimum = new JTextField();
         minimum.setHorizontalAlignment(JTextField.CENTER);
         controls.add(minimum);
-        JTextField payment = new JTextField();
+        minimum.setText(hanmuc+"");
+        minimum.setEditable(false);
+        payment = new JTextField();
         payment.setHorizontalAlignment(JTextField.CENTER);
         controls.add(payment);
         panel.add(controls, BorderLayout.CENTER);
@@ -307,16 +313,17 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         JPanel jpanel = new JPanel(new GridLayout(0, 1, 2, 2));
         payBtn = new JButton("Thanh toán dư nợ");
         jpanel.add(payBtn);
+        payBtn.addActionListener(act);
         panel.add(jpanel, BorderLayout.SOUTH);
 
-        payBtn.addActionListener((ActionEvent ae) -> {
-            if (true) {
-                dialog.dispose();
-                dialog.setVisible(false);
-            } else {
-
-            }
-        });
+//        payBtn.addActionListener((ActionEvent ae) -> {
+//            if (true) {
+//                dialog.dispose();
+//                dialog.setVisible(false);
+//            } else {
+//
+//            }
+//        });
 
         dialog = new JDialog(this, "Thanh toán dư nợ", false);
         dialog.setSize(400, 200);
@@ -325,6 +332,39 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         dialog.setLocationRelativeTo(null);
         dialog.add(panel);
         dialog.setVisible(true);
+    }
+    
+    public float getHanMuc(){
+        String hanmuc = minimum.getText().strip();
+        if(hanmuc.length() > 0){
+            return Float.parseFloat(hanmuc);
+        }
+        return -1;
+    }
+    
+    public int getSoTienThanhToan(){
+        String sotien = payment.getText().strip();
+        if(sotien.length() > 0){
+            return Integer.parseInt(sotien);
+        }
+        return -1;
+    }
+    
+    public float getGhiNo(){
+        String ghino = payment.getText().strip();
+        if(ghino.length() > 0){
+            return Float.parseFloat(ghino);
+        }
+        return -1;
+    }
+    
+    public void closePayment(){
+        dialog.dispose();
+                dialog.setVisible(false);
+    }
+    
+    public void handdlePayEvent(ActionListener act){
+        payBtn.addActionListener(act);
     }
 
     public void ChangePassword(JFrame frame) {

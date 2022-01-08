@@ -30,9 +30,15 @@ public class ThanhtoanServer extends JFrame {
     private JLabel doanhthu;
     private JScrollPane scroll;
     private long total;
+    boolean showdoanhthu;
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
     
     public ThanhtoanServer() {
         init();
+        showdoanhthu = false;
     }
 
     private void init() {
@@ -72,6 +78,13 @@ public class ThanhtoanServer extends JFrame {
         log.setLineWrap(true);
         doanhthuBtn = new JButton("Hiện doanh thu");
         doanhthu = new JLabel("Tổng doanh thu: " + total + " vnđ");
+        doanhthuBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showdoanhthu = !showdoanhthu;
+                doanhthu.setVisible(showdoanhthu);
+            }
+        });
         
         inforPanel.add(addrPanel);
         inforPanel.add(portPanel);
@@ -88,6 +101,7 @@ public class ThanhtoanServer extends JFrame {
         mainPanel.add(logPanel);
         mainPanel.add(totalPanel);
         
+        doanhthu.setVisible(false);
         this.add(mainPanel);
         this.setTitle("Server thanh toán");
         this.setSize(550, 600);

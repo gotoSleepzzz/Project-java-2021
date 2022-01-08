@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class loginController {
 
@@ -34,12 +36,13 @@ public class loginController {
     }
 
     private boolean isFirstRun() {
-
         ResultSet rs = db.executeQuery("Select * from `account` where `role` = 'admin'");
-        if (rs == null) {
-            return true;
+        try {
+            return !rs.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(loginController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return true;
+        return false;
     }
 
     public class createNewPass implements ActionListener {
@@ -117,7 +120,7 @@ public class loginController {
                             }
 
                             try {
-                                BCrypt.checkpw(password, pass);
+                                if(BCrypt.checkpw(password, pass)){
                                 if (status) {
                                     String role = rs.getString(3);
                                     if (role.equalsIgnoreCase("admin")) {
@@ -133,12 +136,15 @@ public class loginController {
                                         login.setVisible(false);
                                         login.dispose();
                                         new userController(username);
+                                        return;
                                     }
                                 } else {
                                     JOptionPane.showMessageDialog(login, "Tài khoản đã bị khóa", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                                }}else{
+                                    JOptionPane.showMessageDialog(login, "Mật khẩu không đúng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                                 }
                             } catch (Exception ex) {
-                                JOptionPane.showMessageDialog(login, "Mật khẩu không đúng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+//                                JOptionPane.showMessageDialog(login, "Mật khẩu không đúng", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                     } catch (SQLException ex) {

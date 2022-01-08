@@ -6,7 +6,18 @@
 package control;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.swing.JOptionPane;
 import utils.dbUtil;
 import view.UserView;
 import model.UserCovid;
@@ -34,7 +45,10 @@ public class userController {
     ManagedHistoryService managerHistory;
     PaymentHistoryService paymentHistory;
     HospitalService hospitalService;
+    SSLSocket sslSocket;
+    String username;
     public userController(String username){
+        this.username = username;
         db = dbUtil.getDbUtil();
         managerService = new ManagerService();
         consumeHistory = new ConsumeHistoryService();
@@ -97,8 +111,61 @@ public class userController {
     class PayEvent implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            view.Pay(view);
+            System.setProperty("javax.net.ssl.trustStore","myTrustStore.jts");
+            System.setProperty("javax.net.ssl.trustStorePassword", "abc123");
+            
+            SSLSocketFactory sslsFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+            try {
+                sslSocket = (SSLSocket)sslsFactory.createSocket("Localhost",5050);
+                PrintWriter pw = new PrintWriter(sslSocket.getOutputStream(), true);
+                BufferedReader br = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
+                pw.println(username);
+                String recv = br.readLine();
+                
+                int sodu = Integer.parseInt(recv);
+                ResultSet rs1 = dbUtil.getDbUtil().executeQuery("select ghino from nguoi_lien_quan where cmnd = '" + username +"'");
+                rs1.next();
+                float ghino = rs1.getFloat(1);
+                float hanmuc = (float) (ghino*0.5);
+                view.Pay(view,sodu,ghino,hanmuc,new PayAction());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(view, "Không thể kết nối server", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
         }  
+    }
+    
+    class PayAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                int sotien = view.getSoTienThanhToan();
+                float hanmuc = view.getHanMuc();
+                float ghino = view.getGhiNo();
+                if(sotien < 0 || hanmuc <0 || ghino<0 || sotien>hanmuc || sotien < ghino){
+                    JOptionPane.showMessageDialog(view, "Vui lòng nhập đúng thông tin", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }   
+                PrintWriter pw = new PrintWriter(sslSocket.getOutputStream(), true);
+                BufferedReader br = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
+                
+                pw.println(sotien);
+                String rep = br.readLine();
+                if(rep.equalsIgnoreCase("Thanh toán thành công!")){
+                    JOptionPane.showMessageDialog(view, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    dbUtil.getDbUtil().executeUpdate("call proc_ThanhToanGhiNo (?,?)", new Object[]{username,sotien});
+                }
+                else{
+                    JOptionPane.showMessageDialog(view, "Thanh toán không thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                }
+                sslSocket.close();
+                view.closePayment();
+            } catch (IOException ex) {
+                Logger.getLogger(userController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
     }
     public String[][] convertConsumeListToArray2D(ArrayList<ConsumeHistory> list){
         String data[][] = new String[list.size()][4];

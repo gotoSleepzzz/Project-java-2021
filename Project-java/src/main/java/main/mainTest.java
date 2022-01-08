@@ -35,7 +35,7 @@ public class mainTest {
         } catch (Exception e) {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
-        //new loginController();
+        new loginController();
 //        adminView a = new adminView();
 //        a.setVisible(true);
         //new ManagerController();

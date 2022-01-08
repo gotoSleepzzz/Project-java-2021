@@ -414,6 +414,37 @@ END$$
 DELIMITER ;
 
 
+DELIMITER $$
+CREATE PROCEDURE `proc_ThanhToanGiaoDich` (_tknhan varchar(12), _tkgui varchar(12), _sotien float)
+BEGIN
+declare _sodutkgui float(15,2);
+select sodu into _sodutkgui from tai_khoan_giao_dich where tk = _tkgui;
+if(_sodutkgui-_sotien>0) then
+update tai_khoan_giao_dich set sodu= sodu-_sotien where tk=_tkgui;
+update tai_khoan_giao_dich set sodu= sodu+_sotien where tk=_tknhan;
+select 1;
+else
+select 0;
+end if;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE `proc_ThanhToanGhiNo` (_cmnd varchar(12), _sotien float)
+BEGIN
+declare _msg varchar(100);
+update nguoi_lien_quan set ghino=ghino-_sotien where cmnd=_cmnd;
+insert into lich_su_thanh_toan (cmnd,sotien) values (_cmnd,_sotien);
+
+set _msg = concat(_cmnd, " thanh toan ghi no voi so tien: ", _sotien);
+INSERT INTO htql_covid.LICH_SU_HOAT_DONG (username, hanhdong, tb, msg)
+VALUES	(_cmnd, "them", "lich_su_thanh_toan", _msg);
+END$$
+DELIMITER ;
+
+-- call proc_ThanhToanGiaoDich ("123456789003","admin",150000);
+-- call proc_ThanhToanGhiNo ("123456789003",150000);
+update nguoi_lien_quan set ghino=1000000 where cmnd="123456789001";
 
 /* ================================================================================== */
 insert into htql_covid.`account` (`username`,`password`,`role`) values ('admin','admin','admin');
@@ -459,13 +490,13 @@ values('abc', '123456789011',1974,'Thành phố Hồ Chí Minh, Quận 1, Phư�
 insert into `NGUOI_LIEN_QUAN`(ten,cmnd, namsinh, diachi,trangthai, idnoiquanly,ghino)
 values('def','123456789012',1974,'Thành phố Hồ Chí Minh, Quận 1, Phường Bến Nghé','F1',20, 2000000);
 
-update htql_covid.`account` set `role` = 'user' where `username` = 'admin';
+update htql_covid.`account` set `role` = 'manager' where `username` = 'admin';
 
--- select * from htql_covid.`account`;
+select * from htql_covid.`account`;
 -- select * from htql_covid.noi_quan_ly;
 -- select * from htql_covid.nguoi_lien_quan;
 -- select * from htql_covid.nhu_pham;
 -- select * from htql_covid.lich_su_chuyen_trang_thai;
 -- select * from htql_covid.lich_su_hoat_dong;
 -- select * from htql_covid.lich_su_mua;
-select * from htql_covid.`ThongKeTrangThai`;
+-- select * from htql_covid.`ThongKeTrangThai`;

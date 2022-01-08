@@ -1,10 +1,13 @@
 package control.hethongthanhtoan;
 
 import java.io.*;
-import javax.net.ssl.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Socket;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -13,9 +16,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLSocket;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.LogManager;
-import utils.AppConstraints;
 import utils.dbUtil;
 import view.thanhtoan_server.ThanhtoanServer;
 
@@ -24,15 +27,31 @@ public class heThongThanhToanController {
     private ThanhtoanServer tts;
     private boolean isOn;
     private SSLServerSocket server = null;
-    private List<Socket> clientList;
+    private List<SSLSocket> clientList;
     static org.apache.logging.log4j.Logger logger = LogManager.getLogger(heThongThanhToanController.class);
 
     public heThongThanhToanController() {
         tts = new ThanhtoanServer();
         isOn = false;
-        clientList = new ArrayList<Socket>();
+        clientList = new ArrayList<SSLSocket>();
         tts.addServerEvent(new powerServerEvent());
         tts.setVisible(true);
+        checkAdminAccount();
+    }
+
+    public void checkAdminAccount() {
+        try {
+            ResultSet rs = dbUtil.getDbUtil().executeQuery("Select * from tai_khoan_giao_dich where tk = 'admin'");
+            if (rs.next()) {
+                tts.setTotal(rs.getLong(2));
+                return;
+            }
+            dbUtil.getDbUtil().excuteProc("insert into tai_khoan_giao_dich (tk,sodu) value (?, ?)", new Object[]{"admin",0});
+            tts.setTotal(0);
+        } catch (SQLException ex) {
+            Logger.getLogger(heThongThanhToanController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     public class powerServerEvent implements ActionListener {
@@ -50,16 +69,16 @@ public class heThongThanhToanController {
         try {
             int port = tts.getPort();
             if (port > 0) {
-                System.setProperty("javax.net.ssl.keyStore", "za.store");
-                System.setProperty("javax.net.ssl.keyStorePassword", "adminadmin");
-
+                
+                System.setProperty("javax.net.ssl.keyStore", "myKeyStore.jks");
+                System.setProperty("javax.net.ssl.keyStorePassword", "abc123");
                 SSLServerSocketFactory sslsf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
                 server = (SSLServerSocket) sslsf.createServerSocket(port);
                 tts.turnOn();
                 isOn = true;
             }
         } catch (IOException ex) {
-            logger.error(ex);
+            ex.printStackTrace();
         }
 
         Thread thrd = new StartServer();
@@ -86,7 +105,7 @@ public class heThongThanhToanController {
         public void run() {
             while (isOn) {
                 try {
-                    new HandleClient(server.accept()).start();
+                    new HandleClient((SSLSocket)server.accept()).start();
                 } catch (IOException ex) {
                     logger.error(ex);
                 }
@@ -96,9 +115,9 @@ public class heThongThanhToanController {
 
     public class HandleClient extends Thread {
 
-        private Socket s;
+        private SSLSocket s;
 
-        public HandleClient(Socket ss) {
+        public HandleClient(SSLSocket ss) {
             this.s = ss;
             clientList.add(ss);
         }
@@ -108,23 +127,38 @@ public class heThongThanhToanController {
             try {
                 PrintWriter pw = new PrintWriter(s.getOutputStream(), true);
                 BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                String recv = br.readLine();
-
-                String temp[] = recv.split("-");
-                String cmnd = temp[0];
-                int sotien = Integer.parseInt(temp[1]);
-
-                int res = dbUtil.getDbUtil().executeUpdate("call proc_ThanhToanGiaoDich (?,?,?);", new Object[]{"admin", cmnd, sotien});
-
+                String cmnd = br.readLine();
+                
+                ResultSet rs1 = dbUtil.getDbUtil().executeQuery("select sodu from tai_khoan_giao_dich where tk = '" + cmnd +"'");
+                long duno=0;
+                if(rs1.next()){
+                duno = rs1.getLong(1);
+                }
+                pw.println(duno);
+                
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Date date = new Date();
+                Date date1 = new Date();
                 DecimalFormat df = new DecimalFormat("###,###,###");
+                
+                String recv = br.readLine();
+                
+                if (recv.equalsIgnoreCase("bye")){
+                    s.close();
+                    return;
+                }
+
+                int sotien = Integer.parseInt(recv);
+
+                ResultSet rs2 = dbUtil.getDbUtil().executeQuery("call proc_ThanhToanGiaoDich (?,?,?);", new Object[]{"admin", cmnd, sotien});
+                rs2.next();
+                int res = rs2.getInt(1);
+                
+                Date date = new Date();
                 String log;
-                if (res > 1) {
+                if (res == 1) {
                     pw.println("Thanh toán thành công!");
-                    log = String.format("* %20s  -  %12s  -  Thanh toan  -  %15s %3s",
+                    log = String.format("* %20s  -  %12s  -  Thanh toan thanh cong -  %15s %3s",
                             dateFormat.format(date), cmnd, df.format(sotien), "vnđ");
-                    tts.insertLog(log);
                     tts.updateTotal(sotien);
                 } else {
                     pw.println("Tài khoản không đủ tiền, thanh toán thất bại!");
@@ -136,6 +170,8 @@ public class heThongThanhToanController {
                 s.close();
             } catch (IOException ex) {
                 logger.error(ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(heThongThanhToanController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

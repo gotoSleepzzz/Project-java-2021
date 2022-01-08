@@ -19,6 +19,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     JButton jbuy, jpay, jchange, jconsumehistory, jmanagehistory, jpaymenthistory, changePassButton, searchBtn, buyBtn, payBtn;
     JTextField name, dob, address, id, balance, debt, searchBar, productname, limit, time, cost, PassWarning;
     JTextField current, jdebt, minimum,payment;
+    JPasswordField oldPass, newPass, reEnterPass;
 
     int editableCell = 3;
 
@@ -351,7 +352,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     }
     
     public float getGhiNo(){
-        String ghino = payment.getText().strip();
+        String ghino = jdebt.getText().strip();
         if(ghino.length() > 0){
             return Float.parseFloat(ghino);
         }
@@ -367,7 +368,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         payBtn.addActionListener(act);
     }
 
-    public void ChangePassword(JFrame frame) {
+    public void ChangePassword(JFrame frame, ActionListener act) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
         label.add(new JLabel("Mật khẩu cũ", SwingConstants.RIGHT));
@@ -376,11 +377,11 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         panel.add(label, BorderLayout.WEST);
 
         JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2));
-        JPasswordField oldPass = new JPasswordField();
+        oldPass = new JPasswordField();
         controls.add(oldPass);
-        JPasswordField newPass = new JPasswordField();
+        newPass = new JPasswordField();
         controls.add(newPass);
-        JPasswordField reEnterPass = new JPasswordField();
+        reEnterPass = new JPasswordField();
         controls.add(reEnterPass);
         panel.add(controls, BorderLayout.CENTER);
 
@@ -395,14 +396,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         jpanel.add(changePassButton);
         panel.add(jpanel, BorderLayout.SOUTH);
 
-        changePassButton.addActionListener((ActionEvent ae) -> {
-            if (Arrays.equals(newPass.getPassword(), reEnterPass.getPassword())) {
-                dialog.dispose();
-                dialog.setVisible(false);
-            } else {
-                PassWarning.setText("Mật khẩu mới không trùng khớp");
-            }
-        });
+        changePassButton.addActionListener(act);
 
         dialog = new JDialog(this, "Đổi mật khẩu", false);
         dialog.setSize(400, 200);
@@ -494,6 +488,9 @@ public class UserView extends JFrame /*implements ActionListener*/ {
     public void AddEventPay(ActionListener e){
         jpay.addActionListener(e);
     }
+    public void AddEventChangePassword(ActionListener e) {
+        jchange.addActionListener(e);
+    }
     public void setDataPaymentHistoryTable(String[][] data){
         hisTable.setModel(new DefaultTableModel(data, hisPaymentHeaders));
         hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -511,6 +508,18 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         TableColumnAdjuster tca = new TableColumnAdjuster(hisTable);
         tca.adjustColumns();
+    }
+    public String getOldPass() {
+        return oldPass.getText();
+    }
+    public String getNewPass() {
+        return newPass.getText();
+    }
+    public String getReEnterPass() {
+        return reEnterPass.getText();
+    }
+    public void setPasswordWarning(String data) {
+        PassWarning.setText(data);
     }
 }
 

@@ -142,7 +142,7 @@ public class userController {
                 int sotien = view.getSoTienThanhToan();
                 float hanmuc = view.getHanMuc();
                 float ghino = view.getGhiNo();
-                if(sotien < 0 || hanmuc <0 || ghino<0 || sotien>hanmuc || sotien < ghino){
+                if(sotien < 0 || hanmuc <0 || ghino<0 || sotien < hanmuc || sotien > ghino){
                     JOptionPane.showMessageDialog(view, "Vui lòng nhập đúng thông tin", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }   

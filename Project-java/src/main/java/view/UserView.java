@@ -1,43 +1,41 @@
 package view;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Arrays;
-import java.util.EventObject;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
 public class UserView extends JFrame /*implements ActionListener*/ {
 
     JTable jtbl, hisTable;
     JDialog dialog;
     JButton jbuy, jpay, jchange, jconsumehistory, jmanagehistory, jpaymenthistory, changePassButton, searchBtn, buyBtn, payBtn;
-    JTextField name, dob, address, id, balance, debt, searchBar, productname, limit, time, cost, PassWarning;
-    JTextField current, jdebt, minimum,payment;
+    JTextField name, dob, address, id, debt, searchBar, productname, limit, time, cost, PassWarning;
+    JTextField current, jdebt, minimum, payment;
     JPasswordField oldPass, newPass, reEnterPass;
     BuyProduct viewBuyProduct;
 
     int editableCell = 3;
 
     private final String[] hisConsumeHeaders = new String[]{
-        "ID gói nhu yếu phẩm", "Số lượng", "Thành tiền", "Thời gian"
+            "ID gói nhu yếu phẩm", "Số lượng", "Thành tiền", "Thời gian"
     };
 
     private final String[] hisManageHeaders = new String[]{
-        "Trạng thái cũ", "Trạng thái mới", "Nơi quản lý cũ", "Nơi quản lý mới", "Thời gian"
+            "Trạng thái cũ", "Trạng thái mới", "Nơi quản lý cũ", "Nơi quản lý mới", "Thời gian"
     };
 
     private final String[] hisPaymentHeaders = new String[]{
-        "Số tiền", "Thời gian"
+            "Số tiền", "Thời gian"
     };
 
     private Object productData = new Object[][]{};
     String username;
+
     public UserView(String username) {
         this.username = username;
         this.setTitle("User");
@@ -71,14 +69,10 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         info.add(infoPanel);
 
         // Panel dư nợ
-        balance = new JTextField();
-        balance.setEditable(false);
         debt = new JTextField();
         debt.setEditable(false);
         JPanel debtPanel = new JPanel();
         debtPanel.setLayout(new GridLayout(2, 2, 5, 5));
-        debtPanel.add(new JLabel("Số dư hiện tại"));
-        debtPanel.add(balance);
         debtPanel.add(new JLabel("Dư nợ"));
         debtPanel.add(debt);
 
@@ -115,10 +109,10 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         panel.setLayout(new BorderLayout());
         panel.add(buttons, BorderLayout.CENTER);
         panel.add(jinfo, BorderLayout.WEST);
-        
+
         hisTable = new JTable();
         hisTable.setRowHeight(50);
-        
+
         this.add(panel);
         //this.pack();
         this.setVisible(true);
@@ -146,12 +140,12 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         debt.setText(t + "đ");
     }
 
-    public void Buy(JFrame frame) {
-        viewBuyProduct = new BuyProduct(username);
+    public void Buy() {
+        viewBuyProduct = new BuyProduct(username, this);
         viewBuyProduct.setVisible(true);
     }
 
-    public void Pay(JFrame frame,int sodu, float ghino,float hanmuc, ActionListener act) {
+    public void Pay(JFrame frame, int sodu, float ghino, float hanmuc, ActionListener act) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
         label.add(new JLabel("Số dư hiện tại (vnd)", SwingConstants.RIGHT));
@@ -164,18 +158,18 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         current = new JTextField();
         current.setHorizontalAlignment(JTextField.CENTER);
         controls.add(current);
-        current.setText(sodu+"");
+        current.setText(sodu + "");
         current.setEditable(false);
         jdebt = new JTextField();
         jdebt.setHorizontalAlignment(JTextField.CENTER);
         jdebt.setText(debt.getText());
-        jdebt.setText(ghino+"");
+        jdebt.setText(ghino + "");
         jdebt.setEditable(false);
         controls.add(jdebt);
         minimum = new JTextField();
         minimum.setHorizontalAlignment(JTextField.CENTER);
         controls.add(minimum);
-        minimum.setText(hanmuc+"");
+        minimum.setText(hanmuc + "");
         minimum.setEditable(false);
         payment = new JTextField();
         payment.setHorizontalAlignment(JTextField.CENTER);
@@ -196,37 +190,37 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         dialog.add(panel);
         dialog.setVisible(true);
     }
-    
-    public float getHanMuc(){
+
+    public float getHanMuc() {
         String hanmuc = minimum.getText().strip();
-        if(hanmuc.length() > 0){
+        if (hanmuc.length() > 0) {
             return Float.parseFloat(hanmuc);
         }
         return -1;
     }
-    
-    public int getSoTienThanhToan(){
+
+    public int getSoTienThanhToan() {
         String sotien = payment.getText().strip();
-        if(sotien.length() > 0){
+        if (sotien.length() > 0) {
             return Integer.parseInt(sotien);
         }
         return -1;
     }
-    
-    public float getGhiNo(){
+
+    public float getGhiNo() {
         String ghino = jdebt.getText().strip();
-        if(ghino.length() > 0){
+        if (ghino.length() > 0) {
             return Float.parseFloat(ghino);
         }
         return -1;
     }
-    
-    public void closePayment(){
+
+    public void closePayment() {
         dialog.dispose();
-                dialog.setVisible(false);
+        dialog.setVisible(false);
     }
-    
-    public void handdlePayEvent(ActionListener act){
+
+    public void handdlePayEvent(ActionListener act) {
         payBtn.addActionListener(act);
     }
 
@@ -269,7 +263,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         dialog.setVisible(true);
     }
 
-    public void ConsumeHistory (JFrame frame) {
+    public void ConsumeHistory(JFrame frame) {
         JScrollPane hisScroll = new JScrollPane();
         hisTable.setPreferredScrollableViewportSize(hisTable.getPreferredSize());
         hisTable.setAutoCreateRowSorter(true);
@@ -281,7 +275,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         flowLayout.setHgap(10);
         //flowLayout.setVgap(10);
         centerPanel.add(hisScroll);
-        
+
 
         dialog = new JDialog(this, "Lịch sử tiêu thụ gói nhu yếu phẩm", false);
         dialog.setResizable(false);
@@ -335,51 +329,64 @@ public class UserView extends JFrame /*implements ActionListener*/ {
         dialog.pack();
         dialog.setVisible(true);
     }
-    public void AddEventShowConsumeHistory(ActionListener e){
+
+    public void AddEventShowConsumeHistory(ActionListener e) {
         jconsumehistory.addActionListener(e);
     }
-    public void AddEventShowManageHistory(ActionListener e){
+
+    public void AddEventShowManageHistory(ActionListener e) {
         jmanagehistory.addActionListener(e);
     }
-    public void AddEventShowPaymentHistory(ActionListener e){
+
+    public void AddEventShowPaymentHistory(ActionListener e) {
         jpaymenthistory.addActionListener(e);
     }
-    public void AddEventBuy(ActionListener e){
+
+    public void AddEventBuy(ActionListener e) {
         jbuy.addActionListener(e);
     }
-    public void AddEventPay(ActionListener e){
+
+    public void AddEventPay(ActionListener e) {
         jpay.addActionListener(e);
     }
+
     public void AddEventChangePassword(ActionListener e) {
         jchange.addActionListener(e);
     }
-    public void setDataPaymentHistoryTable(String[][] data){
+
+    public void setDataPaymentHistoryTable(String[][] data) {
         hisTable.setModel(new DefaultTableModel(data, hisPaymentHeaders));
         hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         TableColumnAdjuster tca = new TableColumnAdjuster(hisTable);
         tca.adjustColumns();
     }
-    public void setDataManageHistoryTable(String[][] data){
+
+    public void setDataManageHistoryTable(String[][] data) {
         hisTable.setModel(new DefaultTableModel(data, hisManageHeaders));
         hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         TableColumnAdjuster tca = new TableColumnAdjuster(hisTable);
         tca.adjustColumns();
     }
-    public void setDataConsumeHistoryTable(String[][] data){
+
+    public void setDataConsumeHistoryTable(String[][] data) {
         hisTable.setModel(new DefaultTableModel(data, hisConsumeHeaders));
         hisTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         TableColumnAdjuster tca = new TableColumnAdjuster(hisTable);
         tca.adjustColumns();
     }
+
     public String getOldPass() {
         return oldPass.getText();
     }
+
     public String getNewPass() {
         return newPass.getText();
     }
+
     public String getReEnterPass() {
         return reEnterPass.getText();
     }
+
     public void setPasswordWarning(String data) {
         PassWarning.setText(data);
     }
@@ -387,7 +394,7 @@ public class UserView extends JFrame /*implements ActionListener*/ {
 
 class SpinnerEditor extends AbstractCellEditor implements TableCellEditor {
     final JSpinner spinner = new JSpinner();
-    
+
     public SpinnerEditor() {
         spinner.setModel(new SpinnerNumberModel(0, 0, 10, 1));
     }

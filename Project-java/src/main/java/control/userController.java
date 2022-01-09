@@ -125,12 +125,8 @@ public class userController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            view.Buy(view);
-
+            view.Buy();
         }
-
-            
-
     }
 
     class PayEvent implements ActionListener {
@@ -224,6 +220,7 @@ public class userController {
                 if (rep.equalsIgnoreCase("Thanh toán thành công!")) {
                     JOptionPane.showMessageDialog(view, "Thanh toán thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     dbUtil.getDbUtil().executeUpdate("call proc_ThanhToanGhiNo (?,?)", new Object[]{username, sotien});
+                    view.setDebtField(String.valueOf(ManagerService.getInstance().findOneUserCovid(user.getId()).getDebt()));
                 } else {
                     JOptionPane.showMessageDialog(view, "Thanh toán không thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }

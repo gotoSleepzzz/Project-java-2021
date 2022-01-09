@@ -46,9 +46,10 @@ public class BuyProduct extends javax.swing.JFrame {
     };
     private String username;
     String[] sortBy = {"Tên sản phẩm","Giá sản phẩm"};
-    public BuyProduct(String username) {
+    UserView userView;
+    public BuyProduct(String username, UserView userView) {
         this.username = username;
-        
+        this.userView = userView;
         initComponents();
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         sortCombobox.setModel(new DefaultComboBoxModel<String>(sortBy));
@@ -509,6 +510,7 @@ public class BuyProduct extends javax.swing.JFrame {
                 int limit = limitProduct.get(cartItems.get(i).getId());
                 ManagerService.getInstance().saveBuyNYP(username, cartItems.get(i).getId(),limit, cartItems.get(i).getExpriredDate());
             }
+            userView.setDebtField(String.valueOf(ManagerService.getInstance().findOneUserCovid(username).getDebt()));
             cartItems.clear();
             total = 0;
             renderTableCart(cartItems);

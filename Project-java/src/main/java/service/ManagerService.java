@@ -1,6 +1,5 @@
 package service;
 
-import java.sql.ResultSet;
 import model.*;
 import org.apache.logging.log4j.LogManager;
 import org.jgrapht.DirectedGraph;
@@ -8,9 +7,8 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import utils.dbUtil;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,29 +98,29 @@ public class ManagerService {
     private String
             getHospital = "Select * from noi_quan_ly where id = ?";
 
-    public boolean isFirstBuy(String username,int idProduct){
+    public boolean isFirstBuy(String username, int idProduct) {
         try {
-            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username,idProduct});
-            if(rs.next())
+            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username, idProduct});
+            if (rs.next())
                 return false;
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ManagerService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
     }
-    
-    public int getLimitNYP(String username,int idProduct){
+
+    public int getLimitNYP(String username, int idProduct) {
         try {
-            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username,idProduct});
-            if(rs.next()){
+            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username, idProduct});
+            if (rs.next()) {
                 int id = rs.getInt("id");
                 Date release = rs.getDate("thoigian");
                 Date now = new Date();
-                if( now.after(release)){
-                    db.executeUpdate("Delete from Quy_dinh_muc_han where id = '" + id+"'" );
+                if (now.after(release)) {
+                    db.executeUpdate("Delete from Quy_dinh_muc_han where id = '" + id + "'");
                     return -1;
-                }else{
+                } else {
                     return rs.getInt("limit");
                 }
             }
@@ -131,25 +129,25 @@ public class ManagerService {
         }
         return -1;
     }
-    
-    public void saveBuyNYP(String username, int idProduct, int soluong, int expDate){
+
+    public void saveBuyNYP(String username, int idProduct, int soluong, int expDate) {
         try {
-            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username,idProduct});
-            if(rs.next()){
-                db.executeUpdate("update Quy_dinh_muc_han set `limit` = ? where cmnd = ? and idsp = ?", new Object[]{soluong,username,idProduct});
-            }else{
+            ResultSet rs = db.executeQuery("Select * from Quy_dinh_muc_han where cmnd = ? and idsp = ?", new Object[]{username, idProduct});
+            if (rs.next()) {
+                db.executeUpdate("update Quy_dinh_muc_han set `limit` = ? where cmnd = ? and idsp = ?", new Object[]{soluong, username, idProduct});
+            } else {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(new Date());
                 cal.add(Calendar.DATE, expDate);
                 Date resDate = cal.getTime();
-                
-                db.executeUpdate("Insert into Quy_dinh_muc_han (cmnd,idsp,`limit`,thoigian) values (?,?,?,?)", new Object[]{username,idProduct,soluong,resDate});
+
+                db.executeUpdate("Insert into Quy_dinh_muc_han (cmnd,idsp,`limit`,thoigian) values (?,?,?,?)", new Object[]{username, idProduct, soluong, resDate});
             }
         } catch (SQLException ex) {
             Logger.getLogger(ManagerService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public boolean isFull(int id) {
         Object[] params = {id};
         logger.info("Select * from noi_quan_ly where id = " + id);
@@ -235,7 +233,7 @@ public class ManagerService {
         }
 
         Object[][] result = new Object[count][5];
-        logger.info("Select from chuyen_trang_thai where cmnd = "+ id);
+        logger.info("Select from chuyen_trang_thai where cmnd = " + id);
         rs = db.executeQuery(getHistoryChangeState, params);
 
 
@@ -349,10 +347,9 @@ public class ManagerService {
 
         try {
             logger.info("Insert user with " + userCovid.getId());
-            if (db.excuteProc(addUserCovid, params)) {
-                managerUserCovid.addUserCovid(userCovid);
-                return true;
-            }
+            db.excuteProc(addUserCovid, params);
+            managerUserCovid.addUserCovid(userCovid);
+            return true;
 
         } catch (Exception e) {
             logger.error("Insert failed due some bug or id duplicated");
